@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBA Props PRO | Quant Dashboard</title>
+    <title>NBA Quant PRO</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NBA PRO">
+
     <style>
         :root {
             --bg-color: #f8fafc; --text-color: #1e293b; --card-bg: #ffffff;
@@ -58,7 +65,7 @@
         .chart-td { padding: 0 !important; border-bottom: 3px solid var(--accent-color) !important; position: sticky; left: 0; z-index: 5;}
         .expanded-panel { display: flex; flex-wrap: wrap; width: 100%; padding: 1.5rem 2rem; gap: 2rem; background: var(--chart-bg); align-items: flex-start;}
         
-        .chart-wrapper, .simulator-box, .sgp-box { flex: 1; min-width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;}
+        .chart-wrapper, .simulator-box, .sgp-box, .h2h-box { flex: 1; min-width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;}
         .panel-title { font-size: 0.9rem; font-weight: 800; color: var(--text-color); text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 0.3rem; }
         
         .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 130px; position: relative; width: 100%; }
@@ -144,6 +151,11 @@
         .hist-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
         .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); }
         .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: white; }
+        
+        /* Styl dla historii wyników H2H */
+        .h2h-pill { background: var(--bg-color); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem;}
+        .h2h-pill.green { color: #10b981; border-color: rgba(16, 185, 129, 0.3);}
+        .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
     </style>
 </head>
 <body>
@@ -151,7 +163,7 @@
     <div class="dashboard-header">
         <div>
             <h1>NBA Props PRO</h1>
-            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Algorytm Filtrów Inteligentnych & Auto-SGP</p>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Algorytm Filtrów Inteligentnych, Auto-SGP & H2H</p>
         </div>
         <div class="top-actions">
             <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
@@ -183,12 +195,10 @@
             <label>Data</label>
             <select id="dateFilter"><option value="all">Wszystkie daty</option></select>
         </div>
-        
         <div class="filter-group">
             <label>Mecz / Drużyna</label>
             <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
         </div>
-
         <div class="filter-group">
             <label>Rynek</label>
             <select id="marketFilter">
@@ -298,6 +308,15 @@
     </div>
 
     <script>
+        // PWA - Rejestracja Service Workera
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('App is PWA ready!', reg);
+                }).catch(err => console.log('PWA error:', err));
+            });
+        }
+
         const themeBtn = document.getElementById('themeToggleBtn');
         themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-theme');
@@ -318,7 +337,6 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
-        // TUTAJ JEST CACHE BUSTING ZNACZNIK CZASU (?v=...) 
         fetch('dane.json?v=' + new Date().getTime()).then(r => r.json()).then(data => {
             globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); renderJournal();
         }).catch(e => {
@@ -341,6 +359,30 @@
                     <div class="chart-label">L${hist.length-i}</div>
                 </div>`).join('');
             return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`;
+        }
+
+        // NOWOŚĆ: Generator HTML dla Head-to-Head
+        function generateH2HHtml(item) {
+            if (!item.h2h_history || item.h2h_history === "Brak danych") {
+                return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Zawodnik nie grał przeciwko ${item.opp_name} w ostatnich 2 sezonach.</div>`;
+            }
+            
+            let vals = item.h2h_history.split(' | ');
+            let pillsHtml = vals.map(v => {
+                let num = parseFloat(v);
+                let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia;
+                return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`;
+            }).join('');
+
+            return `
+                <div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">
+                    ${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    ${pillsHtml}
+                </div>
+            `;
         }
 
         function generateSGPHtml(currentItem) {
@@ -431,12 +473,10 @@
                 }
 
                 let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]);
-                
                 let isValueBet = item.ev >= 0.30;
                 let isSafeBet = true_prob >= 0.70 && l5v >= 80;
                 
                 let rowClass = isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : ""));
-                
                 let badges = [];
                 if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`);
                 if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`);
@@ -444,11 +484,7 @@
 
                 let tr = document.createElement('tr');
                 tr.className = `data-row ${rowClass}`;
-                
-                tr.dataset.isValue = isValueBet ? "true" : "false";
-                tr.dataset.isSafe = isSafeBet ? "true" : "false";
-                tr.dataset.isStable = isStable ? "true" : "false";
-                
+                tr.dataset.isValue = isValueBet ? "true" : "false"; tr.dataset.isSafe = isSafeBet ? "true" : "false"; tr.dataset.isStable = isStable ? "true" : "false";
                 tr.dataset.player = item.zawodnik.toLowerCase(); tr.dataset.game = item.mecz; tr.dataset.date = item.data; tr.dataset.market = item.rynek; tr.dataset.pick = item.typ; tr.dataset.index = index; tr.dataset.odds = item.kurs; tr.dataset.prob = true_prob; tr.dataset.stawka = stake; 
 
                 tr.innerHTML = `
@@ -469,6 +505,12 @@
                     <td colspan="12" class="chart-td">
                         <div class="expanded-panel">
                             <div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div>
+                            
+                            <div class="h2h-box">
+                                <div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>
+                                ${generateH2HHtml(item)}
+                            </div>
+
                             <div class="simulator-box">
                                 <div class="panel-title">Symulator (Korekty)</div>
                                 <div class="sim-grid">
@@ -508,10 +550,7 @@
                 oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight";
                 pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
                 let kelly = (tProb*(tAko-1) - (1-tProb))/(tAko-1), stake = kelly>0 ? kelly*0.25*br : 0;
-                
-                document.getElementById('saveJournalBtn').dataset.stake = stake;
-                document.getElementById('saveJournalBtn').dataset.odds = tAko;
-
+                document.getElementById('saveJournalBtn').dataset.stake = stake; document.getElementById('saveJournalBtn').dataset.odds = tAko;
                 if (stake > 0) { sDisp.innerText = stake.toFixed(2)+" PLN"; sDisp.className = "ako-value success"; } 
                 else { sDisp.innerText = "0.00 PLN"; sDisp.className = "ako-value danger"; pDisp.className = "ako-value danger"; }
             } else {
@@ -588,41 +627,22 @@
             if(confirm("Na pewno usunąć ten kupon z historii? Zmieni to Twoje statystyki ROI.")) { journalData = journalData.filter(e => e.id !== id); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); }
         }
 
-        // =========================================
-        // INTELIGENTNY AUTO-KUPON (Reagujący na filtry)
-        // =========================================
         document.getElementById('generateBtn').addEventListener('click', () => {
             let t = parseFloat(document.getElementById('targetOddsInput').value);
             if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs (np. 3.0) przed użyciem bota.");
-            
-            document.getElementById('favoritesBody').innerHTML = ''; 
-            document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); 
-            applyFilters();
-            
+            document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters();
             let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)'));
             let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index));
-            
             let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev);
-            
             let ako = 1.0, used = new Set();
             for (let b of bets) {
                 if (used.has(b.mecz)) continue;
                 for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) {
-                    if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) {
-                        r.querySelector('.add-btn').click(); 
-                        used.add(b.mecz); 
-                        ako *= b.kurs; 
-                        break;
-                    }
+                    if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; }
                 }
                 if (ako >= t) break;
             }
-            
-            if (ako < t && bets.length > 0) {
-                alert(`Z wybranych filtrów udało się wyciągnąć maksymalnie AKO: ${ako.toFixed(2)}`);
-            } else if (bets.length === 0) {
-                alert(`Nie ma w tej chwili opłacalnych typów (+EV) dla wybranych filtrów! Zmień kryteria wyszukiwania.`);
-            }
+            if (ako < t && bets.length > 0) { alert(`Z wybranych filtrów udało się wyciągnąć maksymalnie AKO: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Nie ma opłacalnych typów dla wybranych filtrów!`); }
         });
 
         document.querySelectorAll('th.sortable').forEach(th => {
@@ -640,37 +660,16 @@
             });
         });
         
-        function populateDropdowns(d) { 
-            let dates = new Set(), games = new Set(); 
-            d.forEach(i => { dates.add(i.data); games.add(i.mecz); }); 
-            Array.from(dates).sort().forEach(dt => document.getElementById('dateFilter').add(new Option(dt, dt))); 
-            Array.from(games).sort().forEach(g => document.getElementById('gameFilter').add(new Option(g, g))); 
-        }
-        
+        function populateDropdowns(d) { let dates = new Set(), games = new Set(); d.forEach(i => { dates.add(i.data); games.add(i.mecz); }); Array.from(dates).sort().forEach(dt => document.getElementById('dateFilter').add(new Option(dt, dt))); Array.from(games).sort().forEach(g => document.getElementById('gameFilter').add(new Option(g, g))); }
         function applyFilters() {
-            let s = document.getElementById('searchFilter').value.toLowerCase();
-            let d = document.getElementById('dateFilter').value;
-            let g = document.getElementById('gameFilter').value;
-            let m = document.getElementById('marketFilter').value;
-            let p = document.getElementById('pickFilter').value;
-            let stat = document.getElementById('statusFilter').value;
-            
+            let s = document.getElementById('searchFilter').value.toLowerCase(), d = document.getElementById('dateFilter').value, g = document.getElementById('gameFilter').value, m = document.getElementById('marketFilter').value, p = document.getElementById('pickFilter').value, stat = document.getElementById('statusFilter').value;
             document.querySelectorAll('#mainBody tr.data-row').forEach(r => {
                 let matchStatus = true;
                 if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false;
                 if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false;
                 if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false;
-
-                let vis = r.dataset.player.includes(s) && 
-                          (d==='all'||r.dataset.date===d) && 
-                          (g==='all'||r.dataset.game===g) && 
-                          (m==='all'||r.dataset.market===m) && 
-                          (p==='all'||r.dataset.pick===p) && 
-                          matchStatus;
-                
-                r.classList.toggle('hidden', !vis); 
-                let c = document.getElementById(`chart-${r.dataset.index}`); 
-                if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden');
+                let vis = r.dataset.player.includes(s) && (d==='all'||r.dataset.date===d) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus;
+                r.classList.toggle('hidden', !vis); let c = document.getElementById(`chart-${r.dataset.index}`); if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden');
             });
         }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
