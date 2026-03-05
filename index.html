@@ -10,7 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NBA PRO">
-    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fcd34d'/><text x='50' y='65' font-size='40' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%230f172a'>PRO</text></svg>">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -118,40 +117,23 @@
         .history-matches { font-size: 0.85rem; color: var(--muted-text); margin-top: 0.5rem; }
         .history-actions { display: flex; gap: 0.5rem; }
         .hist-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); }
+        .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); } .btn-edit { background: #3b82f6; }
         .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: white; }
         .h2h-pill { background: var(--bg-color); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem;}
         .h2h-pill.green { color: #10b981; border-color: rgba(16, 185, 129, 0.3);}
         .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
         .chart-visual-box { width: 100%; height: 250px; margin-bottom: 2rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; }
 
-        /* ==========================================
-           POPRAWKI DLA TELEFONÓW (PWA MOBILE FIX)
-           ========================================== */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            
-            /* Odklejenie sztywnej pierwszej kolumny, żeby dało się scrollować tabelę palcem */
-            td:first-child, th:first-child { 
-                position: static !important; 
-                z-index: 1 !important; 
-                border-right: none !important;
-            }
-            
-            /* Filtry układają się jeden pod drugim dla wygody palca */
+            td:first-child, th:first-child { position: static !important; z-index: 1 !important; border-right: none !important;}
             .filters { flex-direction: column; align-items: stretch; padding: 1rem; }
             .filter-group { border-left: none !important; padding-left: 0 !important; }
-            
-            /* Responsywny nagłówek i statystyki */
             .dashboard-header { flex-direction: column; gap: 1rem; align-items: stretch; text-align: center;}
             .top-actions { justify-content: center; width: 100%; }
             .stats-overview { grid-template-columns: repeat(2, 1fr); }
-            
-            /* Rozwinięty panel gracza (wykresy, symulator) pod spodem */
             .expanded-panel { padding: 1rem; gap: 1.5rem; flex-direction: column; }
             .simulator-box, .chart-wrapper, .h2h-box, .sgp-box { min-width: 100%; }
-            
-            /* Przyciski AKO dla telefonu */
             .generator-bar { flex-direction: column; width: 100%; }
             .generator-bar input, .generator-bar button { width: 100%; }
             .section-title { flex-direction: column; align-items: stretch; }
@@ -376,7 +358,9 @@
         document.getElementById('mainTable').addEventListener('click', e => { if (e.target.classList.contains('add-btn')) { let r = e.target.closest('tr.data-row'), c = r.cloneNode(true); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; document.getElementById('favoritesBody').appendChild(c); r.classList.add('hidden'); updateTotalOdds(); }});
         document.getElementById('favoritesTable').addEventListener('click', e => { if (e.target.classList.contains('remove-btn')) { let r = e.target.closest('tr'), p = r.dataset.player, m = r.dataset.market; r.remove(); document.querySelectorAll('#mainBody tr.data-row').forEach(mr => { if(mr.dataset.player===p && mr.dataset.market===m) { mr.classList.remove('hidden'); applyFilters(); }}); updateTotalOdds(); }});
 
-        // DZIENNIK INWESTYCYJNY ORAZ WYKRES CHART.JS
+        // =========================================
+        // DZIENNIK INWESTYCYJNY (Z FUNKCJĄ EDYCJI)
+        // =========================================
         const modal = document.getElementById('journalModal');
         document.getElementById('openJournalBtn').onclick = () => { modal.style.display = "block"; renderJournal(); }
         document.getElementById('closeJournalBtn').onclick = () => { modal.style.display = "none"; }
@@ -405,7 +389,12 @@
 
             [...journalData].reverse().forEach(entry => {
                 let statusBadge = entry.status === 'pending' ? `<span class="status-badge" style="background:#f59e0b;">⏳ Oczekuje</span>` : (entry.status === 'win' ? `<span class="status-badge" style="background:#10b981;">✅ Wygrany (+${entry.profit.toFixed(2)})</span>` : `<span class="status-badge" style="background:#ef4444;">❌ Przegrany (${entry.profit.toFixed(2)})</span>`);
-                let actions = entry.status === 'pending' ? `<button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `<button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
+                
+                // PRZYCISK EDYCJI DODANY DO AKCJI
+                let editBtn = `<button class="hist-btn btn-edit" onclick="editCoupon(${entry.id})" title="Edytuj kurs/stawkę (np. po zwrocie)">✏️ Edytuj</button>`;
+                
+                let actions = entry.status === 'pending' ? `${editBtn} <button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `${editBtn} <button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
+                
                 let div = document.createElement('div'); div.className = 'history-card';
                 div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
                 container.appendChild(div);
@@ -414,6 +403,38 @@
             if(journalData.length === 0) container.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--muted-text);">Brak zapisanych kuponów.</div>';
             document.getElementById('statInvested').innerText = tInvested.toFixed(2) + ' PLN'; let profitEl = document.getElementById('statProfit'); profitEl.innerText = tProfit.toFixed(2) + ' PLN'; profitEl.className = 'stat-box-value ' + (tProfit > 0 ? 'text-green' : (tProfit < 0 ? 'text-red' : '')); let yieldEl = document.getElementById('statYield'); let yieldVal = tInvested > 0 ? (tProfit / tInvested) * 100 : 0; yieldEl.innerText = yieldVal.toFixed(1) + '%'; yieldEl.className = 'stat-box-value ' + (yieldVal > 0 ? 'text-green' : (yieldVal < 0 ? 'text-red' : '')); document.getElementById('statHitRate').innerText = `${wCount}/${resolvedCount}`;
             updateProfitChart(chartLabels, chartDataPoints);
+        }
+
+        // NOWA FUNKCJA EDYCJI KUPONU
+        window.editCoupon = function(id) {
+            let entry = journalData.find(e => e.id === id);
+            if(!entry) return;
+
+            let newOdds = prompt("Wprowadź nowy kurs po zwrocie/anulowaniu (np. 1.85):", entry.odds.toFixed(2));
+            if(newOdds === null) return; // Anulowano
+            newOdds = parseFloat(newOdds.replace(',', '.'));
+
+            let newStake = prompt("Wprowadź nową stawkę, jeśli się zmieniła:", entry.stake.toFixed(2));
+            if(newStake === null) return;
+            newStake = parseFloat(newStake.replace(',', '.'));
+
+            if(isNaN(newOdds) || isNaN(newStake) || newOdds <= 0 || newStake <= 0) {
+                alert("Wprowadzono niepoprawne dane. Użyj formatu liczbowego.");
+                return;
+            }
+
+            entry.odds = newOdds;
+            entry.stake = newStake;
+
+            // Jeśli kupon był już rozliczony, przelicz zysk na nowo
+            if(entry.status === 'win') {
+                entry.profit = (entry.stake * entry.odds) - entry.stake;
+            } else if(entry.status === 'loss') {
+                entry.profit = -entry.stake;
+            }
+
+            localStorage.setItem('nba_journal_v2', JSON.stringify(journalData));
+            renderJournal();
         }
 
         function updateProfitChart(labels, data) {
