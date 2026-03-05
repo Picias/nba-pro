@@ -10,48 +10,30 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NBA PRO">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fcd34d'/><text x='50' y='65' font-size='40' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%230f172a'>PRO</text></svg>">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        :root {
-            --bg-color: #f8fafc; --text-color: #1e293b; --card-bg: #ffffff;
-            --border-color: #e2e8f0; --hover-bg: #f1f5f9; --accent-color: #3b82f6;
-            --muted-text: #64748b; --chart-bg: #f8fafc;
-            --gold-highlight: #fffbeb; --gold-border: #fcd34d;
-            --safe-highlight: #ecfdf5; --safe-border: #10b981;
-            --stable-highlight: #eff6ff; --stable-border: #3b82f6;
-        }
-
-        .dark-theme {
-            --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b;
-            --border-color: #334155; --hover-bg: #273548; --accent-color: #60a5fa;
-            --muted-text: #94a3b8; --chart-bg: #0f172a;
-            --gold-highlight: #332b14; --gold-border: #b45309;
-            --safe-highlight: #022c22; --safe-border: #059669;
-            --stable-highlight: #172554; --stable-border: #2563eb;
-        }
-
+        :root { --bg-color: #f8fafc; --text-color: #1e293b; --card-bg: #ffffff; --border-color: #e2e8f0; --hover-bg: #f1f5f9; --accent-color: #3b82f6; --muted-text: #64748b; --chart-bg: #f8fafc; --gold-highlight: #fffbeb; --gold-border: #fcd34d; --safe-highlight: #ecfdf5; --safe-border: #10b981; --stable-highlight: #eff6ff; --stable-border: #3b82f6; }
+        .dark-theme { --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b; --border-color: #334155; --hover-bg: #273548; --accent-color: #60a5fa; --muted-text: #94a3b8; --chart-bg: #0f172a; --gold-highlight: #332b14; --gold-border: #b45309; --safe-highlight: #022c22; --safe-border: #059669; --stable-highlight: #172554; --stable-border: #2563eb; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding: 2rem; transition: background-color 0.3s; }
-        
         .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
         .dashboard-header h1 { font-size: 2rem; color: var(--text-color); letter-spacing: -0.5px; }
-        
         .top-actions { display: flex; gap: 1rem; }
         .theme-toggle, .stats-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.6rem 1.2rem; border-radius: 20px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
         .theme-toggle:hover, .stats-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .stats-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
-
         .filters { display: flex; gap: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; border: 1px solid var(--border-color); margin-bottom: 2rem; align-items: flex-end;}
         .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
         .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--muted-text); }
         .filter-group input, .filter-group select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--bg-color); color: var(--text-color); outline: none;}
-
         .section-title { margin: 2rem 0 1rem 0; font-size: 1.4rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;}
-        .legend-box { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-color); }
+        .legend-box { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-color); flex-wrap: wrap;}
         .legend-item { display: flex; align-items: center; gap: 5px; background: var(--card-bg); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border-color);}
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-
-        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; max-height: 70vh; overflow-y: auto; border: 1px solid var(--border-color); }
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; max-height: 70vh; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: center; }
         th { position: sticky; top: 0; z-index: 10; background-color: var(--card-bg); border-bottom: 2px solid var(--border-color); padding: 1rem; font-weight: 700; color: var(--muted-text); font-size: 0.75rem; text-transform: uppercase; cursor: pointer;}
         td { padding: 1rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
@@ -59,15 +41,12 @@
         tbody tr.data-row:hover { background-color: var(--hover-bg); }
         td:first-child, th:first-child { position: sticky; left: 0; z-index: 11; background-color: var(--card-bg); border-right: 1px solid var(--border-color); }
         th:first-child { z-index: 12; }
-        
         .chart-row { display: none; background-color: var(--card-bg); }
         .chart-row.expanded { display: table-row; }
         .chart-td { padding: 0 !important; border-bottom: 3px solid var(--accent-color) !important; position: sticky; left: 0; z-index: 5;}
         .expanded-panel { display: flex; flex-wrap: wrap; width: 100%; padding: 1.5rem 2rem; gap: 2rem; background: var(--chart-bg); align-items: flex-start;}
-        
         .chart-wrapper, .simulator-box, .sgp-box, .h2h-box { flex: 1; min-width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;}
         .panel-title { font-size: 0.9rem; font-weight: 800; color: var(--text-color); text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 0.3rem; }
-        
         .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 130px; position: relative; width: 100%; }
         .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; z-index: 2; margin: 0 4px; }
         .chart-bar { width: 100%; max-width: 35px; border-radius: 4px 4px 0 0; position: relative; transition: height 0.5s; }
@@ -75,7 +54,6 @@
         .chart-label { font-size: 0.75rem; color: var(--muted-text); margin-top: 8px; position: absolute; bottom: -25px;}
         .chart-val { font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; }
         .chart-line { position: absolute; width: calc(100% - 1rem); left: 0.5rem; border-top: 2px dashed var(--text-color); z-index: 1; opacity: 0.5; }
-
         .sim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);}
         .sim-input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted-text); margin-bottom: 0.4rem; }
         .sim-input-group input { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 6px; font-weight: bold; background: var(--bg-color); color: var(--text-color); text-align: center;}
@@ -86,7 +64,6 @@
         .res-data { font-size: 0.9rem; color: var(--muted-text); margin-bottom: 0.3rem;}
         .res-val { font-weight: 900; color: var(--text-color);}
         .res-stake { font-size: 1.1rem; font-weight: 900; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color);}
-
         .sgp-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 0.8rem;}
         .sgp-info { display: flex; flex-direction: column; gap: 0.2rem;}
         .sgp-player { font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
@@ -94,36 +71,31 @@
         .sgp-odds { font-weight: 900; color: var(--accent-color);}
         .sgp-add-btn { background: #10b981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
         .sgp-add-btn:hover { opacity: 0.8; }
-
         .col-left { text-align: left; }
         .player-name { font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
         .matchup-info { font-size: 0.8rem; color: var(--muted-text); margin-top: 0.2rem; }
+        .uwagi-text { font-size: 0.8rem; font-weight: bold; color: #ef4444; margin-top: 0.2rem; }
         .line, .projection, .diff, .ev-val, .stake-val { font-weight: 800; font-size: 1.1rem; }
         .stake-val { color: #10b981; }
-        
         .pick-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 800; font-size: 0.85rem; }
         .pick-over { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
         .pick-under { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
-        
         .matchup-rank { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 800; }
         .stat-pill { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
         .stat-green { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
         .stat-yellow { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
         .stat-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
-
         .super-pick { background-color: var(--gold-highlight); border-left: 4px solid var(--gold-border); }
         .super-safe { background-color: var(--safe-highlight); border-left: 4px solid var(--safe-border); }
         .super-stable { background-color: var(--stable-highlight); border-left: 4px solid var(--stable-border); }
-        
         .action-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; filter: grayscale(0.5); }
         .action-btn:hover { transform: scale(1.3); filter: grayscale(0); }
         .export-btn { background-color: #10b981; color: white; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
         .export-btn:hover { opacity: 0.8; }
         .hidden { display: none !important; }
-        
         .generator-bar { display: flex; gap: 10px; align-items: center; }
         .odds-input { padding: 0.6rem; border: 2px solid var(--accent-color); border-radius: 8px; font-size: 1rem; width: 140px; font-weight: bold; background: var(--bg-color); color: var(--text-color); outline: none;}
-        .ako-dashboard { display: flex; gap: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); align-items: center;}
+        .ako-dashboard { display: flex; gap: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); align-items: center; flex-wrap: wrap;}
         .ako-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 15px; }
         .ako-stat.bordered { border-left: 1px solid var(--border-color); }
         .ako-label { font-size: 0.75rem; color: var(--muted-text); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
@@ -131,31 +103,60 @@
         .ako-value.highlight { color: var(--accent-color); }
         .ako-value.success { color: #10b981; }
         .ako-value.danger { color: #ef4444; }
-
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-        .modal-content { background-color: var(--card-bg); margin: 5% auto; padding: 2rem; border-radius: 12px; width: 90%; max-width: 900px; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-content { background-color: var(--card-bg); margin: 5% auto; padding: 2rem; border-radius: 12px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close-modal { color: var(--muted-text); float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close-modal:hover { color: var(--text-color); }
-        
         .stats-overview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
         .stat-box { background: var(--bg-color); padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
         .stat-box-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 800; color: var(--muted-text); margin-bottom: 0.5rem; }
         .stat-box-value { font-size: 1.8rem; font-weight: 900; color: var(--text-color); }
         .text-green { color: #10b981 !important; } .text-red { color: #ef4444 !important; }
-        
         .history-list { display: flex; flex-direction: column; gap: 1rem; }
-        .history-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; }
-        .history-details { flex: 1; }
+        .history-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;}
+        .history-details { flex: 1; min-width: 250px;}
         .history-matches { font-size: 0.85rem; color: var(--muted-text); margin-top: 0.5rem; }
         .history-actions { display: flex; gap: 0.5rem; }
         .hist-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
         .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); }
         .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: white; }
-        
-        /* Styl dla historii wyników H2H */
         .h2h-pill { background: var(--bg-color); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem;}
         .h2h-pill.green { color: #10b981; border-color: rgba(16, 185, 129, 0.3);}
         .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
+        .chart-visual-box { width: 100%; height: 250px; margin-bottom: 2rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; }
+
+        /* ==========================================
+           POPRAWKI DLA TELEFONÓW (PWA MOBILE FIX)
+           ========================================== */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            
+            /* Odklejenie sztywnej pierwszej kolumny, żeby dało się scrollować tabelę palcem */
+            td:first-child, th:first-child { 
+                position: static !important; 
+                z-index: 1 !important; 
+                border-right: none !important;
+            }
+            
+            /* Filtry układają się jeden pod drugim dla wygody palca */
+            .filters { flex-direction: column; align-items: stretch; padding: 1rem; }
+            .filter-group { border-left: none !important; padding-left: 0 !important; }
+            
+            /* Responsywny nagłówek i statystyki */
+            .dashboard-header { flex-direction: column; gap: 1rem; align-items: stretch; text-align: center;}
+            .top-actions { justify-content: center; width: 100%; }
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
+            
+            /* Rozwinięty panel gracza (wykresy, symulator) pod spodem */
+            .expanded-panel { padding: 1rem; gap: 1.5rem; flex-direction: column; }
+            .simulator-box, .chart-wrapper, .h2h-box, .sgp-box { min-width: 100%; }
+            
+            /* Przyciski AKO dla telefonu */
+            .generator-bar { flex-direction: column; width: 100%; }
+            .generator-bar input, .generator-bar button { width: 100%; }
+            .section-title { flex-direction: column; align-items: stretch; }
+            .ako-dashboard { justify-content: space-between; }
+        }
     </style>
 </head>
 <body>
@@ -163,7 +164,7 @@
     <div class="dashboard-header">
         <div>
             <h1>NBA Props PRO</h1>
-            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Algorytm Filtrów Inteligentnych, Auto-SGP & H2H</p>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Terminal Giełdowy: Smart Money, H2H & Telegram Bot</p>
         </div>
         <div class="top-actions">
             <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
@@ -181,6 +182,7 @@
                 <div class="stat-box"><div class="stat-box-title">ROI (Yield)</div><div class="stat-box-value" id="statYield">0.0%</div></div>
                 <div class="stat-box"><div class="stat-box-title">Skuteczność</div><div class="stat-box-value" id="statHitRate">0/0</div></div>
             </div>
+            <div class="chart-visual-box"><canvas id="profitChart"></canvas></div>
             <h3 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">Zapisane Kupony</h3>
             <div class="history-list" id="historyContainer"></div>
         </div>
@@ -190,10 +192,6 @@
         <div class="filter-group">
             <label>Szukaj gracza</label>
             <input type="text" id="searchFilter" placeholder="np. Curry...">
-        </div>
-        <div class="filter-group">
-            <label>Data</label>
-            <select id="dateFilter"><option value="all">Wszystkie daty</option></select>
         </div>
         <div class="filter-group">
             <label>Mecz / Drużyna</label>
@@ -212,20 +210,11 @@
         </div>
         <div class="filter-group">
             <label>Typ</label>
-            <select id="pickFilter">
-                <option value="all">Wszystkie</option>
-                <option value="OVER">OVER</option>
-                <option value="UNDER">UNDER</option>
-            </select>
+            <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
         </div>
         <div class="filter-group">
             <label>Status (Rating)</label>
-            <select id="statusFilter">
-                <option value="all">Wszystkie Typy</option>
-                <option value="value">💰 Value Bety (>30% EV)</option>
-                <option value="safe">🎯 Pewniaki (>70% Szans)</option>
-                <option value="stable">🛡️ Stabilni gracze</option>
-            </select>
+            <select id="statusFilter"><option value="all">Wszystkie Typy</option><option value="value">💰 Value Bety (>30% EV)</option><option value="safe">🎯 Pewniaki (>70% Szans)</option><option value="stable">🛡️ Stabilni gracze</option></select>
         </div>
         <div class="filter-group" style="border-left: 2px solid var(--border-color); padding-left: 1rem;">
             <label style="color: var(--accent-color);">💰 Budżet</label>
@@ -264,21 +253,12 @@
     </div>
 
     <div class="section-title" style="margin-top: 3rem;">
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
             <h2 style="margin: 0;">Mój Kupon</h2>
             <div class="ako-dashboard">
-                <div class="ako-stat">
-                    <span class="ako-label">AKO</span>
-                    <span class="ako-value highlight" id="totalOddsDisplay">1.00</span>
-                </div>
-                <div class="ako-stat bordered">
-                    <span class="ako-label">Szansa</span>
-                    <span class="ako-value" id="akoProbDisplay">-</span>
-                </div>
-                <div class="ako-stat bordered">
-                    <span class="ako-label">Stawka</span>
-                    <span class="ako-value" id="akoStakeDisplay">- PLN</span>
-                </div>
+                <div class="ako-stat"><span class="ako-label">AKO</span><span class="ako-value highlight" id="totalOddsDisplay">1.00</span></div>
+                <div class="ako-stat bordered"><span class="ako-label">Szansa</span><span class="ako-value" id="akoProbDisplay">-</span></div>
+                <div class="ako-stat bordered"><span class="ako-label">Stawka</span><span class="ako-value" id="akoStakeDisplay">- PLN</span></div>
             </div>
         </div>
         <div class="generator-bar">
@@ -292,15 +272,7 @@
         <table id="favoritesTable">
             <thead>
                 <tr>
-                    <th class="col-left">Zawodnik & Mecz</th>
-                    <th>Rynek</th>
-                    <th>Linia</th>
-                    <th>Projekcja</th>
-                    <th>Szansa & EV</th>
-                    <th>Zal. Stawka</th>
-                    <th>Typ</th>
-                    <th>Matchup</th>
-                    <th>Akcja</th>
+                    <th class="col-left">Zawodnik & Mecz</th><th>Rynek</th><th>Linia</th><th>Projekcja</th><th>Szansa & EV</th><th>Zal. Stawka</th><th>Typ</th><th>Matchup</th><th>Akcja</th>
                 </tr>
             </thead>
             <tbody id="favoritesBody"></tbody>
@@ -308,26 +280,15 @@
     </div>
 
     <script>
-        // PWA - Rejestracja Service Workera
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('App is PWA ready!', reg);
-                }).catch(err => console.log('PWA error:', err));
-            });
-        }
-
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA error:', err)); }); }
         const themeBtn = document.getElementById('themeToggleBtn');
-        themeBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny';
-        });
+        themeBtn.addEventListener('click', () => { document.body.classList.toggle('dark-theme'); themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny'; });
 
         let globalData = [];
         let currentSortCol = '';
         let sortAsc = false;
-        
         let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
+        let profitChartInstance = null; 
 
         function normalCDF(x, mean, stdDev) {
             let z = (x - mean) / (stdDev * Math.sqrt(2));
@@ -337,200 +298,62 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
-        fetch('dane.json?v=' + new Date().getTime()).then(r => r.json()).then(data => {
-            globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); renderJournal();
-        }).catch(e => {
-            document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Błąd ładowania danych! Włącz skrypt Python.</td></tr>`;
-        });
+        fetch('dane.json?v=' + new Date().getTime()).then(r => r.json()).then(data => { globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); renderJournal(); }).catch(e => { document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Błąd ładowania danych! Włącz skrypt Python.</td></tr>`; });
 
-        function createStatPill(str) {
-            if (!str || str === "-") return '<span class="stat-pill stat-yellow">-</span>';
-            let v = parseInt((str.match(/(\d+)%/) || [0,0])[1]);
-            return `<span class="stat-pill ${v>=70?'stat-green':(v>=40?'stat-yellow':'stat-red')}">${str}</span>`;
-        }
-
-        function generateChartHTML(hist, linia) {
-            if (!hist || hist.length === 0) return "<div style='padding: 2rem;'>Brak historii.</div>";
-            let max = Math.max(...hist, linia) * 1.2 || 10;
-            let bars = hist.map((v, i) => `
-                <div class="chart-bar-wrap">
-                    <div class="chart-val">${v}</div>
-                    <div class="chart-bar ${v>linia?'bar-over':'bar-under'}" style="height: ${(v/max)*100}%;"></div>
-                    <div class="chart-label">L${hist.length-i}</div>
-                </div>`).join('');
-            return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`;
-        }
-
-        // NOWOŚĆ: Generator HTML dla Head-to-Head
+        function createStatPill(str) { if (!str || str === "-") return '<span class="stat-pill stat-yellow">-</span>'; let v = parseInt((str.match(/(\d+)%/) || [0,0])[1]); return `<span class="stat-pill ${v>=70?'stat-green':(v>=40?'stat-yellow':'stat-red')}">${str}</span>`; }
+        function generateChartHTML(hist, linia) { if (!hist || hist.length === 0) return "<div style='padding: 2rem;'>Brak historii.</div>"; let max = Math.max(...hist, linia) * 1.2 || 10; let bars = hist.map((v, i) => `<div class="chart-bar-wrap"><div class="chart-val">${v}</div><div class="chart-bar ${v>linia?'bar-over':'bar-under'}" style="height: ${(v/max)*100}%;"></div><div class="chart-label">L${hist.length-i}</div></div>`).join(''); return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`; }
         function generateH2HHtml(item) {
-            if (!item.h2h_history || item.h2h_history === "Brak danych") {
-                return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Zawodnik nie grał przeciwko ${item.opp_name} w ostatnich 2 sezonach.</div>`;
-            }
-            
-            let vals = item.h2h_history.split(' | ');
-            let pillsHtml = vals.map(v => {
-                let num = parseFloat(v);
-                let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia;
-                return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`;
-            }).join('');
-
-            return `
-                <div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div>
-                <div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">
-                    ${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span>
-                </div>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    ${pillsHtml}
-                </div>
-            `;
+            if (!item.h2h_history || item.h2h_history === "Brak danych") return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak najnowszych wyników vs ${item.opp_name}.</div>`;
+            let vals = item.h2h_history.split(' | '); let pillsHtml = vals.map(v => { let num = parseFloat(v); let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia; return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`; }).join('');
+            return `<div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div><div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span></div><div style="display: flex; gap: 8px; flex-wrap: wrap;">${pillsHtml}</div>`;
         }
-
         function generateSGPHtml(currentItem) {
-            let currentLoc = currentItem.lokacja.split(':')[0];
-            let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
-            
+            let currentLoc = currentItem.lokacja.split(':')[0]; let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
             let suggestions = [];
-            if (currentItem.rynek === "Asysty (AST)" && currentItem.typ === "OVER") {
-                suggestions = teammates.filter(t => (t.rynek === "Punkty (PTS)" || t.rynek === "Trójki (3PTM)") && t.typ === "OVER" && t.ev > 0);
-            } else if (currentItem.rynek === "Punkty (PTS)" && currentItem.typ === "OVER") {
-                suggestions = teammates.filter(t => t.rynek === "Asysty (AST)" && t.typ === "OVER" && t.ev > 0);
-            } else if (currentItem.ev > 0) {
-                suggestions = teammates.filter(t => t.ev > 0.05);
-            }
-
-            suggestions.sort((a,b) => b.ev - a.ev);
-            let top2 = suggestions.slice(0, 2);
-
-            if(top2.length === 0) return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak wyraźnych korelacji na dzisiaj dla tego gracza.</div>`;
-
-            let html = top2.map(s => `
-                <div class="sgp-item">
-                    <div class="sgp-info">
-                        <span class="sgp-player">${s.zawodnik}</span>
-                        <span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap: 10px;">
-                        <span class="sgp-odds">@${s.kurs}</span>
-                        <button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button>
-                    </div>
-                </div>
-            `).join('');
-
+            if (currentItem.rynek === "Asysty (AST)" && currentItem.typ === "OVER") suggestions = teammates.filter(t => (t.rynek === "Punkty (PTS)" || t.rynek === "Trójki (3PTM)") && t.typ === "OVER" && t.ev > 0);
+            else if (currentItem.rynek === "Punkty (PTS)" && currentItem.typ === "OVER") suggestions = teammates.filter(t => t.rynek === "Asysty (AST)" && t.typ === "OVER" && t.ev > 0);
+            else if (currentItem.ev > 0) suggestions = teammates.filter(t => t.ev > 0.05);
+            suggestions.sort((a,b) => b.ev - a.ev); let top2 = suggestions.slice(0, 2);
+            if(top2.length === 0) return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak korelacji.</div>`;
+            let html = top2.map(s => `<div class="sgp-item"><div class="sgp-info"><span class="sgp-player">${s.zawodnik}</span><span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span></div><div style="display:flex; align-items:center; gap: 10px;"><span class="sgp-odds">@${s.kurs}</span><button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button></div></div>`).join('');
             return `<div style="margin-top: 1rem;">${html}</div>`;
         }
 
-        window.forceAddToCoupon = function(player, market) {
-            let mainRows = document.querySelectorAll('#mainBody tr.data-row');
-            for (let row of mainRows) {
-                if (row.dataset.player === player.toLowerCase() && row.dataset.market === market) {
-                    row.querySelector('.add-btn').click();
-                    alert("Dodano skorelowany zakład do kuponu!");
-                    break;
-                }
-            }
-        };
+        window.forceAddToCoupon = function(player, market) { let mainRows = document.querySelectorAll('#mainBody tr.data-row'); for (let row of mainRows) { if (row.dataset.player === player.toLowerCase() && row.dataset.market === market) { row.querySelector('.add-btn').click(); alert("Dodano skorelowany zakład do kuponu!"); break; } } };
 
         function runSimulation(idx) {
-            let item = globalData[idx];
-            let proj = parseFloat(document.getElementById(`sim-proj-${idx}`).value);
-            let line = parseFloat(document.getElementById(`sim-line-${idx}`).value);
-            let odds = parseFloat(document.getElementById(`sim-odds-${idx}`).value);
-            let br = parseFloat(document.getElementById('bankrollInput').value) || 1000;
+            let item = globalData[idx], proj = parseFloat(document.getElementById(`sim-proj-${idx}`).value), line = parseFloat(document.getElementById(`sim-line-${idx}`).value), odds = parseFloat(document.getElementById(`sim-odds-${idx}`).value), br = parseFloat(document.getElementById('bankrollInput').value) || 1000;
             if (isNaN(proj) || isNaN(line) || isNaN(odds)) return;
-
-            let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
-            let stdDev = Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length) || 0.5;
-            let probU = normalCDF(line, proj, stdDev), probO = 1 - probU;
-
-            let evO = (probO * odds) - 1, stakeO = ((probO * (odds-1) - probU) / (odds-1)) * 0.25 * br;
-            let evU = (probU * odds) - 1, stakeU = ((probU * (odds-1) - probO) / (odds-1)) * 0.25 * br;
-
-            document.getElementById(`sim-prob-over-${idx}`).innerText = (probO * 100).toFixed(1) + '%';
-            let eOEl = document.getElementById(`sim-ev-over-${idx}`); eOEl.innerText = (evO>0?'+':'')+(evO*100).toFixed(1)+'%'; eOEl.style.color = evO>0?'#10b981':'#ef4444';
-            let sOEl = document.getElementById(`sim-stake-over-${idx}`); sOEl.innerText = stakeO>0?stakeO.toFixed(2)+' PLN':'ODPUŚĆ'; sOEl.style.color = stakeO>0?'#10b981':'var(--muted-text)';
-
-            document.getElementById(`sim-prob-under-${idx}`).innerText = (probU * 100).toFixed(1) + '%';
-            let eUEl = document.getElementById(`sim-ev-under-${idx}`); eUEl.innerText = (evU>0?'+':'')+(evU*100).toFixed(1)+'%'; eUEl.style.color = evU>0?'#10b981':'#ef4444';
-            let sUEl = document.getElementById(`sim-stake-under-${idx}`); sUEl.innerText = stakeU>0?stakeU.toFixed(2)+' PLN':'ODPUŚĆ'; sUEl.style.color = stakeU>0?'#ef4444':'var(--muted-text)';
+            let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length, stdDev = Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length) || 0.5;
+            let probU = normalCDF(line, proj, stdDev), probO = 1 - probU, evO = (probO * odds) - 1, stakeO = ((probO * (odds-1) - probU) / (odds-1)) * 0.25 * br, evU = (probU * odds) - 1, stakeU = ((probU * (odds-1) - probO) / (odds-1)) * 0.25 * br;
+            document.getElementById(`sim-prob-over-${idx}`).innerText = (probO * 100).toFixed(1) + '%'; let eOEl = document.getElementById(`sim-ev-over-${idx}`); eOEl.innerText = (evO>0?'+':'')+(evO*100).toFixed(1)+'%'; eOEl.style.color = evO>0?'#10b981':'#ef4444'; let sOEl = document.getElementById(`sim-stake-over-${idx}`); sOEl.innerText = stakeO>0?stakeO.toFixed(2)+' PLN':'ODPUŚĆ'; sOEl.style.color = stakeO>0?'#10b981':'var(--muted-text)';
+            document.getElementById(`sim-prob-under-${idx}`).innerText = (probU * 100).toFixed(1) + '%'; let eUEl = document.getElementById(`sim-ev-under-${idx}`); eUEl.innerText = (evU>0?'+':'')+(evU*100).toFixed(1)+'%'; eUEl.style.color = evU>0?'#10b981':'#ef4444'; let sUEl = document.getElementById(`sim-stake-under-${idx}`); sUEl.innerText = stakeU>0?stakeU.toFixed(2)+' PLN':'ODPUŚĆ'; sUEl.style.color = stakeU>0?'#ef4444':'var(--muted-text)';
         }
-
         document.addEventListener('input', e => { if (e.target.classList.contains('sim-input')) runSimulation(e.target.dataset.index); });
 
         function renderTable(data) {
             const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
             let bankroll = parseFloat(document.getElementById('bankrollInput').value) || 1000;
-
             data.forEach((item, index) => {
-                let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90);
-                let kelly = (true_prob * ((item.kurs||1.9)-1) - (1-true_prob)) / ((item.kurs||1.9)-1);
-                let stake = kelly > 0 ? kelly * 0.25 * bankroll : 0;
-
-                let isStable = false;
-                if (item.history && item.history.length >= 5) {
-                    let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
-                    let cv = mean > 0 ? (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean : 1; 
-                    if (cv < 0.35 && mean >= (item.linia * 0.75)) isStable = true;
-                }
-
-                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]);
-                let isValueBet = item.ev >= 0.30;
-                let isSafeBet = true_prob >= 0.70 && l5v >= 80;
+                let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90), kelly = (true_prob * ((item.kurs||1.9)-1) - (1-true_prob)) / ((item.kurs||1.9)-1), stake = kelly > 0 ? kelly * 0.25 * bankroll : 0;
+                let isStable = false; if (item.history && item.history.length >= 5) { let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length, cv = mean > 0 ? (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean : 1; if (cv < 0.35 && mean >= (item.linia * 0.75)) isStable = true; }
+                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]), isValueBet = item.ev >= 0.30, isSafeBet = true_prob >= 0.70 && l5v >= 80, rowClass = isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : ""));
                 
-                let rowClass = isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : ""));
-                let badges = [];
-                if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`);
-                if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`);
+                let badges = []; 
+                if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`); 
+                if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`); 
                 if(isStable) badges.push(`<span title="Stabilny" style="font-size:1.1rem">🛡️</span>`);
+                if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów u bukmacherów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
 
-                let tr = document.createElement('tr');
-                tr.className = `data-row ${rowClass}`;
-                tr.dataset.isValue = isValueBet ? "true" : "false"; tr.dataset.isSafe = isSafeBet ? "true" : "false"; tr.dataset.isStable = isStable ? "true" : "false";
-                tr.dataset.player = item.zawodnik.toLowerCase(); tr.dataset.game = item.mecz; tr.dataset.date = item.data; tr.dataset.market = item.rynek; tr.dataset.pick = item.typ; tr.dataset.index = index; tr.dataset.odds = item.kurs; tr.dataset.prob = true_prob; tr.dataset.stawka = stake; 
+                let tr = document.createElement('tr'); tr.className = `data-row ${rowClass}`; tr.dataset.isValue = isValueBet ? "true" : "false"; tr.dataset.isSafe = isSafeBet ? "true" : "false"; tr.dataset.isStable = isStable ? "true" : "false"; tr.dataset.player = item.zawodnik.toLowerCase(); tr.dataset.game = item.mecz; tr.dataset.market = item.rynek; tr.dataset.pick = item.typ; tr.dataset.index = index; tr.dataset.odds = item.kurs; tr.dataset.prob = true_prob; tr.dataset.stawka = stake; 
+                
+                let uwagi_html = item.uwagi !== "-" ? `<div class="uwagi-text">${item.uwagi}</div>` : "";
 
-                tr.innerHTML = `
-                    <td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz} • ${item.data}</div></td>
-                    <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
-                    <td class="line">${item.linia}</td><td class="projection">${item.projekcja}</td>
-                    <td class="ev-val"><div style="font-size:0.85rem;color:var(--muted-text)">Szansa: <span style="font-weight:800;color:var(--text-color)">${(true_prob*100).toFixed(1)}%</span></div><div style="font-size:0.85rem;color:var(--muted-text)">EV: <span style="color:${item.ev>0?'#10b981':'#ef4444'}">${item.ev>0?'+':''}${(item.ev*100).toFixed(1)}%</span></div></td>
-                    <td class="stake-val">${stake>0?stake.toFixed(2)+' PLN':'-'}</td>
-                    <td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td>
-                    <td>${createStatPill(item.l5)}</td><td>${createStatPill(item.l10)}</td><td>${createStatPill(item.sezon)}</td>
-                    <td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td>
-                    <td><button class="action-btn add-btn">⭐</button></td>
-                `;
+                tr.innerHTML = `<td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td><td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td><td class="line">${item.linia}</td><td class="projection">${item.projekcja}</td><td class="ev-val"><div style="font-size:0.85rem;color:var(--muted-text)">Szansa: <span style="font-weight:800;color:var(--text-color)">${(true_prob*100).toFixed(1)}%</span></div><div style="font-size:0.85rem;color:var(--muted-text)">EV: <span style="color:${item.ev>0?'#10b981':'#ef4444'}">${item.ev>0?'+':''}${(item.ev*100).toFixed(1)}%</span></div></td><td class="stake-val">${stake>0?stake.toFixed(2)+' PLN':'-'}</td><td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td><td>${createStatPill(item.l5)}</td><td>${createStatPill(item.l10)}</td><td>${createStatPill(item.sezon)}</td><td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td><td><button class="action-btn add-btn">⭐</button></td>`;
                 tbody.appendChild(tr);
 
                 let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
-                chartTr.innerHTML = `
-                    <td colspan="12" class="chart-td">
-                        <div class="expanded-panel">
-                            <div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div>
-                            
-                            <div class="h2h-box">
-                                <div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>
-                                ${generateH2HHtml(item)}
-                            </div>
-
-                            <div class="simulator-box">
-                                <div class="panel-title">Symulator (Korekty)</div>
-                                <div class="sim-grid">
-                                    <div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div>
-                                    <div class="sim-input-group"><label>Linia (Twój Buk)</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div>
-                                    <div class="sim-input-group"><label>Kurs (Twój Buk)</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div>
-                                </div>
-                                <div class="sim-results">
-                                    <div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div><div class="res-stake" id="sim-stake-over-${index}">-</div></div>
-                                    <div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div><div class="res-stake" id="sim-stake-under-${index}">-</div></div>
-                                </div>
-                            </div>
-                            <div class="sgp-box">
-                                <div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Sugestie BetBuilder (SGP)</div>
-                                <div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem;">Skorelowane typy z tej samej drużyny:</div>
-                                ${generateSGPHtml(item)}
-                            </div>
-                        </div>
-                    </td>
-                `;
+                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia (Twój Buk)</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs (Twój Buk)</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div><div class="res-stake" id="sim-stake-over-${index}">-</div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div><div class="res-stake" id="sim-stake-under-${index}">-</div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Sugestie SGP</div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem;">Skorelowane typy:</div>${generateSGPHtml(item)}</div></div></td>`;
                 tbody.appendChild(chartTr);
                 tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
             });
@@ -539,73 +362,49 @@
         document.getElementById('bankrollInput').addEventListener('input', () => { renderTable(globalData); applyFilters(); updateTotalOdds(); });
 
         function updateTotalOdds() {
-            let rows = document.querySelectorAll('#favoritesBody tr');
-            let br = parseFloat(document.getElementById('bankrollInput').value) || 1000;
-            let tAko = 1.0, tProb = 1.0;
-
+            let rows = document.querySelectorAll('#favoritesBody tr'), br = parseFloat(document.getElementById('bankrollInput').value) || 1000, tAko = 1.0, tProb = 1.0;
             rows.forEach(r => { let k = parseFloat(r.dataset.odds), p = parseFloat(r.dataset.prob); if(!isNaN(k)) tAko *= k; if(!isNaN(p)) tProb *= p; });
-
             let oDisp = document.getElementById('totalOddsDisplay'), pDisp = document.getElementById('akoProbDisplay'), sDisp = document.getElementById('akoStakeDisplay');
             if (rows.length > 0) {
-                oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight";
-                pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
+                oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight"; pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
                 let kelly = (tProb*(tAko-1) - (1-tProb))/(tAko-1), stake = kelly>0 ? kelly*0.25*br : 0;
                 document.getElementById('saveJournalBtn').dataset.stake = stake; document.getElementById('saveJournalBtn').dataset.odds = tAko;
-                if (stake > 0) { sDisp.innerText = stake.toFixed(2)+" PLN"; sDisp.className = "ako-value success"; } 
-                else { sDisp.innerText = "0.00 PLN"; sDisp.className = "ako-value danger"; pDisp.className = "ako-value danger"; }
-            } else {
-                oDisp.innerText = "1.00"; oDisp.className = "ako-value"; pDisp.innerText = "-"; pDisp.className = "ako-value"; sDisp.innerText = "- PLN"; sDisp.className = "ako-value";
-                document.getElementById('saveJournalBtn').dataset.stake = 0;
-            }
+                if (stake > 0) { sDisp.innerText = stake.toFixed(2)+" PLN"; sDisp.className = "ako-value success"; } else { sDisp.innerText = "0.00 PLN"; sDisp.className = "ako-value danger"; pDisp.className = "ako-value danger"; }
+            } else { oDisp.innerText = "1.00"; oDisp.className = "ako-value"; pDisp.innerText = "-"; pDisp.className = "ako-value"; sDisp.innerText = "- PLN"; sDisp.className = "ako-value"; document.getElementById('saveJournalBtn').dataset.stake = 0; }
         }
 
-        document.getElementById('mainTable').addEventListener('click', e => {
-            if (e.target.classList.contains('add-btn')) {
-                let r = e.target.closest('tr.data-row'), c = r.cloneNode(true);
-                c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); 
-                c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>';
-                document.getElementById('favoritesBody').appendChild(c); r.classList.add('hidden'); updateTotalOdds(); 
-            }
-        });
+        document.getElementById('mainTable').addEventListener('click', e => { if (e.target.classList.contains('add-btn')) { let r = e.target.closest('tr.data-row'), c = r.cloneNode(true); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; document.getElementById('favoritesBody').appendChild(c); r.classList.add('hidden'); updateTotalOdds(); }});
+        document.getElementById('favoritesTable').addEventListener('click', e => { if (e.target.classList.contains('remove-btn')) { let r = e.target.closest('tr'), p = r.dataset.player, m = r.dataset.market; r.remove(); document.querySelectorAll('#mainBody tr.data-row').forEach(mr => { if(mr.dataset.player===p && mr.dataset.market===m) { mr.classList.remove('hidden'); applyFilters(); }}); updateTotalOdds(); }});
 
-        document.getElementById('favoritesTable').addEventListener('click', e => {
-            if (e.target.classList.contains('remove-btn')) {
-                let r = e.target.closest('tr'), p = r.dataset.player, m = r.dataset.market; r.remove();
-                document.querySelectorAll('#mainBody tr.data-row').forEach(mr => { if(mr.dataset.player===p && mr.dataset.market===m) { mr.classList.remove('hidden'); applyFilters(); }}); updateTotalOdds(); 
-            }
-        });
-
-        // DZIENNIK INWESTYCYJNY
+        // DZIENNIK INWESTYCYJNY ORAZ WYKRES CHART.JS
         const modal = document.getElementById('journalModal');
         document.getElementById('openJournalBtn').onclick = () => { modal.style.display = "block"; renderJournal(); }
         document.getElementById('closeJournalBtn').onclick = () => { modal.style.display = "none"; }
         window.onclick = e => { if(e.target == modal) modal.style.display = "none"; }
 
         document.getElementById('saveJournalBtn').addEventListener('click', () => {
-            let rows = document.querySelectorAll('#favoritesBody tr');
-            let stake = parseFloat(document.getElementById('saveJournalBtn').dataset.stake);
-            let odds = parseFloat(document.getElementById('saveJournalBtn').dataset.odds);
-
+            let rows = document.querySelectorAll('#favoritesBody tr'), stake = parseFloat(document.getElementById('saveJournalBtn').dataset.stake), odds = parseFloat(document.getElementById('saveJournalBtn').dataset.odds);
             if (rows.length === 0) { alert("Dodaj typy na kupon przed zapisem!"); return; }
-            if (stake <= 0) { if(!confirm("Uwaga: Algorytm odradza grę tego kuponu (Stawka 0 PLN). Zapisać mimo to z testową stawką 10 PLN?")) return; stake = 10; }
-
-            let matches = [];
-            rows.forEach(r => { matches.push(`${r.querySelector('.player-name').innerText.split(' ')[0]} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); });
-
+            if (stake <= 0) { if(!confirm("Uwaga: Algorytm odradza grę tego kuponu. Zapisać mimo to z testową stawką 10 PLN?")) return; stake = 10; }
+            let matches = []; rows.forEach(r => { matches.push(`${r.querySelector('.player-name').innerText.split(' ')[0]} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); });
             let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0 };
-            journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData));
-            alert("✅ Kupon zapisany w Dzienniku Inwestycyjnym!"); renderJournal();
+            journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); alert("✅ Kupon zapisany w Dzienniku!"); renderJournal();
         });
 
         function renderJournal() {
             let container = document.getElementById('historyContainer'); container.innerHTML = '';
             let tInvested = 0, tProfit = 0, wCount = 0, resolvedCount = 0;
+            let chartLabels = ['Start']; let chartDataPoints = [0]; let runningTotal = 0;
+
+            journalData.forEach(entry => {
+                if(entry.status !== 'pending') { 
+                    tInvested += entry.stake; tProfit += entry.profit; resolvedCount++; if(entry.status === 'win') wCount++; 
+                    runningTotal += entry.profit; chartLabels.push(entry.date.split(' ')[0]); chartDataPoints.push(runningTotal);
+                }
+            });
 
             [...journalData].reverse().forEach(entry => {
-                if(entry.status !== 'pending') { tInvested += entry.stake; tProfit += entry.profit; resolvedCount++; if(entry.status === 'win') wCount++; }
-                let statusBadge = entry.status === 'pending' ? `<span class="status-badge" style="background:#f59e0b;">⏳ Oczekuje</span>` : 
-                                 (entry.status === 'win' ? `<span class="status-badge" style="background:#10b981;">✅ Wygrany (+${entry.profit.toFixed(2)})</span>` : 
-                                 `<span class="status-badge" style="background:#ef4444;">❌ Przegrany (${entry.profit.toFixed(2)})</span>`);
+                let statusBadge = entry.status === 'pending' ? `<span class="status-badge" style="background:#f59e0b;">⏳ Oczekuje</span>` : (entry.status === 'win' ? `<span class="status-badge" style="background:#10b981;">✅ Wygrany (+${entry.profit.toFixed(2)})</span>` : `<span class="status-badge" style="background:#ef4444;">❌ Przegrany (${entry.profit.toFixed(2)})</span>`);
                 let actions = entry.status === 'pending' ? `<button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `<button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
                 let div = document.createElement('div'); div.className = 'history-card';
                 div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
@@ -613,65 +412,25 @@
             });
 
             if(journalData.length === 0) container.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--muted-text);">Brak zapisanych kuponów.</div>';
-            document.getElementById('statInvested').innerText = tInvested.toFixed(2) + ' PLN';
-            let profitEl = document.getElementById('statProfit'); profitEl.innerText = tProfit.toFixed(2) + ' PLN'; profitEl.className = 'stat-box-value ' + (tProfit > 0 ? 'text-green' : (tProfit < 0 ? 'text-red' : ''));
-            let yieldEl = document.getElementById('statYield'); let yieldVal = tInvested > 0 ? (tProfit / tInvested) * 100 : 0; yieldEl.innerText = yieldVal.toFixed(1) + '%'; yieldEl.className = 'stat-box-value ' + (yieldVal > 0 ? 'text-green' : (yieldVal < 0 ? 'text-red' : ''));
-            document.getElementById('statHitRate').innerText = `${wCount}/${resolvedCount}`;
+            document.getElementById('statInvested').innerText = tInvested.toFixed(2) + ' PLN'; let profitEl = document.getElementById('statProfit'); profitEl.innerText = tProfit.toFixed(2) + ' PLN'; profitEl.className = 'stat-box-value ' + (tProfit > 0 ? 'text-green' : (tProfit < 0 ? 'text-red' : '')); let yieldEl = document.getElementById('statYield'); let yieldVal = tInvested > 0 ? (tProfit / tInvested) * 100 : 0; yieldEl.innerText = yieldVal.toFixed(1) + '%'; yieldEl.className = 'stat-box-value ' + (yieldVal > 0 ? 'text-green' : (yieldVal < 0 ? 'text-red' : '')); document.getElementById('statHitRate').innerText = `${wCount}/${resolvedCount}`;
+            updateProfitChart(chartLabels, chartDataPoints);
         }
 
-        window.resolveCoupon = function(id, status) {
-            let entry = journalData.find(e => e.id === id);
-            if(entry) { entry.status = status; entry.profit = status === 'win' ? (entry.stake * entry.odds) - entry.stake : -entry.stake; localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); }
-        }
-        window.deleteCoupon = function(id) {
-            if(confirm("Na pewno usunąć ten kupon z historii? Zmieni to Twoje statystyki ROI.")) { journalData = journalData.filter(e => e.id !== id); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); }
+        function updateProfitChart(labels, data) {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+            if (profitChartInstance) { profitChartInstance.destroy(); }
+            let isDark = document.body.classList.contains('dark-theme'); let textColor = isDark ? '#94a3b8' : '#64748b'; let gridColor = isDark ? '#334155' : '#e2e8f0';
+            profitChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Skumulowany Zysk (PLN)', data: data, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, pointBackgroundColor: '#10b981', pointBorderColor: '#fff', pointRadius: 4, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor, maxTicksLimit: 8 }, grid: { display: false } } } } });
         }
 
-        document.getElementById('generateBtn').addEventListener('click', () => {
-            let t = parseFloat(document.getElementById('targetOddsInput').value);
-            if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs (np. 3.0) przed użyciem bota.");
-            document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters();
-            let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)'));
-            let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index));
-            let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev);
-            let ako = 1.0, used = new Set();
-            for (let b of bets) {
-                if (used.has(b.mecz)) continue;
-                for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) {
-                    if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; }
-                }
-                if (ako >= t) break;
-            }
-            if (ako < t && bets.length > 0) { alert(`Z wybranych filtrów udało się wyciągnąć maksymalnie AKO: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Nie ma opłacalnych typów dla wybranych filtrów!`); }
-        });
+        window.resolveCoupon = function(id, status) { let entry = journalData.find(e => e.id === id); if(entry) { entry.status = status; entry.profit = status === 'win' ? (entry.stake * entry.odds) - entry.stake : -entry.stake; localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
+        window.deleteCoupon = function(id) { if(confirm("Na pewno usunąć ten kupon z historii?")) { journalData = journalData.filter(e => e.id !== id); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
 
-        document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => {
-                const col = th.dataset.sort; if (currentSortCol === col) sortAsc = !sortAsc; else { sortAsc = false; currentSortCol = col; }
-                globalData.sort((a, b) => {
-                    let vA = a[col], vB = b[col];
-                    if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; }
-                    else if (['linia', 'projekcja', 'ev'].includes(col)) { vA = parseFloat(vA)||0; vB = parseFloat(vB)||0; }
-                    else if (col === 'stawka') { let rA = document.querySelector(`tr[data-player="${a.zawodnik.toLowerCase()}"][data-market="${a.rynek}"]`), rB = document.querySelector(`tr[data-player="${b.zawodnik.toLowerCase()}"][data-market="${b.rynek}"]`); vA = rA?parseFloat(rA.dataset.stawka):0; vB = rB?parseFloat(rB.dataset.stawka):0; }
-                    else if (col === 'matchup_rank') { vA = parseInt(vA.toString().replace(/\D/g, ''))||0; vB = parseInt(vB.toString().replace(/\D/g, ''))||0; }
-                    else { vA = vA.toString().toLowerCase(); vB = vB.toString().toLowerCase(); }
-                    return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0);
-                }); renderTable(globalData); applyFilters(); 
-            });
-        });
+        document.getElementById('generateBtn').addEventListener('click', () => { let t = parseFloat(document.getElementById('targetOddsInput').value); if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs."); document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters(); let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')); let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index)); let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev); let ako = 1.0, used = new Set(); for (let b of bets) { if (used.has(b.mecz)) continue; for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) { if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; } } if (ako >= t) break; } if (ako < t && bets.length > 0) { alert(`Maksymalne AKO z filtrów: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Brak typów dla wybranych filtrów!`); } });
+        document.querySelectorAll('th.sortable').forEach(th => { th.addEventListener('click', () => { const col = th.dataset.sort; if (currentSortCol === col) sortAsc = !sortAsc; else { sortAsc = false; currentSortCol = col; } globalData.sort((a, b) => { let vA = a[col], vB = b[col]; if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; } else if (['linia', 'projekcja', 'ev'].includes(col)) { vA = parseFloat(vA)||0; vB = parseFloat(vB)||0; } else if (col === 'stawka') { let rA = document.querySelector(`tr[data-player="${a.zawodnik.toLowerCase()}"][data-market="${a.rynek}"]`), rB = document.querySelector(`tr[data-player="${b.zawodnik.toLowerCase()}"][data-market="${b.rynek}"]`); vA = rA?parseFloat(rA.dataset.stawka):0; vB = rB?parseFloat(rB.dataset.stawka):0; } else if (col === 'matchup_rank') { vA = parseInt(vA.toString().replace(/\D/g, ''))||0; vB = parseInt(vB.toString().replace(/\D/g, ''))||0; } else { vA = vA.toString().toLowerCase(); vB = vB.toString().toLowerCase(); } return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); }); renderTable(globalData); applyFilters();  }); });
         
-        function populateDropdowns(d) { let dates = new Set(), games = new Set(); d.forEach(i => { dates.add(i.data); games.add(i.mecz); }); Array.from(dates).sort().forEach(dt => document.getElementById('dateFilter').add(new Option(dt, dt))); Array.from(games).sort().forEach(g => document.getElementById('gameFilter').add(new Option(g, g))); }
-        function applyFilters() {
-            let s = document.getElementById('searchFilter').value.toLowerCase(), d = document.getElementById('dateFilter').value, g = document.getElementById('gameFilter').value, m = document.getElementById('marketFilter').value, p = document.getElementById('pickFilter').value, stat = document.getElementById('statusFilter').value;
-            document.querySelectorAll('#mainBody tr.data-row').forEach(r => {
-                let matchStatus = true;
-                if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false;
-                if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false;
-                if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false;
-                let vis = r.dataset.player.includes(s) && (d==='all'||r.dataset.date===d) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus;
-                r.classList.toggle('hidden', !vis); let c = document.getElementById(`chart-${r.dataset.index}`); if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden');
-            });
-        }
+        function populateDropdowns(d) { let games = new Set(); d.forEach(i => { games.add(i.mecz); }); Array.from(games).sort().forEach(g => document.getElementById('gameFilter').add(new Option(g, g))); }
+        function applyFilters() { let s = document.getElementById('searchFilter').value.toLowerCase(), g = document.getElementById('gameFilter').value, m = document.getElementById('marketFilter').value, p = document.getElementById('pickFilter').value, stat = document.getElementById('statusFilter').value; document.querySelectorAll('#mainBody tr.data-row').forEach(r => { let matchStatus = true; if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; r.classList.toggle('hidden', !vis); let c = document.getElementById(`chart-${r.dataset.index}`); if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden'); }); }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
     </script>
 </body>
