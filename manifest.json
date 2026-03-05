@@ -1,0 +1,17 @@
+{
+  "name": "NBA Quant PRO",
+  "short_name": "NBA PRO",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "description": "Profesjonalny system analityczny do NBA",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23fcd34d'/><text x='50' y='65' font-size='40' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%230f172a'>PRO</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
