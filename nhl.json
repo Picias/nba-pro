@@ -14,7 +14,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "64%",
-        "lokacja": "-",
+        "lokacja": "DOM: 70% (22/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -29,9 +29,9 @@
             6,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.8,
+        "h2h_history": "2 | 1 | 1 | 3",
         "smart_money": false
     },
     {
@@ -49,7 +49,7 @@
         "l5": "0% (0/5)",
         "l10": "30% (3/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (14/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -64,9 +64,9 @@
             3,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 3.2,
+        "h2h_history": "3 | 3 | 5 | 2",
         "smart_money": false
     },
     {
@@ -84,7 +84,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 31% (9/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -99,9 +99,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 2.3,
+        "h2h_history": "2 | 2 | 3",
         "smart_money": false
     },
     {
@@ -119,7 +119,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (8/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -134,9 +134,9 @@
             2,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 3.2,
+        "h2h_history": "2 | 4 | 5 | 2",
         "smart_money": false
     },
     {
@@ -154,7 +154,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (13/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -169,9 +169,9 @@
             3,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 4.5,
+        "h2h_history": "2 | 7",
         "smart_money": false
     },
     {
@@ -189,7 +189,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "DOM: 64% (20/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -204,9 +204,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.5,
+        "h2h_history": "0 | 3 | 1 | 2",
         "smart_money": false
     },
     {
@@ -224,7 +224,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "66%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 62% (5/8)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -239,9 +239,9 @@
             2,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 2.0,
+        "h2h_history": "2",
         "smart_money": false
     },
     {
@@ -259,7 +259,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 31% (7/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -274,9 +274,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 1.6,
+        "h2h_history": "4 | 1 | 2 | 0 | 1",
         "smart_money": false
     },
     {
@@ -294,7 +294,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 31% (9/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -309,9 +309,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 3.7,
+        "h2h_history": "1 | 7 | 3",
         "smart_money": false
     },
     {
@@ -329,7 +329,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (13/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -344,9 +344,9 @@
             1,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 2.7,
+        "h2h_history": "2 | 1 | 5",
         "smart_money": false
     },
     {
@@ -364,7 +364,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "DOM: 55% (16/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -379,9 +379,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 1 | 2",
         "smart_money": false
     },
     {
@@ -399,7 +399,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 62% (5/8)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -414,9 +414,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -434,7 +434,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (14/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -449,9 +449,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -469,7 +469,7 @@
         "l5": "0% (0/5)",
         "l10": "30% (3/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 40% (10/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -484,9 +484,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -504,7 +504,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 31% (9/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -519,9 +519,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -539,7 +539,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (10/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -554,9 +554,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.8,
+        "h2h_history": "2 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -574,7 +574,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (10/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -589,9 +589,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.0,
+        "h2h_history": "2 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -609,7 +609,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 20% (6/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -624,9 +624,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -644,7 +644,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 36% (8/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -659,9 +659,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -679,7 +679,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "28%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 39% (11/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -694,9 +694,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -714,7 +714,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (10/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -729,9 +729,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -749,7 +749,7 @@
         "l5": "0% (0/5)",
         "l10": "10% (1/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 34% (10/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -764,9 +764,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -784,7 +784,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "24%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 25% (7/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -799,9 +799,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -819,7 +819,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "59%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (18/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -834,9 +834,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.2,
+        "h2h_history": "2 | 1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -854,7 +854,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 62% (5/8)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -869,9 +869,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -889,7 +889,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "70%",
-        "lokacja": "-",
+        "lokacja": "DOM: 68% (20/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -904,9 +904,9 @@
             2,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 1 | 2",
         "smart_money": false
     },
     {
@@ -924,7 +924,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "64%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (18/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -939,9 +939,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.5,
+        "h2h_history": "2 | 1 | 0 | 3",
         "smart_money": false
     },
     {
@@ -959,7 +959,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "61%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 51% (15/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -974,9 +974,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -994,7 +994,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "54%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 55% (16/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1009,9 +1009,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -1029,7 +1029,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "DOM: 52% (13/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1044,9 +1044,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 1 | 2",
         "smart_money": false
     },
     {
@@ -1064,7 +1064,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "68%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 59% (13/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1079,9 +1079,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 1 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -1099,7 +1099,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 51% (16/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1114,9 +1114,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -1134,7 +1134,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 53% (15/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1149,9 +1149,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -1169,7 +1169,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (12/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1184,9 +1184,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -1204,7 +1204,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "DOM: 35% (11/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1219,9 +1219,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -1239,7 +1239,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "30%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 39% (11/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1254,9 +1254,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -1274,7 +1274,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 32% (9/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1289,9 +1289,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -1309,7 +1309,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 50% (14/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1324,9 +1324,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 3.0,
+        "h2h_history": "3 | 3 | 3 | 3",
         "smart_money": false
     },
     {
@@ -1344,7 +1344,7 @@
         "l5": "20% (1/5)",
         "l10": "50% (5/10)",
         "sezon": "59%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 53% (15/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1359,9 +1359,9 @@
             3,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 2.8,
+        "h2h_history": "2 | 1 | 5 | 3",
         "smart_money": false
     },
     {
@@ -1379,7 +1379,7 @@
         "l5": "60% (3/5)",
         "l10": "80% (8/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "DOM: 36% (11/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1394,9 +1394,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Florida Panthers",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 1 | 2 | 1",
         "smart_money": false
     },
     {
@@ -1414,7 +1414,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 32% (9/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1429,9 +1429,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Detroit Red Wings",
+        "h2h_avg": 0.2,
+        "h2h_history": "1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -1449,7 +1449,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "DOM: 35% (10/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1464,9 +1464,9 @@
             4,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 3.8,
+        "h2h_history": "5 | 2 | 6 | 2",
         "smart_money": false
     },
     {
@@ -1484,7 +1484,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 41% (10/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1499,9 +1499,9 @@
             1,
             5
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -1519,7 +1519,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1534,9 +1534,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 2.8,
+        "h2h_history": "5 | 1 | 2 | 3",
         "smart_money": false
     },
     {
@@ -1554,7 +1554,7 @@
         "l5": "100% (5/5)",
         "l10": "80% (8/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "DOM: 78% (22/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1569,9 +1569,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.7,
+        "h2h_history": "1 | 2 | 2",
         "smart_money": false
     },
     {
@@ -1589,7 +1589,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "DOM: 54% (12/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1604,9 +1604,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.2,
+        "h2h_history": "2 | 1 | 2 | 0",
         "smart_money": false
     },
     {
@@ -1624,7 +1624,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "28%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 32% (8/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1639,9 +1639,9 @@
             5,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 4.0,
+        "h2h_history": "4",
         "smart_money": false
     },
     {
@@ -1659,7 +1659,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "67%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 65% (19/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1674,9 +1674,9 @@
             8,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 4.0,
+        "h2h_history": "4 | 4 | 3 | 5",
         "smart_money": false
     },
     {
@@ -1694,7 +1694,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "49%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (12/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1709,9 +1709,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 3.8,
+        "h2h_history": "3 | 8 | 1 | 3",
         "smart_money": false
     },
     {
@@ -1729,7 +1729,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 43% (13/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1744,9 +1744,9 @@
             5,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.8,
+        "h2h_history": "5 | 1 | 2 | 3",
         "smart_money": false
     },
     {
@@ -1764,7 +1764,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 33% (10/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1779,9 +1779,9 @@
             2,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 0 | 3 | 3",
         "smart_money": false
     },
     {
@@ -1799,7 +1799,7 @@
         "l5": "100% (5/5)",
         "l10": "70% (7/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 51% (15/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1814,9 +1814,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.2,
+        "h2h_history": "2 | 1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -1834,7 +1834,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 66% (20/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1849,9 +1849,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2 | 0 | 2",
         "smart_money": false
     },
     {
@@ -1869,7 +1869,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (12/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1884,9 +1884,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.0,
+        "h2h_history": "2 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -1904,7 +1904,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "DOM: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1919,9 +1919,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -1939,7 +1939,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 53% (15/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1954,9 +1954,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -1974,7 +1974,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 28% (7/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -1989,9 +1989,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -2009,7 +2009,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 54% (13/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2024,9 +2024,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -2044,7 +2044,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 30% (9/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2059,9 +2059,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -2079,7 +2079,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "DOM: 33% (5/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2094,9 +2094,9 @@
             1,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -2114,7 +2114,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "DOM: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2129,9 +2129,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.2,
+        "h2h_history": "0 | 1 | 3 | 1",
         "smart_money": false
     },
     {
@@ -2149,7 +2149,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (10/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2164,9 +2164,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.2,
+        "h2h_history": "1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2184,7 +2184,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (12/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2199,9 +2199,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -2219,7 +2219,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "23%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 25% (6/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2234,9 +2234,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2254,7 +2254,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "21%",
-        "lokacja": "-",
+        "lokacja": "DOM: 14% (4/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2269,9 +2269,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2289,7 +2289,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "24%",
-        "lokacja": "-",
+        "lokacja": "DOM: 21% (6/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2304,9 +2304,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2324,7 +2324,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "30%",
-        "lokacja": "-",
+        "lokacja": "DOM: 22% (4/18)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2339,9 +2339,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -2359,7 +2359,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 30% (9/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2374,9 +2374,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2394,7 +2394,7 @@
         "l5": "0% (0/5)",
         "l10": "0% (0/10)",
         "sezon": "21%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 14% (4/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2409,9 +2409,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2429,7 +2429,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "36%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 26% (8/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2444,9 +2444,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -2464,7 +2464,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 48% (14/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2479,9 +2479,9 @@
             2,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.5,
+        "h2h_history": "3 | 1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -2499,7 +2499,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 37% (11/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2514,9 +2514,9 @@
             3,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.8,
+        "h2h_history": "3 | 1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -2534,7 +2534,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "70%",
-        "lokacja": "-",
+        "lokacja": "DOM: 71% (20/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2549,9 +2549,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 1 | 3 | 0",
         "smart_money": false
     },
     {
@@ -2569,7 +2569,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "71%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 80% (24/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2584,9 +2584,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.8,
+        "h2h_history": "0 | 3 | 2 | 2",
         "smart_money": false
     },
     {
@@ -2604,7 +2604,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (10/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2619,9 +2619,9 @@
             3,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -2639,7 +2639,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "67%",
-        "lokacja": "-",
+        "lokacja": "DOM: 64% (18/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2654,9 +2654,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 1 | 3 | 1",
         "smart_money": false
     },
     {
@@ -2674,7 +2674,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 66% (20/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2689,9 +2689,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -2709,7 +2709,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "63%",
-        "lokacja": "-",
+        "lokacja": "DOM: 62% (15/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2724,9 +2724,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -2744,7 +2744,7 @@
         "l5": "80% (4/5)",
         "l10": "90% (9/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (7/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2759,9 +2759,9 @@
             2,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 1 | 2 | 1",
         "smart_money": false
     },
     {
@@ -2779,7 +2779,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "DOM: 67% (19/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2794,9 +2794,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -2814,7 +2814,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "52%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 62% (17/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2829,9 +2829,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2 | 1",
         "smart_money": false
     },
     {
@@ -2849,7 +2849,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "36%",
-        "lokacja": "-",
+        "lokacja": "DOM: 35% (10/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2864,9 +2864,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2884,7 +2884,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (11/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2899,9 +2899,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.5,
+        "h2h_history": "2 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2919,7 +2919,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "27%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 29% (7/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2934,9 +2934,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -2954,7 +2954,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "43%",
-        "lokacja": "-",
+        "lokacja": "DOM: 38% (7/18)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -2969,9 +2969,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -2989,7 +2989,7 @@
         "l5": "0% (0/5)",
         "l10": "20% (2/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 21% (6/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3004,9 +3004,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3024,7 +3024,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 43% (13/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3039,9 +3039,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -3059,7 +3059,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "DOM: 25% (7/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3074,9 +3074,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3094,7 +3094,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 30% (9/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3109,9 +3109,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -3129,7 +3129,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (11/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3144,9 +3144,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.3,
+        "h2h_history": "2 | 3 | 2",
         "smart_money": false
     },
     {
@@ -3164,7 +3164,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "63%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 64% (18/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3179,9 +3179,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2 | 1",
         "smart_money": false
     },
     {
@@ -3199,7 +3199,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "63%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 56% (17/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3214,9 +3214,9 @@
             3,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.3,
+        "h2h_history": "3 | 2 | 2",
         "smart_money": false
     },
     {
@@ -3234,7 +3234,7 @@
         "l5": "100% (5/5)",
         "l10": "60% (6/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (14/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3249,9 +3249,9 @@
             2,
             5
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 2 | 2 | 0",
         "smart_money": false
     },
     {
@@ -3269,7 +3269,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "DOM: 53% (8/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3284,9 +3284,9 @@
             4,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Colorado Avalanche",
+        "h2h_avg": 2.8,
+        "h2h_history": "1 | 4 | 3 | 3",
         "smart_money": false
     },
     {
@@ -3304,7 +3304,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "58%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3319,9 +3319,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.7,
+        "h2h_history": "2 | 3 | 3",
         "smart_money": false
     },
     {
@@ -3339,7 +3339,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 50% (12/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3354,9 +3354,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Dallas Stars",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 1 | 3 | 2",
         "smart_money": false
     },
     {
@@ -3374,7 +3374,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (9/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3389,9 +3389,9 @@
             2,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 3.2,
+        "h2h_history": "4 | 6 | 1 | 0 | 5",
         "smart_money": false
     },
     {
@@ -3409,7 +3409,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "DOM: 43% (10/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3424,9 +3424,9 @@
             4,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 3.6,
+        "h2h_history": "5 | 4 | 2 | 1 | 6",
         "smart_money": false
     },
     {
@@ -3444,7 +3444,7 @@
         "l5": "100% (5/5)",
         "l10": "70% (7/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (7/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3459,9 +3459,9 @@
             3,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2",
         "smart_money": false
     },
     {
@@ -3479,7 +3479,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 47% (9/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3494,9 +3494,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.7,
+        "h2h_history": "2 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3514,7 +3514,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "13%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 12% (3/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3529,9 +3529,9 @@
             0,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -3549,7 +3549,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "48%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (14/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3564,9 +3564,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 2.4,
+        "h2h_history": "2 | 5 | 2 | 2 | 1",
         "smart_money": false
     },
     {
@@ -3584,7 +3584,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 37% (10/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3599,9 +3599,9 @@
             0,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 3 | 1 | 1",
         "smart_money": false
     },
     {
@@ -3619,7 +3619,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 38% (12/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3634,9 +3634,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 1.0,
+        "h2h_history": "2 | 1 | 0",
         "smart_money": false
     },
     {
@@ -3654,7 +3654,7 @@
         "l5": "0% (0/5)",
         "l10": "30% (3/10)",
         "sezon": "43%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 33% (10/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3669,9 +3669,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 3.0,
+        "h2h_history": "4 | 10 | 0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -3689,7 +3689,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "43%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (7/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3704,9 +3704,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.2,
+        "h2h_history": "1 | 0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3724,7 +3724,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 38% (12/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3739,9 +3739,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.6,
+        "h2h_history": "0 | 1 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -3759,7 +3759,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "24%",
-        "lokacja": "-",
+        "lokacja": "DOM: 26% (7/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3774,9 +3774,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3794,7 +3794,7 @@
         "l5": "0% (0/5)",
         "l10": "0% (0/10)",
         "sezon": "11%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 12% (3/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3809,9 +3809,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -3829,7 +3829,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "29%",
-        "lokacja": "-",
+        "lokacja": "DOM: 21% (6/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3844,9 +3844,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3864,7 +3864,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "24%",
-        "lokacja": "-",
+        "lokacja": "DOM: 33% (5/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3879,9 +3879,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -3899,7 +3899,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "DOM: 36% (7/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3914,9 +3914,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3934,7 +3934,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "22%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 25% (7/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3949,9 +3949,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -3969,7 +3969,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "23%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 10% (3/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -3984,9 +3984,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -4004,7 +4004,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 21% (3/14)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4019,9 +4019,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -4039,7 +4039,7 @@
         "l5": "0% (0/5)",
         "l10": "0% (0/10)",
         "sezon": "30%",
-        "lokacja": "-",
+        "lokacja": "DOM: 33% (9/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4054,9 +4054,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.8,
+        "h2h_history": "0 | 1 | 1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -4074,7 +4074,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "21%",
-        "lokacja": "-",
+        "lokacja": "DOM: 22% (7/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4089,9 +4089,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -4109,7 +4109,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "DOM: 26% (6/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4124,9 +4124,44 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.4,
+        "h2h_history": "2 | 0 | 0 | 0 | 0",
+        "smart_money": false
+    },
+    {
+        "zawodnik": "Teuvo Teravainen",
+        "mecz": "Vancouver Canucks @ Chicago Blackhawks",
+        "data": "2026-03-06",
+        "rynek": "Punkty Kanadyjskie",
+        "linia": 0.5,
+        "projekcja": 0.8,
+        "roznica": 0.3,
+        "ev": 0.201,
+        "uwagi": "-",
+        "typ": "OVER",
+        "kurs": 1.8,
+        "l5": "80% (4/5)",
+        "l10": "60% (6/10)",
+        "sezon": "40%",
+        "lokacja": "DOM: 42% (11/26)",
+        "matchup_rank": "-",
+        "matchup_color": "stat-yellow",
+        "history": [
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            1,
+            1,
+            2,
+            1
+        ],
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -4144,7 +4179,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "15%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 16% (4/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4159,44 +4194,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
-        "smart_money": false
-    },
-    {
-        "zawodnik": "Teuvo Teravainen",
-        "mecz": "Vancouver Canucks @ Chicago Blackhawks",
-        "data": "2026-03-06",
-        "rynek": "Punkty Kanadyjskie",
-        "linia": 0.5,
-        "projekcja": 0.8,
-        "roznica": 0.3,
-        "ev": 0.221,
-        "uwagi": "-",
-        "typ": "OVER",
-        "kurs": 1.83,
-        "l5": "80% (4/5)",
-        "l10": "60% (6/10)",
-        "sezon": "40%",
-        "lokacja": "-",
-        "matchup_rank": "-",
-        "matchup_color": "stat-yellow",
-        "history": [
-            0,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            1,
-            2,
-            1
-        ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -4214,7 +4214,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (13/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4229,9 +4229,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 1.0,
+        "h2h_history": "3 | 1 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -4249,7 +4249,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (11/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4264,9 +4264,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -4284,7 +4284,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 47% (9/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4299,9 +4299,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -4319,7 +4319,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "43%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 33% (10/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4334,9 +4334,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.4,
+        "h2h_history": "0 | 1 | 0 | 1 | 0",
         "smart_money": false
     },
     {
@@ -4354,7 +4354,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (13/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4369,9 +4369,9 @@
             0,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.6,
+        "h2h_history": "0 | 1 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -4389,7 +4389,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 28% (4/14)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4404,9 +4404,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Chicago Blackhawks",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -4424,7 +4424,7 @@
         "l5": "0% (0/5)",
         "l10": "0% (0/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 40% (11/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4439,9 +4439,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 1.2,
+        "h2h_history": "0 | 1 | 2 | 1 | 2",
         "smart_money": false
     },
     {
@@ -4459,7 +4459,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "30%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (7/15)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4474,9 +4474,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -4494,7 +4494,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 38% (12/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4509,9 +4509,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vancouver Canucks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -4529,7 +4529,7 @@
         "l5": "0% (0/5)",
         "l10": "40% (4/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "DOM: 41% (13/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4544,7 +4544,7 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4564,7 +4564,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "48%",
-        "lokacja": "-",
+        "lokacja": "DOM: 52% (13/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4579,7 +4579,7 @@
             2,
             3
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4599,7 +4599,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4614,7 +4614,7 @@
             5,
             4
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4634,7 +4634,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "DOM: 35% (11/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4649,7 +4649,7 @@
             2,
             3
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4669,7 +4669,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "DOM: 54% (17/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4684,7 +4684,7 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4704,7 +4704,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "52%",
-        "lokacja": "-",
+        "lokacja": "DOM: 61% (19/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4719,7 +4719,7 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4739,7 +4739,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "46%",
-        "lokacja": "-",
+        "lokacja": "DOM: 44% (11/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4754,7 +4754,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4774,7 +4774,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (14/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4789,7 +4789,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4809,7 +4809,7 @@
         "l5": "0% (0/5)",
         "l10": "20% (2/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 36% (11/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4824,7 +4824,7 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4844,7 +4844,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "20%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (9/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4859,7 +4859,7 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4879,7 +4879,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "26%",
-        "lokacja": "-",
+        "lokacja": "DOM: 25% (8/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4894,7 +4894,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4914,7 +4914,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "26%",
-        "lokacja": "-",
+        "lokacja": "DOM: 29% (9/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4929,7 +4929,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4949,7 +4949,7 @@
         "l5": "0% (0/5)",
         "l10": "40% (4/10)",
         "sezon": "27%",
-        "lokacja": "-",
+        "lokacja": "DOM: 26% (7/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4964,7 +4964,7 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -4984,7 +4984,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "14%",
-        "lokacja": "-",
+        "lokacja": "DOM: 19% (6/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -4999,7 +4999,7 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5019,7 +5019,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 66% (20/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5034,7 +5034,7 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5054,7 +5054,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "63%",
-        "lokacja": "-",
+        "lokacja": "DOM: 64% (16/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5069,7 +5069,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5089,7 +5089,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 67% (21/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5104,7 +5104,7 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5124,7 +5124,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "59%",
-        "lokacja": "-",
+        "lokacja": "DOM: 64% (20/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5139,7 +5139,7 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5159,7 +5159,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "DOM: 53% (16/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5174,7 +5174,7 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5194,7 +5194,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 54% (17/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5209,7 +5209,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5229,7 +5229,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (14/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5244,7 +5244,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5264,7 +5264,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 38% (10/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5279,7 +5279,7 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5299,7 +5299,7 @@
         "l5": "100% (5/5)",
         "l10": "90% (9/10)",
         "sezon": "65%",
-        "lokacja": "-",
+        "lokacja": "DOM: 70% (22/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5314,7 +5314,7 @@
             3,
             3
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5334,7 +5334,7 @@
         "l5": "20% (1/5)",
         "l10": "50% (5/10)",
         "sezon": "56%",
-        "lokacja": "-",
+        "lokacja": "DOM: 56% (17/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5349,7 +5349,7 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5369,7 +5369,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 54% (17/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5384,7 +5384,7 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5404,7 +5404,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "27%",
-        "lokacja": "-",
+        "lokacja": "DOM: 32% (10/31)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5419,7 +5419,7 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "Montréal Canadiens",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -5439,7 +5439,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 36% (11/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5454,9 +5454,9 @@
             3,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 3.0,
+        "h2h_history": "1 | 3 | 5",
         "smart_money": false
     },
     {
@@ -5474,7 +5474,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 72% (16/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5489,9 +5489,9 @@
             1,
             5
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.3,
+        "h2h_history": "2 | 2 | 3",
         "smart_money": false
     },
     {
@@ -5509,7 +5509,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "52%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (17/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5524,9 +5524,9 @@
             0,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -5544,7 +5544,7 @@
         "l5": "100% (5/5)",
         "l10": "80% (8/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 57% (16/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5559,9 +5559,9 @@
             2,
             5
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.5,
+        "h2h_history": "3 | 2",
         "smart_money": false
     },
     {
@@ -5579,7 +5579,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5594,9 +5594,9 @@
             4,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 6.7,
+        "h2h_history": "7 | 4 | 9",
         "smart_money": false
     },
     {
@@ -5614,7 +5614,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "68%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 82% (23/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5629,9 +5629,9 @@
             2,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 2.5,
+        "h2h_history": "2 | 3",
         "smart_money": false
     },
     {
@@ -5649,7 +5649,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "56%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (15/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5664,9 +5664,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 2 | 2",
         "smart_money": false
     },
     {
@@ -5684,7 +5684,7 @@
         "l5": "100% (5/5)",
         "l10": "50% (5/10)",
         "sezon": "39%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5699,9 +5699,9 @@
             4,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.0,
+        "h2h_history": "2 | 1 | 0",
         "smart_money": false
     },
     {
@@ -5719,7 +5719,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "DOM: 64% (18/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5734,9 +5734,9 @@
             5,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.7,
+        "h2h_history": "3 | 2 | 3",
         "smart_money": false
     },
     {
@@ -5754,7 +5754,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "DOM: 70% (21/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5769,9 +5769,9 @@
             3,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 4.7,
+        "h2h_history": "5 | 4 | 5",
         "smart_money": false
     },
     {
@@ -5789,7 +5789,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "30%",
-        "lokacja": "-",
+        "lokacja": "DOM: 33% (10/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5804,9 +5804,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -5824,7 +5824,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "DOM: 60% (17/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5839,9 +5839,9 @@
             0,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 1.7,
+        "h2h_history": "2 | 2 | 1",
         "smart_money": false
     },
     {
@@ -5859,7 +5859,7 @@
         "l5": "100% (5/5)",
         "l10": "90% (9/10)",
         "sezon": "59%",
-        "lokacja": "-",
+        "lokacja": "DOM: 56% (17/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5874,9 +5874,9 @@
             2,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -5894,7 +5894,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 32% (9/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5909,9 +5909,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -5929,7 +5929,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 21% (6/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5944,9 +5944,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -5964,7 +5964,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "52%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (14/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -5979,9 +5979,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -5999,7 +5999,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 36% (9/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6014,9 +6014,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6034,7 +6034,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 31% (6/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6049,9 +6049,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6069,7 +6069,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "DOM: 27% (6/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6084,9 +6084,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6104,7 +6104,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6119,9 +6119,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6139,7 +6139,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 43% (13/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6154,9 +6154,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6174,7 +6174,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 25% (7/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6189,9 +6189,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6209,7 +6209,7 @@
         "l5": "0% (0/5)",
         "l10": "0% (0/10)",
         "sezon": "21%",
-        "lokacja": "-",
+        "lokacja": "DOM: 37% (6/16)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6224,9 +6224,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -6244,7 +6244,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "29%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 25% (7/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6259,9 +6259,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6279,7 +6279,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "18%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 11% (3/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6294,9 +6294,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6314,7 +6314,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "22%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 21% (6/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6329,9 +6329,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 2",
         "smart_money": false
     },
     {
@@ -6349,7 +6349,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "54%",
-        "lokacja": "-",
+        "lokacja": "DOM: 60% (18/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6364,9 +6364,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.0,
+        "h2h_history": "3 | 1 | 2",
         "smart_money": false
     },
     {
@@ -6384,7 +6384,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (14/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6399,9 +6399,9 @@
             1,
             5
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.0,
+        "h2h_history": "3 | 2 | 1",
         "smart_money": false
     },
     {
@@ -6419,7 +6419,7 @@
         "l5": "100% (5/5)",
         "l10": "90% (9/10)",
         "sezon": "66%",
-        "lokacja": "-",
+        "lokacja": "DOM: 63% (19/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6434,9 +6434,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6454,7 +6454,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 57% (16/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6469,9 +6469,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 1 | 2",
         "smart_money": false
     },
     {
@@ -6489,7 +6489,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "66%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 64% (16/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6504,9 +6504,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6524,7 +6524,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (11/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6539,9 +6539,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6559,7 +6559,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "49%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 39% (11/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6574,9 +6574,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6594,7 +6594,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "66%",
-        "lokacja": "-",
+        "lokacja": "DOM: 67% (19/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6609,9 +6609,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -6629,7 +6629,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (17/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6644,9 +6644,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6664,7 +6664,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "61%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 52% (10/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6679,9 +6679,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -6699,7 +6699,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "49%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 46% (13/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6714,9 +6714,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6734,7 +6734,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 32% (9/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6749,9 +6749,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -6769,7 +6769,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 29% (8/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6784,9 +6784,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6804,7 +6804,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6819,9 +6819,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -6839,7 +6839,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 28% (8/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6854,9 +6854,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 2",
         "smart_money": false
     },
     {
@@ -6874,7 +6874,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "36%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (8/16)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6889,9 +6889,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -6909,7 +6909,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6924,9 +6924,9 @@
             5,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 2.7,
+        "h2h_history": "2 | 2 | 4",
         "smart_money": false
     },
     {
@@ -6944,7 +6944,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "29%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 36% (7/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6959,9 +6959,9 @@
             4,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 2.3,
+        "h2h_history": "2 | 4 | 1",
         "smart_money": false
     },
     {
@@ -6979,7 +6979,7 @@
         "l5": "100% (5/5)",
         "l10": "70% (7/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (17/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -6994,9 +6994,9 @@
             4,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 0 | 2 | 2",
         "smart_money": false
     },
     {
@@ -7014,7 +7014,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "DOM: 43% (13/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7029,9 +7029,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2",
         "smart_money": false
     },
     {
@@ -7049,7 +7049,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "67%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 82% (23/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7064,9 +7064,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Edmonton Oilers",
+        "h2h_avg": 2.7,
+        "h2h_history": "2 | 4 | 2",
         "smart_money": false
     },
     {
@@ -7084,7 +7084,7 @@
         "l5": "20% (1/5)",
         "l10": "60% (6/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "DOM: 62% (10/16)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7099,9 +7099,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Carolina Hurricanes",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 2",
         "smart_money": false
     },
     {
@@ -7119,7 +7119,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (12/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7134,9 +7134,9 @@
             2,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 2.2,
+        "h2h_history": "2 | 5 | 0 | 2",
         "smart_money": false
     },
     {
@@ -7154,7 +7154,7 @@
         "l5": "40% (2/5)",
         "l10": "20% (2/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (12/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7169,9 +7169,9 @@
             3,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.7,
+        "h2h_history": "2 | 3 | 0",
         "smart_money": false
     },
     {
@@ -7189,7 +7189,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (18/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7204,9 +7204,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 1 | 3 | 0",
         "smart_money": false
     },
     {
@@ -7224,7 +7224,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "46%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (14/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7239,9 +7239,9 @@
             2,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 3.7,
+        "h2h_history": "4 | 6 | 1",
         "smart_money": false
     },
     {
@@ -7259,7 +7259,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "DOM: 34% (10/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7274,9 +7274,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 2.8,
+        "h2h_history": "0 | 3 | 5 | 3",
         "smart_money": false
     },
     {
@@ -7294,7 +7294,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (17/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7309,9 +7309,9 @@
             4,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 4.0,
+        "h2h_history": "3 | 3 | 6 | 5 | 3",
         "smart_money": false
     },
     {
@@ -7329,7 +7329,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "DOM: 56% (13/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7344,9 +7344,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 2.0,
+        "h2h_history": "1 | 0 | 4 | 3",
         "smart_money": false
     },
     {
@@ -7364,7 +7364,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "55%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (17/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7379,9 +7379,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 2 | 2 | 1",
         "smart_money": false
     },
     {
@@ -7399,7 +7399,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 26% (8/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7414,9 +7414,9 @@
             5,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 5.0,
+        "h2h_history": "3 | 6 | 6",
         "smart_money": false
     },
     {
@@ -7434,7 +7434,7 @@
         "l5": "60% (3/5)",
         "l10": "30% (3/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (12/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7449,9 +7449,44 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.4,
+        "h2h_history": "2 | 3 | 1 | 1 | 0",
+        "smart_money": false
+    },
+    {
+        "zawodnik": "Quinn Hughes",
+        "mecz": "Minnesota Wild @ Vegas Golden Knights",
+        "data": "2026-03-06",
+        "rynek": "Asysty",
+        "linia": 0.5,
+        "projekcja": 1.0,
+        "roznica": 0.5,
+        "ev": 0.174,
+        "uwagi": "-",
+        "typ": "OVER",
+        "kurs": 1.74,
+        "l5": "80% (4/5)",
+        "l10": "90% (9/10)",
+        "sezon": "60%",
+        "lokacja": "WYJ: 60% (17/28)",
+        "matchup_rank": "-",
+        "matchup_color": "stat-yellow",
+        "history": [
+            1,
+            1,
+            1,
+            1,
+            3,
+            2,
+            1,
+            0,
+            1,
+            1
+        ],
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -7469,7 +7504,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "52%",
-        "lokacja": "-",
+        "lokacja": "DOM: 65% (19/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7484,44 +7519,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
-        "smart_money": true
-    },
-    {
-        "zawodnik": "Quinn Hughes",
-        "mecz": "Minnesota Wild @ Vegas Golden Knights",
-        "data": "2026-03-06",
-        "rynek": "Asysty",
-        "linia": 0.5,
-        "projekcja": 1.0,
-        "roznica": 0.5,
-        "ev": 0.194,
-        "uwagi": "-",
-        "typ": "OVER",
-        "kurs": 1.77,
-        "l5": "80% (4/5)",
-        "l10": "90% (9/10)",
-        "sezon": "60%",
-        "lokacja": "-",
-        "matchup_rank": "-",
-        "matchup_color": "stat-yellow",
-        "history": [
-            1,
-            1,
-            1,
-            1,
-            3,
-            2,
-            1,
-            0,
-            1,
-            1
-        ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -7539,7 +7539,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "61%",
-        "lokacja": "-",
+        "lokacja": "DOM: 58% (14/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7554,9 +7554,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 0 | 2",
         "smart_money": false
     },
     {
@@ -7574,7 +7574,7 @@
         "l5": "100% (5/5)",
         "l10": "90% (9/10)",
         "sezon": "48%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 51% (14/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7589,9 +7589,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.4,
+        "h2h_history": "1 | 1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -7609,7 +7609,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 53% (16/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7624,9 +7624,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -7644,7 +7644,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "54%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 59% (13/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7659,9 +7659,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2 | 1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -7679,7 +7679,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 33% (10/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7694,9 +7694,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.2,
+        "h2h_history": "0 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -7714,7 +7714,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 44% (13/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7729,9 +7729,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1 | 1 | 0",
         "smart_money": false
     },
     {
@@ -7749,7 +7749,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 37% (10/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7764,9 +7764,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -7784,7 +7784,7 @@
         "l5": "0% (0/5)",
         "l10": "10% (1/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "DOM: 44% (13/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7799,9 +7799,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.6,
+        "h2h_history": "2 | 1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -7819,7 +7819,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "25%",
-        "lokacja": "-",
+        "lokacja": "DOM: 24% (7/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7834,9 +7834,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.6,
+        "h2h_history": "1 | 0 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -7854,7 +7854,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (7/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7869,9 +7869,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 1 | 2 | 1",
         "smart_money": false
     },
     {
@@ -7889,7 +7889,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "28%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (6/20)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7904,9 +7904,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -7924,7 +7924,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "29%",
-        "lokacja": "-",
+        "lokacja": "DOM: 34% (9/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7939,9 +7939,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.4,
+        "h2h_history": "1 | 0 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -7959,7 +7959,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "25%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 18% (5/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -7974,9 +7974,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -7994,7 +7994,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "29%",
-        "lokacja": "-",
+        "lokacja": "DOM: 28% (7/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8009,9 +8009,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.4,
+        "h2h_history": "0 | 0 | 2 | 0 | 0",
         "smart_money": false
     },
     {
@@ -8029,7 +8029,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 36% (11/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8044,9 +8044,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -8064,7 +8064,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (11/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8079,9 +8079,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.6,
+        "h2h_history": "2 | 1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -8099,7 +8099,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 37% (9/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8114,9 +8114,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.7,
+        "h2h_history": "0 | 3 | 2",
         "smart_money": false
     },
     {
@@ -8134,7 +8134,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "62%",
-        "lokacja": "-",
+        "lokacja": "DOM: 79% (23/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8149,9 +8149,9 @@
             0,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -8162,14 +8162,14 @@
         "linia": 0.5,
         "projekcja": 1.2,
         "roznica": 0.7,
-        "ev": 0.175,
+        "ev": 0.153,
         "uwagi": "-",
         "typ": "OVER",
-        "kurs": 1.6,
+        "kurs": 1.57,
         "l5": "80% (4/5)",
         "l10": "90% (9/10)",
         "sezon": "64%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 60% (17/28)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8184,9 +8184,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -8204,7 +8204,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "61%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 72% (16/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8219,9 +8219,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.0,
+        "h2h_history": "0 | 2 | 1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -8239,7 +8239,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "58%",
-        "lokacja": "-",
+        "lokacja": "DOM: 48% (14/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8254,9 +8254,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.2,
+        "h2h_history": "1 | 1 | 0 | 3 | 1",
         "smart_money": false
     },
     {
@@ -8274,7 +8274,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "59%",
-        "lokacja": "-",
+        "lokacja": "DOM: 65% (19/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8289,9 +8289,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.8,
+        "h2h_history": "0 | 1 | 2 | 0",
         "smart_money": false
     },
     {
@@ -8309,7 +8309,7 @@
         "l5": "40% (2/5)",
         "l10": "70% (7/10)",
         "sezon": "51%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 48% (13/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8324,9 +8324,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.0,
+        "h2h_history": "2 | 1 | 0",
         "smart_money": false
     },
     {
@@ -8344,7 +8344,7 @@
         "l5": "60% (3/5)",
         "l10": "80% (8/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "DOM: 65% (19/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8359,9 +8359,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.6,
+        "h2h_history": "2 | 1 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -8379,7 +8379,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "41%",
-        "lokacja": "-",
+        "lokacja": "DOM: 35% (7/20)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8394,9 +8394,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0",
         "smart_money": false
     },
     {
@@ -8414,7 +8414,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8429,9 +8429,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -8449,7 +8449,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 44% (12/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8464,9 +8464,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -8484,7 +8484,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 43% (10/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8499,9 +8499,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.5,
+        "h2h_history": "1 | 1 | 2 | 2",
         "smart_money": false
     },
     {
@@ -8519,7 +8519,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (13/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8534,9 +8534,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.8,
+        "h2h_history": "2 | 0 | 0 | 1 | 1",
         "smart_money": false
     },
     {
@@ -8554,7 +8554,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "33%",
-        "lokacja": "-",
+        "lokacja": "DOM: 28% (7/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8569,9 +8569,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.4,
+        "h2h_history": "0 | 0 | 2 | 0 | 0",
         "smart_money": false
     },
     {
@@ -8589,7 +8589,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "36%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (6/20)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8604,9 +8604,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0",
         "smart_money": false
     },
     {
@@ -8624,7 +8624,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "48%",
-        "lokacja": "-",
+        "lokacja": "DOM: 51% (15/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8639,9 +8639,9 @@
             3,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 0.8,
+        "h2h_history": "1 | 0 | 0 | 3 | 0",
         "smart_money": false
     },
     {
@@ -8659,7 +8659,7 @@
         "l5": "100% (5/5)",
         "l10": "60% (6/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 68% (15/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8674,9 +8674,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 2.0,
+        "h2h_history": "3 | 3 | 1 | 3 | 0",
         "smart_money": false
     },
     {
@@ -8694,7 +8694,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 65% (17/26)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8709,9 +8709,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 2.2,
+        "h2h_history": "6 | 1 | 2 | 1 | 1",
         "smart_money": false
     },
     {
@@ -8729,7 +8729,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "53%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 51% (14/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8744,9 +8744,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 2.0,
+        "h2h_history": "1 | 1 | 2 | 4 | 2",
         "smart_money": false
     },
     {
@@ -8764,7 +8764,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 52% (13/25)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8779,9 +8779,9 @@
             3,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Minnesota Wild",
+        "h2h_avg": 1.6,
+        "h2h_history": "0 | 3 | 1 | 3 | 1",
         "smart_money": false
     },
     {
@@ -8799,7 +8799,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "54%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 48% (13/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8814,9 +8814,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "Vegas Golden Knights",
+        "h2h_avg": 1.7,
+        "h2h_history": "2 | 2 | 1",
         "smart_money": false
     },
     {
@@ -8834,7 +8834,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "49%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8849,9 +8849,9 @@
             0,
             7
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 3.7,
+        "h2h_history": "6 | 3 | 2",
         "smart_money": false
     },
     {
@@ -8869,7 +8869,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (15/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8884,9 +8884,9 @@
             3,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 3.0,
+        "h2h_history": "4 | 1 | 4",
         "smart_money": false
     },
     {
@@ -8904,7 +8904,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "DOM: 40% (9/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8919,9 +8919,9 @@
             4,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 2.0,
+        "h2h_history": "2",
         "smart_money": false
     },
     {
@@ -8939,7 +8939,7 @@
         "l5": "60% (3/5)",
         "l10": "60% (6/10)",
         "sezon": "70%",
-        "lokacja": "-",
+        "lokacja": "DOM: 70% (19/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8954,9 +8954,9 @@
             5,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 2 | 2",
         "smart_money": false
     },
     {
@@ -8974,7 +8974,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "DOM: 47% (11/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -8989,9 +8989,9 @@
             3,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 2.8,
+        "h2h_history": "5 | 4 | 1 | 1",
         "smart_money": false
     },
     {
@@ -9009,7 +9009,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 58% (17/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9024,9 +9024,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 1.7,
+        "h2h_history": "0 | 3 | 2",
         "smart_money": false
     },
     {
@@ -9044,7 +9044,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "57%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 62% (18/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9059,9 +9059,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 2.3,
+        "h2h_history": "2 | 3 | 2",
         "smart_money": false
     },
     {
@@ -9079,7 +9079,7 @@
         "l5": "60% (3/5)",
         "l10": "80% (8/10)",
         "sezon": "54%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 58% (14/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9094,9 +9094,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 2.0,
+        "h2h_history": "2 | 3 | 1",
         "smart_money": false
     },
     {
@@ -9114,7 +9114,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (9/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9129,9 +9129,9 @@
             3,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 2.7,
+        "h2h_history": "1 | 4 | 3",
         "smart_money": false
     },
     {
@@ -9149,7 +9149,7 @@
         "l5": "80% (4/5)",
         "l10": "80% (8/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 47% (9/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9164,9 +9164,9 @@
             2,
             6
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 1.7,
+        "h2h_history": "1 | 1 | 3",
         "smart_money": false
     },
     {
@@ -9184,7 +9184,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "61%",
-        "lokacja": "-",
+        "lokacja": "DOM: 56% (17/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9199,9 +9199,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 2 | 1",
         "smart_money": false
     },
     {
@@ -9219,7 +9219,7 @@
         "l5": "80% (4/5)",
         "l10": "50% (5/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 40% (9/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9234,9 +9234,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -9254,7 +9254,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "36%",
-        "lokacja": "-",
+        "lokacja": "DOM: 45% (10/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9269,9 +9269,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -9289,7 +9289,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "DOM: 26% (8/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9304,9 +9304,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9324,7 +9324,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 34% (10/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9339,9 +9339,9 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9359,7 +9359,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "27%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 27% (8/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9374,9 +9374,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9394,7 +9394,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "45%",
-        "lokacja": "-",
+        "lokacja": "DOM: 44% (12/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9409,9 +9409,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -9429,7 +9429,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 33% (8/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9444,9 +9444,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 0 | 2",
         "smart_money": false
     },
     {
@@ -9464,7 +9464,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (14/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9479,9 +9479,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0",
         "smart_money": false
     },
     {
@@ -9499,7 +9499,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "25%",
-        "lokacja": "-",
+        "lokacja": "DOM: 31% (9/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9514,7 +9514,7 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "St Louis Blues",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -9534,7 +9534,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "23%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 31% (6/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9549,9 +9549,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9569,7 +9569,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "24%",
-        "lokacja": "-",
+        "lokacja": "DOM: 16% (4/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9584,9 +9584,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -9604,7 +9604,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "32%",
-        "lokacja": "-",
+        "lokacja": "DOM: 40% (12/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9619,9 +9619,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -9639,7 +9639,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "21%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 27% (8/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9654,9 +9654,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9674,7 +9674,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "25%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 27% (8/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9689,9 +9689,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -9709,7 +9709,7 @@
         "l5": "0% (0/5)",
         "l10": "20% (2/10)",
         "sezon": "20%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 16% (4/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9724,9 +9724,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.3,
+        "h2h_history": "1 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9744,7 +9744,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "26%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 26% (6/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9759,7 +9759,7 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "San Jose Sharks",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -9779,7 +9779,7 @@
         "l5": "20% (1/5)",
         "l10": "30% (3/10)",
         "sezon": "12%",
-        "lokacja": "-",
+        "lokacja": "DOM: 13% (3/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9794,9 +9794,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -9814,7 +9814,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "DOM: 30% (3/10)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9829,7 +9829,7 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "St Louis Blues",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -9849,7 +9849,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "31%",
-        "lokacja": "-",
+        "lokacja": "DOM: 42% (9/21)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9864,9 +9864,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -9884,7 +9884,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "40%",
-        "lokacja": "-",
+        "lokacja": "DOM: 40% (12/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9899,9 +9899,9 @@
             1,
             4
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 2.3,
+        "h2h_history": "3 | 2 | 2",
         "smart_money": false
     },
     {
@@ -9919,7 +9919,7 @@
         "l5": "60% (3/5)",
         "l10": "80% (8/10)",
         "sezon": "60%",
-        "lokacja": "-",
+        "lokacja": "DOM: 68% (15/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9934,9 +9934,9 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -9954,7 +9954,7 @@
         "l5": "80% (4/5)",
         "l10": "60% (6/10)",
         "sezon": "56%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 50% (11/22)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -9969,9 +9969,9 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -9989,7 +9989,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 45% (11/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10004,9 +10004,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 1.3,
+        "h2h_history": "1 | 1 | 2",
         "smart_money": false
     },
     {
@@ -10024,7 +10024,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 51% (15/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10039,9 +10039,9 @@
             2,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -10059,7 +10059,7 @@
         "l5": "60% (3/5)",
         "l10": "50% (5/10)",
         "sezon": "49%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (14/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10074,9 +10074,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.7,
+        "h2h_history": "0 | 2 | 0",
         "smart_money": false
     },
     {
@@ -10094,7 +10094,7 @@
         "l5": "60% (3/5)",
         "l10": "70% (7/10)",
         "sezon": "58%",
-        "lokacja": "-",
+        "lokacja": "DOM: 55% (15/27)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10109,9 +10109,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -10129,7 +10129,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "44%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 42% (8/19)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10144,9 +10144,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.0,
+        "h2h_history": "0 | 0 | 0",
         "smart_money": false
     },
     {
@@ -10164,7 +10164,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "47%",
-        "lokacja": "-",
+        "lokacja": "DOM: 53% (16/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10179,9 +10179,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 1.0,
+        "h2h_history": "1 | 0 | 2",
         "smart_money": false
     },
     {
@@ -10199,7 +10199,7 @@
         "l5": "40% (2/5)",
         "l10": "60% (6/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (12/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10214,9 +10214,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.3,
+        "h2h_history": "0 | 0 | 1",
         "smart_money": false
     },
     {
@@ -10234,7 +10234,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "46%",
-        "lokacja": "-",
+        "lokacja": "DOM: 44% (13/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10249,7 +10249,7 @@
             1,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "St Louis Blues",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -10269,7 +10269,7 @@
         "l5": "20% (1/5)",
         "l10": "40% (4/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "DOM: 43% (10/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10284,9 +10284,9 @@
             0,
             2
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 1.5,
+        "h2h_history": "3 | 2 | 1 | 0",
         "smart_money": false
     },
     {
@@ -10304,7 +10304,7 @@
         "l5": "40% (2/5)",
         "l10": "70% (7/10)",
         "sezon": "38%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 30% (7/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10319,7 +10319,7 @@
             1,
             0
         ],
-        "opp_name": "Rywal",
+        "opp_name": "San Jose Sharks",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -10339,7 +10339,7 @@
         "l5": "0% (0/5)",
         "l10": "30% (3/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 41% (10/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10354,9 +10354,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.7,
+        "h2h_history": "2 | 0 | 0",
         "smart_money": false
     },
     {
@@ -10374,7 +10374,7 @@
         "l5": "20% (1/5)",
         "l10": "10% (1/10)",
         "sezon": "37%",
-        "lokacja": "-",
+        "lokacja": "DOM: 46% (14/30)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10389,9 +10389,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.5,
+        "h2h_history": "1 | 0",
         "smart_money": false
     },
     {
@@ -10409,7 +10409,7 @@
         "l5": "40% (2/5)",
         "l10": "50% (5/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 34% (10/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10424,9 +10424,9 @@
             1,
             3
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.7,
+        "h2h_history": "1 | 0 | 1",
         "smart_money": false
     },
     {
@@ -10444,7 +10444,7 @@
         "l5": "80% (4/5)",
         "l10": "70% (7/10)",
         "sezon": "50%",
-        "lokacja": "-",
+        "lokacja": "DOM: 50% (5/10)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10459,7 +10459,7 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
+        "opp_name": "St Louis Blues",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -10479,7 +10479,7 @@
         "l5": "40% (2/5)",
         "l10": "30% (3/10)",
         "sezon": "35%",
-        "lokacja": "-",
+        "lokacja": "DOM: 29% (7/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10494,9 +10494,9 @@
             0,
             0
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -10514,7 +10514,7 @@
         "l5": "60% (3/5)",
         "l10": "40% (4/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 57% (12/21)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10529,9 +10529,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     },
     {
@@ -10549,7 +10549,7 @@
         "l5": "40% (2/5)",
         "l10": "40% (4/10)",
         "sezon": "28%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 27% (8/29)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10564,9 +10564,9 @@
             0,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "San Jose Sharks",
+        "h2h_avg": 0.5,
+        "h2h_history": "0 | 1",
         "smart_money": false
     },
     {
@@ -10584,7 +10584,7 @@
         "l5": "20% (1/5)",
         "l10": "20% (2/10)",
         "sezon": "34%",
-        "lokacja": "-",
+        "lokacja": "WYJ: 39% (9/23)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10599,7 +10599,7 @@
             2,
             2
         ],
-        "opp_name": "Rywal",
+        "opp_name": "San Jose Sharks",
         "h2h_avg": 0,
         "h2h_history": "Brak danych",
         "smart_money": false
@@ -10619,7 +10619,7 @@
         "l5": "0% (0/5)",
         "l10": "50% (5/10)",
         "sezon": "42%",
-        "lokacja": "-",
+        "lokacja": "DOM: 41% (10/24)",
         "matchup_rank": "-",
         "matchup_color": "stat-yellow",
         "history": [
@@ -10634,9 +10634,9 @@
             1,
             1
         ],
-        "opp_name": "Rywal",
-        "h2h_avg": 0,
-        "h2h_history": "Brak danych",
+        "opp_name": "St Louis Blues",
+        "h2h_avg": 0.0,
+        "h2h_history": "0",
         "smart_money": false
     }
 ]
