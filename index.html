@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NBA Quant PRO</title>
+    <title>Quant PRO Syndicate</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="NBA PRO">
+    <meta name="apple-mobile-web-app-title" content="Quant PRO">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -18,12 +18,21 @@
         .dark-theme { --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b; --border-color: #334155; --hover-bg: #273548; --accent-color: #60a5fa; --muted-text: #94a3b8; --chart-bg: #0f172a; --gold-highlight: #332b14; --gold-border: #b45309; --safe-highlight: #022c22; --safe-border: #059669; --stable-highlight: #172554; --stable-border: #2563eb; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding: 2rem; transition: background-color 0.3s; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+        
+        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
         .dashboard-header h1 { font-size: 2rem; color: var(--text-color); letter-spacing: -0.5px; }
         .top-actions { display: flex; gap: 1rem; }
         .theme-toggle, .stats-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.6rem 1.2rem; border-radius: 20px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
         .theme-toggle:hover, .stats-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .stats-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+
+        /* NAWIGACJA SPORTÓW */
+        .sports-nav { display: flex; gap: 10px; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none;}
+        .sports-nav::-webkit-scrollbar { display: none; }
+        .sport-tab { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--muted-text); padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; white-space: nowrap; font-size: 1rem;}
+        .sport-tab:hover { background: var(--hover-bg); color: var(--text-color);}
+        .sport-tab.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+
         .filters { display: flex; gap: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; border: 1px solid var(--border-color); margin-bottom: 2rem; align-items: flex-end;}
         .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
         .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--muted-text); }
@@ -145,13 +154,20 @@
 
     <div class="dashboard-header">
         <div>
-            <h1>NBA Props PRO</h1>
-            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Terminal Giełdowy: Smart Money, H2H & Telegram Bot</p>
+            <h1>Pewniaczki</h1>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Multi-Sport Betting</p>
         </div>
         <div class="top-actions">
             <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
             <button class="theme-toggle" id="themeToggleBtn">🌙 Tryb Nocny</button>
         </div>
+    </div>
+
+    <div class="sports-nav">
+        <button class="sport-tab active" data-sport="nba">🏀 NBA</button>
+        <button class="sport-tab" data-sport="nhl">🏒 NHL</button>
+        <button class="sport-tab" data-sport="mlb" style="opacity: 0.5;" title="Wkrótce">⚾ MLB (Wkrótce)</button>
+        <button class="sport-tab" data-sport="nfl" style="opacity: 0.5;" title="Wkrótce">🏈 NFL (Wkrótce)</button>
     </div>
 
     <div id="journalModal" class="modal">
@@ -183,11 +199,6 @@
             <label>Rynek</label>
             <select id="marketFilter">
                 <option value="all">Wszystkie</option>
-                <option value="Punkty (PTS)">Punkty (PTS)</option>
-                <option value="Zbiórki (REB)">Zbiórki (REB)</option>
-                <option value="Asysty (AST)">Asysty (AST)</option>
-                <option value="Trójki (3PTM)">Trójki (3PTM)</option>
-                <option value="PTS+REB+AST">PTS+REB+AST</option>
             </select>
         </div>
         <div class="filter-group">
@@ -271,6 +282,7 @@
         let sortAsc = false;
         let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
         let profitChartInstance = null; 
+        let currentSport = 'nba';
 
         function normalCDF(x, mean, stdDev) {
             let z = (x - mean) / (stdDev * Math.sqrt(2));
@@ -280,7 +292,42 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
-        fetch('dane.json?v=' + new Date().getTime()).then(r => r.json()).then(data => { globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); renderJournal(); }).catch(e => { document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Błąd ładowania danych! Włącz skrypt Python.</td></tr>`; });
+        // ==========================================
+        // SYSTEM ŁADOWANIA SPORTÓW
+        // ==========================================
+        function loadSportData(sport) {
+            document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
+            
+            fetch(`${sport}.json?v=` + new Date().getTime())
+            .then(r => {
+                if(!r.ok) throw new Error("Brak pliku");
+                return r.json();
+            })
+            .then(data => { 
+                globalData = data; 
+                renderTable(globalData); 
+                populateDropdowns(data); 
+                updateTotalOdds(); 
+            })
+            .catch(e => { 
+                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza ${sport.toUpperCase()} jest pusta lub wciąż się buduje. Odpal skrypt bota dla tego sportu!</td></tr>`; 
+                globalData = [];
+            });
+        }
+
+        document.querySelectorAll('.sport-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                if(tab.dataset.sport === 'mlb' || tab.dataset.sport === 'nfl') return alert("Ten moduł sportowy zostanie aktywowany w następnej aktualizacji!");
+                
+                document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentSport = tab.dataset.sport;
+                loadSportData(currentSport);
+            });
+        });
+
+        // Inicjalizujemy NBA przy starcie
+        loadSportData('nba');
 
         function createStatPill(str) { if (!str || str === "-") return '<span class="stat-pill stat-yellow">-</span>'; let v = parseInt((str.match(/(\d+)%/) || [0,0])[1]); return `<span class="stat-pill ${v>=70?'stat-green':(v>=40?'stat-yellow':'stat-red')}">${str}</span>`; }
         function generateChartHTML(hist, linia) { if (!hist || hist.length === 0) return "<div style='padding: 2rem;'>Brak historii.</div>"; let max = Math.max(...hist, linia) * 1.2 || 10; let bars = hist.map((v, i) => `<div class="chart-bar-wrap"><div class="chart-val">${v}</div><div class="chart-bar ${v>linia?'bar-over':'bar-under'}" style="height: ${(v/max)*100}%;"></div><div class="chart-label">L${hist.length-i}</div></div>`).join(''); return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`; }
@@ -292,9 +339,7 @@
         function generateSGPHtml(currentItem) {
             let currentLoc = currentItem.lokacja.split(':')[0]; let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
             let suggestions = [];
-            if (currentItem.rynek === "Asysty (AST)" && currentItem.typ === "OVER") suggestions = teammates.filter(t => (t.rynek === "Punkty (PTS)" || t.rynek === "Trójki (3PTM)") && t.typ === "OVER" && t.ev > 0);
-            else if (currentItem.rynek === "Punkty (PTS)" && currentItem.typ === "OVER") suggestions = teammates.filter(t => t.rynek === "Asysty (AST)" && t.typ === "OVER" && t.ev > 0);
-            else if (currentItem.ev > 0) suggestions = teammates.filter(t => t.ev > 0.05);
+            if (currentItem.ev > 0) suggestions = teammates.filter(t => t.ev > 0.05);
             suggestions.sort((a,b) => b.ev - a.ev); let top2 = suggestions.slice(0, 2);
             if(top2.length === 0) return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak korelacji.</div>`;
             let html = top2.map(s => `<div class="sgp-item"><div class="sgp-info"><span class="sgp-player">${s.zawodnik}</span><span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span></div><div style="display:flex; align-items:center; gap: 10px;"><span class="sgp-odds">@${s.kurs}</span><button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button></div></div>`).join('');
@@ -325,17 +370,17 @@
                 if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`); 
                 if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`); 
                 if(isStable) badges.push(`<span title="Stabilny" style="font-size:1.1rem">🛡️</span>`);
-                if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów u bukmacherów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
+                if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
 
                 let tr = document.createElement('tr'); tr.className = `data-row ${rowClass}`; tr.dataset.isValue = isValueBet ? "true" : "false"; tr.dataset.isSafe = isSafeBet ? "true" : "false"; tr.dataset.isStable = isStable ? "true" : "false"; tr.dataset.player = item.zawodnik.toLowerCase(); tr.dataset.game = item.mecz; tr.dataset.market = item.rynek; tr.dataset.pick = item.typ; tr.dataset.index = index; tr.dataset.odds = item.kurs; tr.dataset.prob = true_prob; tr.dataset.stawka = stake; 
                 
-                let uwagi_html = item.uwagi !== "-" ? `<div class="uwagi-text">${item.uwagi}</div>` : "";
+                let uwagi_html = item.uwagi && item.uwagi !== "-" ? `<div class="uwagi-text">${item.uwagi}</div>` : "";
 
                 tr.innerHTML = `<td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td><td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td><td class="line">${item.linia}</td><td class="projection">${item.projekcja}</td><td class="ev-val"><div style="font-size:0.85rem;color:var(--muted-text)">Szansa: <span style="font-weight:800;color:var(--text-color)">${(true_prob*100).toFixed(1)}%</span></div><div style="font-size:0.85rem;color:var(--muted-text)">EV: <span style="color:${item.ev>0?'#10b981':'#ef4444'}">${item.ev>0?'+':''}${(item.ev*100).toFixed(1)}%</span></div></td><td class="stake-val">${stake>0?stake.toFixed(2)+' PLN':'-'}</td><td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td><td>${createStatPill(item.l5)}</td><td>${createStatPill(item.l10)}</td><td>${createStatPill(item.sezon)}</td><td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td><td><button class="action-btn add-btn">⭐</button></td>`;
                 tbody.appendChild(tr);
 
                 let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
-                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia (Twój Buk)</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs (Twój Buk)</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div><div class="res-stake" id="sim-stake-over-${index}">-</div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div><div class="res-stake" id="sim-stake-under-${index}">-</div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Sugestie SGP</div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem;">Skorelowane typy:</div>${generateSGPHtml(item)}</div></div></td>`;
+                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div><div class="res-stake" id="sim-stake-over-${index}">-</div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div><div class="res-stake" id="sim-stake-under-${index}">-</div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Sugestie SGP</div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem;">Skorelowane typy:</div>${generateSGPHtml(item)}</div></div></td>`;
                 tbody.appendChild(chartTr);
                 tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
             });
@@ -358,9 +403,6 @@
         document.getElementById('mainTable').addEventListener('click', e => { if (e.target.classList.contains('add-btn')) { let r = e.target.closest('tr.data-row'), c = r.cloneNode(true); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; document.getElementById('favoritesBody').appendChild(c); r.classList.add('hidden'); updateTotalOdds(); }});
         document.getElementById('favoritesTable').addEventListener('click', e => { if (e.target.classList.contains('remove-btn')) { let r = e.target.closest('tr'), p = r.dataset.player, m = r.dataset.market; r.remove(); document.querySelectorAll('#mainBody tr.data-row').forEach(mr => { if(mr.dataset.player===p && mr.dataset.market===m) { mr.classList.remove('hidden'); applyFilters(); }}); updateTotalOdds(); }});
 
-        // =========================================
-        // DZIENNIK INWESTYCYJNY (Z FUNKCJĄ EDYCJI)
-        // =========================================
         const modal = document.getElementById('journalModal');
         document.getElementById('openJournalBtn').onclick = () => { modal.style.display = "block"; renderJournal(); }
         document.getElementById('closeJournalBtn').onclick = () => { modal.style.display = "none"; }
@@ -371,7 +413,7 @@
             if (rows.length === 0) { alert("Dodaj typy na kupon przed zapisem!"); return; }
             if (stake <= 0) { if(!confirm("Uwaga: Algorytm odradza grę tego kuponu. Zapisać mimo to z testową stawką 10 PLN?")) return; stake = 10; }
             let matches = []; rows.forEach(r => { matches.push(`${r.querySelector('.player-name').innerText.split(' ')[0]} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); });
-            let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0 };
+            let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0, sport: currentSport };
             journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); alert("✅ Kupon zapisany w Dzienniku!"); renderJournal();
         });
 
@@ -389,14 +431,13 @@
 
             [...journalData].reverse().forEach(entry => {
                 let statusBadge = entry.status === 'pending' ? `<span class="status-badge" style="background:#f59e0b;">⏳ Oczekuje</span>` : (entry.status === 'win' ? `<span class="status-badge" style="background:#10b981;">✅ Wygrany (+${entry.profit.toFixed(2)})</span>` : `<span class="status-badge" style="background:#ef4444;">❌ Przegrany (${entry.profit.toFixed(2)})</span>`);
-                
-                // PRZYCISK EDYCJI DODANY DO AKCJI
-                let editBtn = `<button class="hist-btn btn-edit" onclick="editCoupon(${entry.id})" title="Edytuj kurs/stawkę (np. po zwrocie)">✏️ Edytuj</button>`;
-                
+                let editBtn = `<button class="hist-btn btn-edit" onclick="editCoupon(${entry.id})" title="Edytuj kurs/stawkę">✏️ Edytuj</button>`;
                 let actions = entry.status === 'pending' ? `${editBtn} <button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `${editBtn} <button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
                 
+                let sportIcon = entry.sport === 'nhl' ? '🏒' : '🏀';
+                
                 let div = document.createElement('div'); div.className = 'history-card';
-                div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
+                div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">${sportIcon} Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
                 container.appendChild(div);
             });
 
@@ -405,43 +446,21 @@
             updateProfitChart(chartLabels, chartDataPoints);
         }
 
-        // NOWA FUNKCJA EDYCJI KUPONU
         window.editCoupon = function(id) {
-            let entry = journalData.find(e => e.id === id);
-            if(!entry) return;
-
-            let newOdds = prompt("Wprowadź nowy kurs po zwrocie/anulowaniu (np. 1.85):", entry.odds.toFixed(2));
-            if(newOdds === null) return; // Anulowano
-            newOdds = parseFloat(newOdds.replace(',', '.'));
-
-            let newStake = prompt("Wprowadź nową stawkę, jeśli się zmieniła:", entry.stake.toFixed(2));
-            if(newStake === null) return;
-            newStake = parseFloat(newStake.replace(',', '.'));
-
-            if(isNaN(newOdds) || isNaN(newStake) || newOdds <= 0 || newStake <= 0) {
-                alert("Wprowadzono niepoprawne dane. Użyj formatu liczbowego.");
-                return;
-            }
-
-            entry.odds = newOdds;
-            entry.stake = newStake;
-
-            // Jeśli kupon był już rozliczony, przelicz zysk na nowo
-            if(entry.status === 'win') {
-                entry.profit = (entry.stake * entry.odds) - entry.stake;
-            } else if(entry.status === 'loss') {
-                entry.profit = -entry.stake;
-            }
-
-            localStorage.setItem('nba_journal_v2', JSON.stringify(journalData));
-            renderJournal();
+            let entry = journalData.find(e => e.id === id); if(!entry) return;
+            let newOdds = prompt("Wprowadź nowy kurs:", entry.odds.toFixed(2)); if(newOdds === null) return; newOdds = parseFloat(newOdds.replace(',', '.'));
+            let newStake = prompt("Wprowadź nową stawkę:", entry.stake.toFixed(2)); if(newStake === null) return; newStake = parseFloat(newStake.replace(',', '.'));
+            if(isNaN(newOdds) || isNaN(newStake) || newOdds <= 0 || newStake <= 0) return alert("Wprowadzono niepoprawne dane.");
+            entry.odds = newOdds; entry.stake = newStake;
+            if(entry.status === 'win') entry.profit = (entry.stake * entry.odds) - entry.stake; else if(entry.status === 'loss') entry.profit = -entry.stake;
+            localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal();
         }
 
         function updateProfitChart(labels, data) {
             const ctx = document.getElementById('profitChart').getContext('2d');
             if (profitChartInstance) { profitChartInstance.destroy(); }
             let isDark = document.body.classList.contains('dark-theme'); let textColor = isDark ? '#94a3b8' : '#64748b'; let gridColor = isDark ? '#334155' : '#e2e8f0';
-            profitChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Skumulowany Zysk (PLN)', data: data, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, pointBackgroundColor: '#10b981', pointBorderColor: '#fff', pointRadius: 4, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor, maxTicksLimit: 8 }, grid: { display: false } } } } });
+            profitChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Zysk (PLN)', data: data, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, pointBackgroundColor: '#10b981', pointBorderColor: '#fff', pointRadius: 4, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor, maxTicksLimit: 8 }, grid: { display: false } } } } });
         }
 
         window.resolveCoupon = function(id, status) { let entry = journalData.find(e => e.id === id); if(entry) { entry.status = status; entry.profit = status === 'win' ? (entry.stake * entry.odds) - entry.stake : -entry.stake; localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
@@ -450,7 +469,19 @@
         document.getElementById('generateBtn').addEventListener('click', () => { let t = parseFloat(document.getElementById('targetOddsInput').value); if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs."); document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters(); let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')); let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index)); let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev); let ako = 1.0, used = new Set(); for (let b of bets) { if (used.has(b.mecz)) continue; for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) { if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; } } if (ako >= t) break; } if (ako < t && bets.length > 0) { alert(`Maksymalne AKO z filtrów: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Brak typów dla wybranych filtrów!`); } });
         document.querySelectorAll('th.sortable').forEach(th => { th.addEventListener('click', () => { const col = th.dataset.sort; if (currentSortCol === col) sortAsc = !sortAsc; else { sortAsc = false; currentSortCol = col; } globalData.sort((a, b) => { let vA = a[col], vB = b[col]; if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; } else if (['linia', 'projekcja', 'ev'].includes(col)) { vA = parseFloat(vA)||0; vB = parseFloat(vB)||0; } else if (col === 'stawka') { let rA = document.querySelector(`tr[data-player="${a.zawodnik.toLowerCase()}"][data-market="${a.rynek}"]`), rB = document.querySelector(`tr[data-player="${b.zawodnik.toLowerCase()}"][data-market="${b.rynek}"]`); vA = rA?parseFloat(rA.dataset.stawka):0; vB = rB?parseFloat(rB.dataset.stawka):0; } else if (col === 'matchup_rank') { vA = parseInt(vA.toString().replace(/\D/g, ''))||0; vB = parseInt(vB.toString().replace(/\D/g, ''))||0; } else { vA = vA.toString().toLowerCase(); vB = vB.toString().toLowerCase(); } return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); }); renderTable(globalData); applyFilters();  }); });
         
-        function populateDropdowns(d) { let games = new Set(); d.forEach(i => { games.add(i.mecz); }); Array.from(games).sort().forEach(g => document.getElementById('gameFilter').add(new Option(g, g))); }
+        function populateDropdowns(d) { 
+            let games = new Set(); let markets = new Set();
+            d.forEach(i => { games.add(i.mecz); markets.add(i.rynek); }); 
+            
+            let gameFilter = document.getElementById('gameFilter');
+            gameFilter.innerHTML = '<option value="all">Wszystkie mecze</option>';
+            Array.from(games).sort().forEach(g => gameFilter.add(new Option(g, g))); 
+            
+            let marketFilter = document.getElementById('marketFilter');
+            marketFilter.innerHTML = '<option value="all">Wszystkie</option>';
+            Array.from(markets).sort().forEach(m => marketFilter.add(new Option(m, m)));
+        }
+        
         function applyFilters() { let s = document.getElementById('searchFilter').value.toLowerCase(), g = document.getElementById('gameFilter').value, m = document.getElementById('marketFilter').value, p = document.getElementById('pickFilter').value, stat = document.getElementById('statusFilter').value; document.querySelectorAll('#mainBody tr.data-row').forEach(r => { let matchStatus = true; if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; r.classList.toggle('hidden', !vis); let c = document.getElementById(`chart-${r.dataset.index}`); if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden'); }); }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
     </script>
