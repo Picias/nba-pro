@@ -21,40 +21,70 @@
         
         .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
         .dashboard-header h1 { font-size: 2rem; color: var(--text-color); letter-spacing: -0.5px; }
-        .top-actions { display: flex; gap: 1rem; }
+        .top-actions { display: flex; gap: 1rem; flex-wrap: wrap;}
         .theme-toggle, .stats-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.6rem 1.2rem; border-radius: 20px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
         .theme-toggle:hover, .stats-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .stats-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
 
-        /* NAWIGACJA SPORTÓW */
         .sports-nav { display: flex; gap: 10px; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none;}
         .sports-nav::-webkit-scrollbar { display: none; }
         .sport-tab { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--muted-text); padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; white-space: nowrap; font-size: 1rem;}
         .sport-tab:hover { background: var(--hover-bg); color: var(--text-color);}
         .sport-tab.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
 
+        /* PANEL AUDYTORA */
+        .audytor-card { background: var(--card-bg); border-left: 4px solid #10b981; padding: 20px 25px; margin-bottom: 2rem; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; }
+        .audytor-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
+        .audytor-header { font-size: 14px; color: var(--muted-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .audytor-toggle { display: flex; gap: 10px; }
+        .audytor-btn { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .audytor-btn.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+        
+        .audytor-stats { display: flex; gap: 40px; flex-wrap: wrap;}
+        .audytor-box { display: flex; flex-direction: column; }
+        .audytor-label { font-size: 11px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+        .audytor-value { font-size: 24px; font-weight: 900; color: var(--text-color); }
+        .text-green { color: #10b981; } .text-red { color: #ef4444; } .text-orange { color: #f59e0b; }
+        
+        .audytor-categories { display: flex; gap: 20px; margin-top: 10px; background: var(--bg-color); padding: 15px; border-radius: 8px; flex-wrap: wrap;}
+        .cat-stat { flex: 1; min-width: 120px; border-left: 3px solid; padding-left: 10px; }
+        .cat-graal { border-color: #f59e0b; } .cat-value { border-color: #3b82f6; } .cat-safe { border-color: #10b981; } .cat-stable { border-color: #8b5cf6; }
+        .cat-title { font-size: 0.75rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;}
+        .cat-val { font-size: 1.1rem; font-weight: 900; color: var(--text-color); margin-top: 3px;}
+
         .filters { display: flex; gap: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; border: 1px solid var(--border-color); margin-bottom: 2rem; align-items: flex-end;}
         .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
         .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--muted-text); }
         .filter-group input, .filter-group select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--bg-color); color: var(--text-color); outline: none;}
+        
         .section-title { margin: 2rem 0 1rem 0; font-size: 1.4rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;}
         .legend-box { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-color); flex-wrap: wrap;}
         .legend-item { display: flex; align-items: center; gap: 5px; background: var(--card-bg); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border-color);}
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        
         .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; max-height: 70vh; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: center; }
-        th { position: sticky; top: 0; z-index: 10; background-color: var(--card-bg); border-bottom: 2px solid var(--border-color); padding: 1rem; font-weight: 700; color: var(--muted-text); font-size: 0.75rem; text-transform: uppercase; cursor: pointer;}
+        th { position: sticky; top: 0; z-index: 10; background-color: var(--card-bg); border-bottom: 2px solid var(--border-color); padding: 1rem; font-weight: 700; color: var(--muted-text); font-size: 0.75rem; text-transform: uppercase; cursor: pointer; transition: 0.2s;}
+        th:hover { color: var(--accent-color); }
         td { padding: 1rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
         tbody tr.data-row { transition: background-color 0.2s; cursor: pointer; }
         tbody tr.data-row:hover { background-color: var(--hover-bg); }
+        
         td:first-child, th:first-child { position: sticky; left: 0; z-index: 11; background-color: var(--card-bg); border-right: 1px solid var(--border-color); }
         th:first-child { z-index: 12; }
+        
+        .col-left { text-align: left; white-space: normal; max-width: 380px; min-width: 250px; }
+        .player-name { font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .matchup-info { font-size: 0.8rem; color: var(--muted-text); margin-top: 0.2rem; }
+        .uwagi-text { font-size: 0.8rem; font-weight: bold; color: #ef4444; margin-top: 0.4rem; line-height: 1.5; }
+
         .chart-row { display: none; background-color: var(--card-bg); }
         .chart-row.expanded { display: table-row; }
         .chart-td { padding: 0 !important; border-bottom: 3px solid var(--accent-color) !important; position: sticky; left: 0; z-index: 5;}
         .expanded-panel { display: flex; flex-wrap: wrap; width: 100%; padding: 1.5rem 2rem; gap: 2rem; background: var(--chart-bg); align-items: flex-start;}
         .chart-wrapper, .simulator-box, .sgp-box, .h2h-box { flex: 1; min-width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;}
         .panel-title { font-size: 0.9rem; font-weight: 800; color: var(--text-color); text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 0.3rem; }
+        
         .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 130px; position: relative; width: 100%; }
         .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; z-index: 2; margin: 0 4px; }
         .chart-bar { width: 100%; max-width: 35px; border-radius: 4px 4px 0 0; position: relative; transition: height 0.5s; }
@@ -62,6 +92,7 @@
         .chart-label { font-size: 0.75rem; color: var(--muted-text); margin-top: 8px; position: absolute; bottom: -25px;}
         .chart-val { font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; }
         .chart-line { position: absolute; width: calc(100% - 1rem); left: 0.5rem; border-top: 2px dashed var(--text-color); z-index: 1; opacity: 0.5; }
+        
         .sim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);}
         .sim-input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted-text); margin-bottom: 0.4rem; }
         .sim-input-group input { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 6px; font-weight: bold; background: var(--bg-color); color: var(--text-color); text-align: center;}
@@ -71,7 +102,7 @@
         .res-title.over { color: #10b981; } .res-title.under { color: #ef4444; }
         .res-data { font-size: 0.9rem; color: var(--muted-text); margin-bottom: 0.3rem;}
         .res-val { font-weight: 900; color: var(--text-color);}
-        .res-stake { font-size: 1.1rem; font-weight: 900; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color);}
+        
         .sgp-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 0.8rem;}
         .sgp-info { display: flex; flex-direction: column; gap: 0.2rem;}
         .sgp-player { font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
@@ -79,12 +110,13 @@
         .sgp-odds { font-weight: 900; color: var(--accent-color);}
         .sgp-add-btn { background: #10b981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
         .sgp-add-btn:hover { opacity: 0.8; }
-        .col-left { text-align: left; }
-        .player-name { font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
-        .matchup-info { font-size: 0.8rem; color: var(--muted-text); margin-top: 0.2rem; }
-        .uwagi-text { font-size: 0.8rem; font-weight: bold; color: #ef4444; margin-top: 0.2rem; }
-        .line, .projection, .diff, .ev-val, .stake-val { font-weight: 800; font-size: 1.1rem; }
-        .stake-val { color: #10b981; }
+        
+        .sgp-golden { background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15); display: flex; flex-direction: column; gap: 8px;}
+        .sgp-golden-title { color: #f59e0b; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 5px;}
+        .sgp-golden-text { font-size: 0.95rem; font-weight: normal; color: var(--text-color); line-height: 1.4;}
+
+        .line, .projection { font-weight: 800; font-size: 1.1rem; }
+        
         .pick-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 800; font-size: 0.85rem; }
         .pick-over { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
         .pick-under { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
@@ -93,14 +125,17 @@
         .stat-green { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
         .stat-yellow { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
         .stat-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        
         .super-pick { background-color: var(--gold-highlight); border-left: 4px solid var(--gold-border); }
         .super-safe { background-color: var(--safe-highlight); border-left: 4px solid var(--safe-border); }
         .super-stable { background-color: var(--stable-highlight); border-left: 4px solid var(--stable-border); }
+        
         .action-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; filter: grayscale(0.5); }
         .action-btn:hover { transform: scale(1.3); filter: grayscale(0); }
         .export-btn { background-color: #10b981; color: white; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
         .export-btn:hover { opacity: 0.8; }
         .hidden { display: none !important; }
+        
         .generator-bar { display: flex; gap: 10px; align-items: center; }
         .odds-input { padding: 0.6rem; border: 2px solid var(--accent-color); border-radius: 8px; font-size: 1rem; width: 140px; font-weight: bold; background: var(--bg-color); color: var(--text-color); outline: none;}
         .ako-dashboard { display: flex; gap: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); align-items: center; flex-wrap: wrap;}
@@ -109,8 +144,7 @@
         .ako-label { font-size: 0.75rem; color: var(--muted-text); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
         .ako-value { font-size: 1.3rem; font-weight: 900; color: var(--text-color); }
         .ako-value.highlight { color: var(--accent-color); }
-        .ako-value.success { color: #10b981; }
-        .ako-value.danger { color: #ef4444; }
+        
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
         .modal-content { background-color: var(--card-bg); margin: 5% auto; padding: 2rem; border-radius: 12px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close-modal { color: var(--muted-text); float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
@@ -119,7 +153,6 @@
         .stat-box { background: var(--bg-color); padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
         .stat-box-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 800; color: var(--muted-text); margin-bottom: 0.5rem; }
         .stat-box-value { font-size: 1.8rem; font-weight: 900; color: var(--text-color); }
-        .text-green { color: #10b981 !important; } .text-red { color: #ef4444 !important; }
         .history-list { display: flex; flex-direction: column; gap: 1rem; }
         .history-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;}
         .history-details { flex: 1; min-width: 250px;}
@@ -128,6 +161,7 @@
         .hist-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
         .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); } .btn-edit { background: #3b82f6; }
         .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: white; }
+        
         .h2h-pill { background: var(--bg-color); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem;}
         .h2h-pill.green { color: #10b981; border-color: rgba(16, 185, 129, 0.3);}
         .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
@@ -150,30 +184,54 @@
         }
     </style>
 </head>
-<body>
+<body class="dark-theme">
 
     <div class="dashboard-header">
         <div>
             <h1>Pewniaczki</h1>
-            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Multi-Sport Betting</p>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Quant PRO Syndicate</p>
         </div>
         <div class="top-actions">
+            <button id="exportCsvBtn" class="export-btn" style="background-color: #8b5cf6;">📥 Eksport CSV</button>
             <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
-            <button class="theme-toggle" id="themeToggleBtn">🌙 Tryb Nocny</button>
+            <button class="theme-toggle" id="themeToggleBtn">☀️ Tryb Jasny</button>
         </div>
     </div>
 
     <div class="sports-nav">
         <button class="sport-tab active" data-sport="nba">🏀 NBA</button>
         <button class="sport-tab" data-sport="nhl">🏒 NHL</button>
-        <button class="sport-tab" data-sport="mlb" style="opacity: 0.5;" title="Wkrótce">⚾ MLB (Wkrótce)</button>
+        <button class="sport-tab" data-sport="mlb">⚾ MLB</button>
         <button class="sport-tab" data-sport="nfl" style="opacity: 0.5;" title="Wkrótce">🏈 NFL (Wkrótce)</button>
+    </div>
+    
+    <div id="audytor-panel" class="audytor-card">
+        <div class="audytor-top-bar">
+            <div class="audytor-header" id="audytor-title">📊 Raport Skuteczności Modelu (Ładowanie...)</div>
+            <div class="audytor-toggle">
+                <button class="audytor-btn active" id="btn-audytor-wczoraj" onclick="renderAuditorView('wczoraj')">Ostatnia Noc</button>
+                <button class="audytor-btn" id="btn-audytor-alltime" onclick="renderAuditorView('alltime')">Cała Historia</button>
+            </div>
+        </div>
+        
+        <div class="audytor-stats">
+            <div class="audytor-box"><span class="audytor-label">Skuteczność (Hit Rate)</span><span class="audytor-value" id="audytor-hitrate">--</span></div>
+            <div class="audytor-box"><span class="audytor-label">Czysty Zysk (ROI)</span><span class="audytor-value text-orange" id="audytor-roi">--</span></div>
+            <div class="audytor-box"><span class="audytor-label">Bilans (Win - Loss - Zwrot)</span><span class="audytor-value"><span id="audytor-w" class="text-green">0</span> - <span id="audytor-l" class="text-red">0</span> - <span id="audytor-p">0</span></span></div>
+        </div>
+        
+        <div class="audytor-categories">
+            <div class="cat-stat cat-graal"><div class="cat-title">🏆 Graale</div><div class="cat-val" id="cat-graal-val">--</div></div>
+            <div class="cat-stat cat-value"><div class="cat-title">💰 Value Bety</div><div class="cat-val" id="cat-value-val">--</div></div>
+            <div class="cat-stat cat-safe"><div class="cat-title">🎯 Pewniaki</div><div class="cat-val" id="cat-safe-val">--</div></div>
+            <div class="cat-stat cat-stable"><div class="cat-title">🛡️ Stabilni</div><div class="cat-val" id="cat-stable-val">--</div></div>
+        </div>
     </div>
 
     <div id="journalModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeJournalBtn">&times;</span>
-            <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (ROI & Yield)</h2>
+            <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (Kupony)</h2>
             <div class="stats-overview">
                 <div class="stat-box"><div class="stat-box-title">Zainwestowano</div><div class="stat-box-value" id="statInvested">0 PLN</div></div>
                 <div class="stat-box"><div class="stat-box-title">Czysty Zysk</div><div class="stat-box-value" id="statProfit">0 PLN</div></div>
@@ -197,9 +255,7 @@
         </div>
         <div class="filter-group">
             <label>Rynek</label>
-            <select id="marketFilter">
-                <option value="all">Wszystkie</option>
-            </select>
+            <select id="marketFilter"><option value="all">Wszystkie</option></select>
         </div>
         <div class="filter-group">
             <label>Typ</label>
@@ -207,11 +263,13 @@
         </div>
         <div class="filter-group">
             <label>Status (Rating)</label>
-            <select id="statusFilter"><option value="all">Wszystkie Typy</option><option value="value">💰 Value Bety (>30% EV)</option><option value="safe">🎯 Pewniaki (>70% Szans)</option><option value="stable">🛡️ Stabilni gracze</option></select>
-        </div>
-        <div class="filter-group" style="border-left: 2px solid var(--border-color); padding-left: 1rem;">
-            <label style="color: var(--accent-color);">💰 Budżet</label>
-            <input type="number" id="bankrollInput" value="1000" min="10" step="10">
+            <select id="statusFilter">
+                <option value="all">Wszystkie Typy</option>
+                <option value="value">💰 Value Bety (>30% EV)</option>
+                <option value="safe">🎯 Pewniaki (>70% Szans)</option>
+                <option value="stable">🛡️ Stabilni gracze</option>
+                <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
+            </select>
         </div>
     </div>
 
@@ -231,8 +289,8 @@
                     <th class="sortable" data-sort="rynek">Rynek</th>
                     <th class="sortable" data-sort="linia">Linia</th>
                     <th class="sortable" data-sort="projekcja">Projekcja</th>
-                    <th class="sortable" data-sort="ev">Szansa & EV</th>
-                    <th class="sortable" data-sort="stawka">Zal. Stawka</th>
+                    <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                    <th class="sortable" data-sort="ev">Edge (EV)</th>
                     <th>Typ</th>
                     <th class="sortable" data-sort="l5">L5</th>
                     <th class="sortable" data-sort="l10">L10</th>
@@ -251,7 +309,11 @@
             <div class="ako-dashboard">
                 <div class="ako-stat"><span class="ako-label">AKO</span><span class="ako-value highlight" id="totalOddsDisplay">1.00</span></div>
                 <div class="ako-stat bordered"><span class="ako-label">Szansa</span><span class="ako-value" id="akoProbDisplay">-</span></div>
-                <div class="ako-stat bordered"><span class="ako-label">Stawka</span><span class="ako-value" id="akoStakeDisplay">- PLN</span></div>
+                <div class="ako-stat bordered">
+                    <span class="ako-label">Twoja Stawka</span>
+                    <input type="number" id="customStakeInput" value="50" style="width: 70px; background: transparent; border: none; border-bottom: 2px solid var(--accent-color); color: var(--text-color); font-weight: 900; font-size: 1.2rem; text-align: center; outline: none;">
+                </div>
+                <div class="ako-stat bordered"><span class="ako-label">Ew. Wygrana</span><span class="ako-value text-green" id="akoEwkDisplay">0.00 PLN</span></div>
             </div>
         </div>
         <div class="generator-bar">
@@ -261,11 +323,22 @@
         </div>
     </div>
     
-    <div class="table-container" style="max-height: 40vh; margin-bottom: 3rem;">
+    <div class="table-container" style="max-height: 70vh; margin-bottom: 3rem;">
         <table id="favoritesTable">
             <thead>
                 <tr>
-                    <th class="col-left">Zawodnik & Mecz</th><th>Rynek</th><th>Linia</th><th>Projekcja</th><th>Szansa & EV</th><th>Zal. Stawka</th><th>Typ</th><th>Matchup</th><th>Akcja</th>
+                    <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
+                    <th class="sortable" data-sort="rynek">Rynek</th>
+                    <th class="sortable" data-sort="linia">Linia</th>
+                    <th class="sortable" data-sort="projekcja">Projekcja</th>
+                    <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                    <th class="sortable" data-sort="ev">Edge (EV)</th>
+                    <th>Typ</th>
+                    <th class="sortable" data-sort="l5">L5</th>
+                    <th class="sortable" data-sort="l10">L10</th>
+                    <th class="sortable" data-sort="sezon">Sezon</th>
+                    <th class="sortable" data-sort="matchup_rank">Matchup</th>
+                    <th>Akcja</th>
                 </tr>
             </thead>
             <tbody id="favoritesBody"></tbody>
@@ -274,8 +347,14 @@
 
     <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA error:', err)); }); }
+        
         const themeBtn = document.getElementById('themeToggleBtn');
-        themeBtn.addEventListener('click', () => { document.body.classList.toggle('dark-theme'); themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny'; });
+        themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny';
+        
+        themeBtn.addEventListener('click', () => { 
+            document.body.classList.toggle('dark-theme'); 
+            themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny'; 
+        });
 
         let globalData = [];
         let currentSortCol = '';
@@ -283,6 +362,8 @@
         let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
         let profitChartInstance = null; 
         let currentSport = 'nba';
+        
+        let statystykiBota = []; 
 
         function normalCDF(x, mean, stdDev) {
             let z = (x - mean) / (stdDev * Math.sqrt(2));
@@ -292,9 +373,81 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
-        // ==========================================
-        // SYSTEM ŁADOWANIA SPORTÓW
-        // ==========================================
+        async function wczytajAudytora() {
+            try {
+                const response = await fetch(`statystyki_bota.json?v=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Brak pliku");
+                statystykiBota = await response.json();
+                if (statystykiBota && statystykiBota.length > 0) {
+                    renderAuditorView('wczoraj'); 
+                }
+            } catch (error) {
+                console.log("Audytor: Brak pliku z wczorajszymi statystykami.");
+                document.getElementById('audytor-title').innerText = "📊 Raport Skuteczności Modelu (Brak Danych)";
+            }
+        }
+        
+        window.renderAuditorView = function(typWidoku) {
+            if(!statystykiBota || statystykiBota.length === 0) return;
+            
+            document.getElementById('btn-audytor-wczoraj').classList.toggle('active', typWidoku === 'wczoraj');
+            document.getElementById('btn-audytor-alltime').classList.toggle('active', typWidoku === 'alltime');
+            
+            let dataTytul, hitRate, roi, w, l, p, zyskJednostki;
+            let cGraalW = 0, cGraalT = 0, cValueW = 0, cValueT = 0, cSafeW = 0, cSafeT = 0, cStableW = 0, cStableT = 0;
+            
+            if(typWidoku === 'wczoraj') {
+                const wczoraj = statystykiBota[0];
+                dataTytul = `Ostatnia Noc (${wczoraj.data_meczow})`;
+                hitRate = wczoraj.hit_rate;
+                roi = wczoraj.roi;
+                zyskJednostki = wczoraj.profit_jednostki;
+                w = wczoraj.wygrane; l = wczoraj.przegrane; p = wczoraj.zwroty;
+                
+                if(wczoraj.kategorie) {
+                    cGraalW = wczoraj.kategorie.graal.w; cGraalT = wczoraj.kategorie.graal.t;
+                    cValueW = wczoraj.kategorie.value.w; cValueT = wczoraj.kategorie.value.t;
+                    cSafeW = wczoraj.kategorie.safe.w; cSafeT = wczoraj.kategorie.safe.t;
+                    cStableW = wczoraj.kategorie.stable.w; cStableT = wczoraj.kategorie.stable.t;
+                }
+            } else {
+                dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
+                let sumW = 0, sumL = 0, sumP = 0, sumProfit = 0;
+                
+                statystykiBota.forEach(d => {
+                    sumW += d.wygrane; sumL += d.przegrane; sumP += d.zwroty; sumProfit += d.profit_jednostki;
+                    if(d.kategorie) {
+                        cGraalW += d.kategorie.graal.w; cGraalT += d.kategorie.graal.t;
+                        cValueW += d.kategorie.value.w; cValueT += d.kategorie.value.t;
+                        cSafeW += d.kategorie.safe.w; cSafeT += d.kategorie.safe.t;
+                        cStableW += d.kategorie.stable.w; cStableT += d.kategorie.stable.t;
+                    }
+                });
+                
+                w = sumW; l = sumL; p = sumP; zyskJednostki = sumProfit;
+                let sumaAll = sumW + sumL;
+                hitRate = sumaAll > 0 ? (sumW / sumaAll * 100).toFixed(1) + '%' : "0.0%";
+                roi = sumaAll > 0 ? (sumProfit / sumaAll * 100).toFixed(1) + '%' : "0.0%";
+            }
+            
+            document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności Modelu (${dataTytul})`;
+            document.getElementById('audytor-hitrate').textContent = hitRate;
+            
+            const roiEl = document.getElementById('audytor-roi');
+            roiEl.textContent = (parseFloat(zyskJednostki) > 0 ? "+" : "") + roi + ` (${parseFloat(zyskJednostki).toFixed(2)}u)`;
+            roiEl.className = parseFloat(zyskJednostki) > 0 ? "audytor-value text-green" : "audytor-value text-red";
+            
+            document.getElementById('audytor-w').textContent = w;
+            document.getElementById('audytor-l').textContent = l;
+            document.getElementById('audytor-p').textContent = p;
+            
+            const formatCat = (win, tot) => tot > 0 ? `${win}/${tot} (${(win/tot*100).toFixed(0)}%)` : "0/0 (Brak)";
+            document.getElementById('cat-graal-val').textContent = formatCat(cGraalW, cGraalT);
+            document.getElementById('cat-value-val').textContent = formatCat(cValueW, cValueT);
+            document.getElementById('cat-safe-val').textContent = formatCat(cSafeW, cSafeT);
+            document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
+        }
+
         function loadSportData(sport) {
             document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
             
@@ -310,15 +463,14 @@
                 updateTotalOdds(); 
             })
             .catch(e => { 
-                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza ${sport.toUpperCase()} jest pusta lub wciąż się buduje. Odpal skrypt bota dla tego sportu!</td></tr>`; 
+                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza ${sport.toUpperCase()} jest pusta lub wciąż się buduje. Odpal skrypt bota!</td></tr>`; 
                 globalData = [];
             });
         }
 
         document.querySelectorAll('.sport-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                if(tab.dataset.sport === 'mlb' || tab.dataset.sport === 'nfl') return alert("Ten moduł sportowy zostanie aktywowany w następnej aktualizacji!");
-                
+                if(tab.dataset.sport === 'nfl') return alert("Moduł NFL zostanie aktywowany we wrześniu!");
                 document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentSport = tab.dataset.sport;
@@ -326,82 +478,320 @@
             });
         });
 
-        // Inicjalizujemy NBA przy starcie
         loadSportData('nba');
+
+        // CSV EKSPORT
+        document.getElementById('exportCsvBtn').addEventListener('click', () => {
+            if(globalData.length === 0) return alert("Brak danych do eksportu. Baza jest pusta.");
+            let headers = ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
+            let csvRows = [headers.join(",")];
+            globalData.forEach(d => {
+                let true_prob = (((d.ev + 1) / (parseFloat(d.kurs) || 1.90)) * 100).toFixed(1);
+                let ev = (d.ev * 100).toFixed(1);
+                let row = [
+                    `"${d.zawodnik}"`, `"${d.mecz}"`, `"${d.rynek}"`, `"${d.typ}"`, 
+                    d.linia, d.kurs, d.projekcja, true_prob, ev, 
+                    `"${d.l5}"`, `"${d.l10}"`, `"${d.sezon}"`, `"${d.matchup_rank}"`
+                ];
+                csvRows.push(row.join(","));
+            });
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `quant_pro_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
         function createStatPill(str) { if (!str || str === "-") return '<span class="stat-pill stat-yellow">-</span>'; let v = parseInt((str.match(/(\d+)%/) || [0,0])[1]); return `<span class="stat-pill ${v>=70?'stat-green':(v>=40?'stat-yellow':'stat-red')}">${str}</span>`; }
         function generateChartHTML(hist, linia) { if (!hist || hist.length === 0) return "<div style='padding: 2rem;'>Brak historii.</div>"; let max = Math.max(...hist, linia) * 1.2 || 10; let bars = hist.map((v, i) => `<div class="chart-bar-wrap"><div class="chart-val">${v}</div><div class="chart-bar ${v>linia?'bar-over':'bar-under'}" style="height: ${(v/max)*100}%;"></div><div class="chart-label">L${hist.length-i}</div></div>`).join(''); return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`; }
         function generateH2HHtml(item) {
-            if (!item.h2h_history || item.h2h_history === "Brak danych") return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak najnowszych wyników vs ${item.opp_name}.</div>`;
-            let vals = item.h2h_history.split(' | '); let pillsHtml = vals.map(v => { let num = parseFloat(v); let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia; return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`; }).join('');
+            if (!item.h2h_history || item.h2h_history === "Brak" || item.h2h_history === "Brak danych") return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak najnowszych wyników vs ${item.opp_name}.</div>`;
+            let vals = item.h2h_history.split(','); let pillsHtml = vals.map(v => { let num = parseFloat(v); let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia; return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`; }).join('');
             return `<div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div><div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span></div><div style="display: flex; gap: 8px; flex-wrap: wrap;">${pillsHtml}</div>`;
         }
+
+        // ZAAWANSOWANA LOGIKA ZŁOTEJ PARY (Naprawione działanie przycisku)
         function generateSGPHtml(currentItem) {
-            let currentLoc = currentItem.lokacja.split(':')[0]; let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
-            let suggestions = [];
-            if (currentItem.ev > 0) suggestions = teammates.filter(t => t.ev > 0.05);
-            suggestions.sort((a,b) => b.ev - a.ev); let top2 = suggestions.slice(0, 2);
-            if(top2.length === 0) return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak korelacji.</div>`;
-            let html = top2.map(s => `<div class="sgp-item"><div class="sgp-info"><span class="sgp-player">${s.zawodnik}</span><span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span></div><div style="display:flex; align-items:center; gap: 10px;"><span class="sgp-odds">@${s.kurs}</span><button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button></div></div>`).join('');
-            return `<div style="margin-top: 1rem;">${html}</div>`;
+            let goldenHtml = "";
+            let regexText = /🔗 ZŁOTA PARA SGP: (.*)/;
+            let matchText = currentItem.uwagi ? currentItem.uwagi.match(regexText) : null;
+            
+            if (matchText) {
+                let fullText = matchText[1].trim();
+                let targetPlayer = "";
+                let targetMarket = "";
+                let displayMsg = "";
+                
+                if (fullText.includes("Łącz z OVER")) {
+                    let bezPrefiksu = fullText.replace("Łącz z OVER ", ""); 
+                    let lastParenIndex = bezPrefiksu.lastIndexOf("(");
+                    if(lastParenIndex !== -1) {
+                        targetPlayer = bezPrefiksu.substring(0, lastParenIndex).trim();
+                        targetMarket = bezPrefiksu.substring(lastParenIndex + 1, bezPrefiksu.length - 1).trim();
+                    } else {
+                        targetPlayer = bezPrefiksu;
+                    }
+                    displayMsg = `Skoro grasz ${currentItem.zawodnik}, model zdecydowanie zaleca uderzyć w kolegę: <br><b>OVER ${targetPlayer} (${targetMarket})</b>`;
+                } else if (fullText.includes("Asystuje")) {
+                    let bezPrefiksu = fullText.replace("Asystuje ", ""); 
+                    let lastParenIndex = bezPrefiksu.lastIndexOf("(");
+                    if(lastParenIndex !== -1) {
+                        targetPlayer = bezPrefiksu.substring(0, lastParenIndex).trim();
+                    } else {
+                        targetPlayer = bezPrefiksu;
+                    }
+                    targetMarket = "Asysty (AST)";
+                    displayMsg = `Głównym rozgrywającym asystującym temu graczowi jest: <br><b>OVER ${targetPlayer} (${targetMarket})</b>`;
+                }
+
+                goldenHtml = `
+                <div class="sgp-golden">
+                    <div class="sgp-golden-title">🏆 Wykryto Złotą Parę Korelacyjną</div>
+                    <div class="sgp-golden-text">${displayMsg}</div>
+                    ${targetPlayer ? `<button class="sgp-add-btn" style="background: #f59e0b; width: fit-content; margin-top: 5px; font-size: 0.9rem;" onclick="forceAddToCoupon('${targetPlayer}', '${targetMarket}')">+ Dodaj Złotą Parę na Kupon</button>` : ''}
+                </div>`;
+            }
+
+            let currentLoc = currentItem.lokacja.split(':')[0]; 
+            let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
+            let suggestions = teammates.filter(t => t.ev > 0.02);
+            suggestions.sort((a,b) => b.ev - a.ev); 
+            let top2 = suggestions.slice(0, 2);
+            
+            let html = "";
+            if(top2.length === 0) {
+                html = `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak innych opłacalnych typów (EV > 0) z tej drużyny.</div>`;
+            } else {
+                html = top2.map(s => `<div class="sgp-item"><div class="sgp-info"><span class="sgp-player">${s.zawodnik}</span><span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span></div><div style="display:flex; align-items:center; gap: 10px;"><span class="sgp-odds">@${s.kurs}</span><button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button></div></div>`).join('');
+            }
+            
+            return goldenHtml + `<div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">Najlepsze opcje z tej samej drużyny:</div>${html}</div>`;
         }
 
-        window.forceAddToCoupon = function(player, market) { let mainRows = document.querySelectorAll('#mainBody tr.data-row'); for (let row of mainRows) { if (row.dataset.player === player.toLowerCase() && row.dataset.market === market) { row.querySelector('.add-btn').click(); alert("Dodano skorelowany zakład do kuponu!"); break; } } };
+        window.forceAddToCoupon = function(player, market) { 
+            let pLower = player.toLowerCase().trim();
+            
+            // 1. Sprawdzamy czy nie ma go już w Moim Kuponie
+            let alreadyInCoupon = false;
+            document.querySelectorAll('#favoritesBody tr.data-row').forEach(fRow => {
+                if (fRow.dataset.player === pLower && (fRow.dataset.market === market || fRow.dataset.market.includes(market.split('(')[0].trim()))) {
+                    alreadyInCoupon = true;
+                }
+            });
+            
+            if (alreadyInCoupon) {
+                alert(`Gracz ${player} znajduje się już na Twoim kuponie!`);
+                return;
+            }
 
-        function runSimulation(idx) {
-            let item = globalData[idx], proj = parseFloat(document.getElementById(`sim-proj-${idx}`).value), line = parseFloat(document.getElementById(`sim-line-${idx}`).value), odds = parseFloat(document.getElementById(`sim-odds-${idx}`).value), br = parseFloat(document.getElementById('bankrollInput').value) || 1000;
+            // 2. Szukamy go w głównej tabeli i omijamy bug z klasą .hidden
+            let mainRows = document.querySelectorAll('#mainBody tr.data-row'); 
+            let added = false;
+            for (let row of mainRows) { 
+                let pCheck = row.dataset.player === pLower;
+                let mCheck = row.dataset.market === market || row.dataset.market.includes(market.split('(')[0].trim());
+                
+                if (pCheck && mCheck) { 
+                    row.querySelector('.add-btn').click(); 
+                    alert(`✅ Dodano ${player} do Kuponu!`); 
+                    added = true;
+                    break; 
+                } 
+            } 
+            if(!added) alert(`Nie udało się znaleźć gracza ${player} z rynkiem ${market} w głównej tabeli.`);
+        };
+
+        function runSimulation(idx, isFav = false) {
+            let suffix = isFav ? '-fav' : '';
+            let item = globalData[idx];
+            let projEl = document.getElementById(`sim-proj-${idx}${suffix}`);
+            let lineEl = document.getElementById(`sim-line-${idx}${suffix}`);
+            let oddsEl = document.getElementById(`sim-odds-${idx}${suffix}`);
+            
+            if (!projEl || !lineEl || !oddsEl) return;
+
+            let proj = parseFloat(projEl.value);
+            let line = parseFloat(lineEl.value);
+            let odds = parseFloat(oddsEl.value);
+            
             if (isNaN(proj) || isNaN(line) || isNaN(odds)) return;
-            let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length, stdDev = Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length) || 0.5;
-            let probU = normalCDF(line, proj, stdDev), probO = 1 - probU, evO = (probO * odds) - 1, stakeO = ((probO * (odds-1) - probU) / (odds-1)) * 0.25 * br, evU = (probU * odds) - 1, stakeU = ((probU * (odds-1) - probO) / (odds-1)) * 0.25 * br;
-            document.getElementById(`sim-prob-over-${idx}`).innerText = (probO * 100).toFixed(1) + '%'; let eOEl = document.getElementById(`sim-ev-over-${idx}`); eOEl.innerText = (evO>0?'+':'')+(evO*100).toFixed(1)+'%'; eOEl.style.color = evO>0?'#10b981':'#ef4444'; let sOEl = document.getElementById(`sim-stake-over-${idx}`); sOEl.innerText = stakeO>0?stakeO.toFixed(2)+' PLN':'ODPUŚĆ'; sOEl.style.color = stakeO>0?'#10b981':'var(--muted-text)';
-            document.getElementById(`sim-prob-under-${idx}`).innerText = (probU * 100).toFixed(1) + '%'; let eUEl = document.getElementById(`sim-ev-under-${idx}`); eUEl.innerText = (evU>0?'+':'')+(evU*100).toFixed(1)+'%'; eUEl.style.color = evU>0?'#10b981':'#ef4444'; let sUEl = document.getElementById(`sim-stake-under-${idx}`); sUEl.innerText = stakeU>0?stakeU.toFixed(2)+' PLN':'ODPUŚĆ'; sUEl.style.color = stakeU>0?'#ef4444':'var(--muted-text)';
+            
+            let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
+            let stdDev = Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length) || 0.5;
+            let probU = normalCDF(line, proj, stdDev), probO = 1 - probU, evO = (probO * odds) - 1, evU = (probU * odds) - 1;
+            
+            document.getElementById(`sim-prob-over-${idx}${suffix}`).innerText = (probO * 100).toFixed(1) + '%'; 
+            let eOEl = document.getElementById(`sim-ev-over-${idx}${suffix}`); 
+            eOEl.innerText = (evO>0?'+':'')+(evO*100).toFixed(1)+'%'; 
+            eOEl.style.color = evO>0?'#10b981':'#ef4444'; 
+            
+            document.getElementById(`sim-prob-under-${idx}${suffix}`).innerText = (probU * 100).toFixed(1) + '%'; 
+            let eUEl = document.getElementById(`sim-ev-under-${idx}${suffix}`); 
+            eUEl.innerText = (evU>0?'+':'')+(evU*100).toFixed(1)+'%'; 
+            eUEl.style.color = evU>0?'#10b981':'#ef4444'; 
         }
-        document.addEventListener('input', e => { if (e.target.classList.contains('sim-input')) runSimulation(e.target.dataset.index); });
+
+        document.addEventListener('input', e => { 
+            if (e.target.classList.contains('sim-input')) {
+                let isFav = e.target.id.includes('-fav');
+                runSimulation(e.target.dataset.index, isFav); 
+            }
+        });
 
         function renderTable(data) {
             const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
-            let bankroll = parseFloat(document.getElementById('bankrollInput').value) || 1000;
+            
             data.forEach((item, index) => {
-                let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90), kelly = (true_prob * ((item.kurs||1.9)-1) - (1-true_prob)) / ((item.kurs||1.9)-1), stake = kelly > 0 ? kelly * 0.25 * bankroll : 0;
+                let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90);
                 let isStable = false; if (item.history && item.history.length >= 5) { let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length, cv = mean > 0 ? (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean : 1; if (cv < 0.35 && mean >= (item.linia * 0.75)) isStable = true; }
-                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]), isValueBet = item.ev >= 0.30, isSafeBet = true_prob >= 0.70 && l5v >= 80, rowClass = isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : ""));
+                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]), isValueBet = item.ev >= 0.30, isSafeBet = true_prob >= 0.70 && l5v >= 80;
+                
+                let isGraal = isValueBet && isSafeBet && isStable;
+                let rowClass = isGraal ? "super-pick" : (isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : "")));
                 
                 let badges = []; 
-                if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`); 
-                if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`); 
-                if(isStable) badges.push(`<span title="Stabilny" style="font-size:1.1rem">🛡️</span>`);
+                if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
+                else {
+                    if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`); 
+                    if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`); 
+                    if(isStable) badges.push(`<span title="Stabilny" style="font-size:1.1rem">🛡️</span>`);
+                }
                 if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
 
-                let tr = document.createElement('tr'); tr.className = `data-row ${rowClass}`; tr.dataset.isValue = isValueBet ? "true" : "false"; tr.dataset.isSafe = isSafeBet ? "true" : "false"; tr.dataset.isStable = isStable ? "true" : "false"; tr.dataset.player = item.zawodnik.toLowerCase(); tr.dataset.game = item.mecz; tr.dataset.market = item.rynek; tr.dataset.pick = item.typ; tr.dataset.index = index; tr.dataset.odds = item.kurs; tr.dataset.prob = true_prob; tr.dataset.stawka = stake; 
-                
-                let uwagi_html = item.uwagi && item.uwagi !== "-" ? `<div class="uwagi-text">${item.uwagi}</div>` : "";
+                let szansaProcent = (true_prob * 100).toFixed(1);
+                let szansaKolor = true_prob > 0.55 ? "color: #10b981; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
+                let evProcent = (item.ev * 100).toFixed(1);
+                let evKolor = item.ev > 0.05 ? "color: #f59e0b; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
 
-                tr.innerHTML = `<td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td><td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td><td class="line">${item.linia}</td><td class="projection">${item.projekcja}</td><td class="ev-val"><div style="font-size:0.85rem;color:var(--muted-text)">Szansa: <span style="font-weight:800;color:var(--text-color)">${(true_prob*100).toFixed(1)}%</span></div><div style="font-size:0.85rem;color:var(--muted-text)">EV: <span style="color:${item.ev>0?'#10b981':'#ef4444'}">${item.ev>0?'+':''}${(item.ev*100).toFixed(1)}%</span></div></td><td class="stake-val">${stake>0?stake.toFixed(2)+' PLN':'-'}</td><td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td><td>${createStatPill(item.l5)}</td><td>${createStatPill(item.l10)}</td><td>${createStatPill(item.sezon)}</td><td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td><td><button class="action-btn add-btn">⭐</button></td>`;
+                let tr = document.createElement('tr'); 
+                tr.className = `data-row ${rowClass}`; 
+                tr.dataset.isValue = isValueBet ? "true" : "false"; 
+                tr.dataset.isSafe = isSafeBet ? "true" : "false"; 
+                tr.dataset.isStable = isStable ? "true" : "false"; 
+                tr.dataset.player = item.zawodnik.toLowerCase(); 
+                tr.dataset.game = item.mecz; 
+                tr.dataset.market = item.rynek; 
+                tr.dataset.pick = item.typ; 
+                tr.dataset.index = index; 
+                tr.dataset.odds = item.kurs; 
+                tr.dataset.prob = true_prob;
+                
+                let cleanUwagi = item.uwagi;
+                if (cleanUwagi) { cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, ""); }
+                let uwagi_html = cleanUwagi && cleanUwagi !== "-" ? `<div class="uwagi-text">${cleanUwagi}</div>` : "";
+
+                tr.innerHTML = `
+                    <td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td>
+                    <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
+                    <td class="line">${item.linia}</td>
+                    <td class="projection">${item.projekcja}</td>
+                    <td style="${szansaKolor}">${szansaProcent}%</td>
+                    <td style="${evKolor}">${item.ev > 0 ? '+' : ''}${evProcent}%</td>
+                    <td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td>
+                    <td>${createStatPill(item.l5)}</td>
+                    <td>${createStatPill(item.l10)}</td>
+                    <td>${createStatPill(item.sezon)}</td>
+                    <td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td>
+                    <td><button class="action-btn add-btn">⭐</button></td>
+                `;
                 tbody.appendChild(tr);
 
                 let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
-                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div><div class="res-stake" id="sim-stake-over-${index}">-</div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div><div class="res-stake" id="sim-stake-under-${index}">-</div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Sugestie SGP</div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem;">Skorelowane typy:</div>${generateSGPHtml(item)}</div></div></td>`;
+                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Panel Korelacji SGP</div>${generateSGPHtml(item)}</div></div></td>`;
                 tbody.appendChild(chartTr);
                 tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
             });
         }
 
-        document.getElementById('bankrollInput').addEventListener('input', () => { renderTable(globalData); applyFilters(); updateTotalOdds(); });
-
+        // AKO & EWK (KALKULATOR ZYSKU NA ŻYWO)
         function updateTotalOdds() {
-            let rows = document.querySelectorAll('#favoritesBody tr'), br = parseFloat(document.getElementById('bankrollInput').value) || 1000, tAko = 1.0, tProb = 1.0;
+            let rows = document.querySelectorAll('#favoritesBody tr.data-row'), tAko = 1.0, tProb = 1.0;
             rows.forEach(r => { let k = parseFloat(r.dataset.odds), p = parseFloat(r.dataset.prob); if(!isNaN(k)) tAko *= k; if(!isNaN(p)) tProb *= p; });
-            let oDisp = document.getElementById('totalOddsDisplay'), pDisp = document.getElementById('akoProbDisplay'), sDisp = document.getElementById('akoStakeDisplay');
+            
+            let oDisp = document.getElementById('totalOddsDisplay'), pDisp = document.getElementById('akoProbDisplay');
+            let ewkDisp = document.getElementById('akoEwkDisplay');
+            let customStake = parseFloat(document.getElementById('customStakeInput').value) || 0;
+
             if (rows.length > 0) {
-                oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight"; pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
-                let kelly = (tProb*(tAko-1) - (1-tProb))/(tAko-1), stake = kelly>0 ? kelly*0.25*br : 0;
-                document.getElementById('saveJournalBtn').dataset.stake = stake; document.getElementById('saveJournalBtn').dataset.odds = tAko;
-                if (stake > 0) { sDisp.innerText = stake.toFixed(2)+" PLN"; sDisp.className = "ako-value success"; } else { sDisp.innerText = "0.00 PLN"; sDisp.className = "ako-value danger"; pDisp.className = "ako-value danger"; }
-            } else { oDisp.innerText = "1.00"; oDisp.className = "ako-value"; pDisp.innerText = "-"; pDisp.className = "ako-value"; sDisp.innerText = "- PLN"; sDisp.className = "ako-value"; document.getElementById('saveJournalBtn').dataset.stake = 0; }
+                oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight"; 
+                pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
+                
+                let ewk = (tAko * customStake).toFixed(2);
+                ewkDisp.innerText = ewk + " PLN";
+
+                document.getElementById('saveJournalBtn').dataset.odds = tAko;
+            } else { 
+                oDisp.innerText = "1.00"; oDisp.className = "ako-value"; 
+                pDisp.innerText = "-"; pDisp.className = "ako-value"; 
+                ewkDisp.innerText = "0.00 PLN";
+                document.getElementById('saveJournalBtn').dataset.odds = 1.0; 
+            }
         }
 
-        document.getElementById('mainTable').addEventListener('click', e => { if (e.target.classList.contains('add-btn')) { let r = e.target.closest('tr.data-row'), c = r.cloneNode(true); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:nth-child(8)').remove(); c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; document.getElementById('favoritesBody').appendChild(c); r.classList.add('hidden'); updateTotalOdds(); }});
-        document.getElementById('favoritesTable').addEventListener('click', e => { if (e.target.classList.contains('remove-btn')) { let r = e.target.closest('tr'), p = r.dataset.player, m = r.dataset.market; r.remove(); document.querySelectorAll('#mainBody tr.data-row').forEach(mr => { if(mr.dataset.player===p && mr.dataset.market===m) { mr.classList.remove('hidden'); applyFilters(); }}); updateTotalOdds(); }});
+        document.getElementById('customStakeInput').addEventListener('input', updateTotalOdds);
+
+        document.getElementById('mainTable').addEventListener('click', e => { 
+            if (e.target.classList.contains('add-btn')) { 
+                let r = e.target.closest('tr.data-row');
+                let idx = r.dataset.index;
+                let chartR = document.getElementById(`chart-${idx}`);
+                
+                let c = r.cloneNode(true); 
+                let cChart = chartR.cloneNode(true);
+                
+                // FIX: Usuwamy ukrytą klasę w kopii (jeśli rząd był schowany przez filtry)
+                c.classList.remove('hidden');
+                cChart.classList.remove('hidden');
+                
+                c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; 
+                
+                cChart.id = `chart-${idx}-fav`;
+                cChart.querySelectorAll('[id]').forEach(el => {
+                    el.id = el.id + '-fav';
+                });
+
+                c.addEventListener('click', ev => { 
+                    if(!ev.target.closest('button') && ev.target.tagName !== 'INPUT') { 
+                        let isExp = !cChart.classList.contains('expanded'); 
+                        cChart.classList.toggle('expanded'); 
+                        if(isExp) runSimulation(idx, true); 
+                    } 
+                });
+                
+                document.getElementById('favoritesBody').appendChild(c);
+                document.getElementById('favoritesBody').appendChild(cChart);
+                
+                r.classList.add('hidden'); 
+                chartR.classList.remove('expanded');
+                chartR.classList.add('hidden');
+                
+                updateTotalOdds(); 
+            }
+        });
+
+        document.getElementById('favoritesTable').addEventListener('click', e => { 
+            if (e.target.classList.contains('remove-btn')) { 
+                let r = e.target.closest('tr.data-row');
+                let idx = r.dataset.index;
+                let cChart = document.getElementById(`chart-${idx}-fav`);
+                
+                r.remove(); 
+                if(cChart) cChart.remove();
+                
+                let mainR = document.querySelector(`#mainBody tr.data-row[data-index="${idx}"]`);
+                let mainChart = document.getElementById(`chart-${idx}`);
+                
+                if(mainR) {
+                    mainR.classList.remove('hidden'); 
+                    mainChart.classList.remove('hidden');
+                    applyFilters(); 
+                }
+                updateTotalOdds(); 
+            }
+        });
 
         const modal = document.getElementById('journalModal');
         document.getElementById('openJournalBtn').onclick = () => { modal.style.display = "block"; renderJournal(); }
@@ -409,12 +799,18 @@
         window.onclick = e => { if(e.target == modal) modal.style.display = "none"; }
 
         document.getElementById('saveJournalBtn').addEventListener('click', () => {
-            let rows = document.querySelectorAll('#favoritesBody tr'), stake = parseFloat(document.getElementById('saveJournalBtn').dataset.stake), odds = parseFloat(document.getElementById('saveJournalBtn').dataset.odds);
+            let rows = document.querySelectorAll('#favoritesBody tr.data-row');
+            let odds = parseFloat(document.getElementById('saveJournalBtn').dataset.odds);
             if (rows.length === 0) { alert("Dodaj typy na kupon przed zapisem!"); return; }
-            if (stake <= 0) { if(!confirm("Uwaga: Algorytm odradza grę tego kuponu. Zapisać mimo to z testową stawką 10 PLN?")) return; stake = 10; }
+            
+            let stake = parseFloat(document.getElementById('customStakeInput').value);
+            if (isNaN(stake) || stake <= 0) return alert("Wprowadź prawidłową stawkę na kuponie.");
+            
             let matches = []; rows.forEach(r => { matches.push(`${r.querySelector('.player-name').innerText.split(' ')[0]} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); });
             let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0, sport: currentSport };
-            journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); alert("✅ Kupon zapisany w Dzienniku!"); renderJournal();
+            journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); 
+            alert("✅ Kupon zapisany w Dzienniku!"); 
+            renderJournal();
         });
 
         function renderJournal() {
@@ -467,7 +863,33 @@
         window.deleteCoupon = function(id) { if(confirm("Na pewno usunąć ten kupon z historii?")) { journalData = journalData.filter(e => e.id !== id); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
 
         document.getElementById('generateBtn').addEventListener('click', () => { let t = parseFloat(document.getElementById('targetOddsInput').value); if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs."); document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters(); let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')); let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index)); let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev); let ako = 1.0, used = new Set(); for (let b of bets) { if (used.has(b.mecz)) continue; for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) { if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; } } if (ako >= t) break; } if (ako < t && bets.length > 0) { alert(`Maksymalne AKO z filtrów: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Brak typów dla wybranych filtrów!`); } });
-        document.querySelectorAll('th.sortable').forEach(th => { th.addEventListener('click', () => { const col = th.dataset.sort; if (currentSortCol === col) sortAsc = !sortAsc; else { sortAsc = false; currentSortCol = col; } globalData.sort((a, b) => { let vA = a[col], vB = b[col]; if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; } else if (['linia', 'projekcja', 'ev'].includes(col)) { vA = parseFloat(vA)||0; vB = parseFloat(vB)||0; } else if (col === 'stawka') { let rA = document.querySelector(`tr[data-player="${a.zawodnik.toLowerCase()}"][data-market="${a.rynek}"]`), rB = document.querySelector(`tr[data-player="${b.zawodnik.toLowerCase()}"][data-market="${b.rynek}"]`); vA = rA?parseFloat(rA.dataset.stawka):0; vB = rB?parseFloat(rB.dataset.stawka):0; } else if (col === 'matchup_rank') { vA = parseInt(vA.toString().replace(/\D/g, ''))||0; vB = parseInt(vB.toString().replace(/\D/g, ''))||0; } else { vA = vA.toString().toLowerCase(); vB = vB.toString().toLowerCase(); } return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); }); renderTable(globalData); applyFilters();  }); });
+        
+        document.querySelectorAll('th.sortable').forEach(th => { th.addEventListener('click', () => { 
+            const col = th.dataset.sort; 
+            if (currentSortCol === col) sortAsc = !sortAsc; 
+            else { sortAsc = false; currentSortCol = col; } 
+            
+            globalData.sort((a, b) => { 
+                let vA = a[col], vB = b[col]; 
+                if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { 
+                    vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                    vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                } else if (['linia', 'projekcja', 'ev', 'true_prob'].includes(col)) { 
+                    vA = parseFloat(vA)||0; 
+                    vB = parseFloat(vB)||0; 
+                } else if (col === 'matchup_rank') { 
+                    vA = parseInt(vA.toString().replace(/\D/g, ''))||0; 
+                    vB = parseInt(vB.toString().replace(/\D/g, ''))||0; 
+                } else { 
+                    vA = vA.toString().toLowerCase(); 
+                    vB = vB.toString().toLowerCase(); 
+                } 
+                return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); 
+            }); 
+            
+            renderTable(globalData); 
+            applyFilters();  
+        }); });
         
         function populateDropdowns(d) { 
             let games = new Set(); let markets = new Set();
@@ -482,7 +904,27 @@
             Array.from(markets).sort().forEach(m => marketFilter.add(new Option(m, m)));
         }
         
-        function applyFilters() { let s = document.getElementById('searchFilter').value.toLowerCase(), g = document.getElementById('gameFilter').value, m = document.getElementById('marketFilter').value, p = document.getElementById('pickFilter').value, stat = document.getElementById('statusFilter').value; document.querySelectorAll('#mainBody tr.data-row').forEach(r => { let matchStatus = true; if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; r.classList.toggle('hidden', !vis); let c = document.getElementById(`chart-${r.dataset.index}`); if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} else c.classList.remove('hidden'); }); }
+        function applyFilters() { 
+            let s = document.getElementById('searchFilter').value.toLowerCase(), 
+                g = document.getElementById('gameFilter').value, 
+                m = document.getElementById('marketFilter').value, 
+                p = document.getElementById('pickFilter').value, 
+                stat = document.getElementById('statusFilter').value; 
+            
+            document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
+                let matchStatus = true; 
+                if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
+                if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
+                if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
+                if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                
+                let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; 
+                r.classList.toggle('hidden', !vis); 
+                let c = document.getElementById(`chart-${r.dataset.index}`); 
+                if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
+                else c.classList.remove('hidden'); 
+            }); 
+        }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
     </script>
 </body>
