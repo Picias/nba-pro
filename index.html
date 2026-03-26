@@ -32,7 +32,6 @@
         .sport-tab:hover { background: var(--hover-bg); color: var(--text-color);}
         .sport-tab.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
 
-        /* PANEL AUDYTORA */
         .audytor-card { background: var(--card-bg); border-left: 4px solid #10b981; padding: 20px 25px; margin-bottom: 2rem; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; }
         .audytor-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
         .audytor-header { font-size: 14px; color: var(--muted-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
@@ -257,6 +256,16 @@
             <label>Rynek</label>
             <select id="marketFilter"><option value="all">Wszystkie</option></select>
         </div>
+        
+        <div class="filter-group" id="roleFilterGroup" style="display: none;">
+            <label>Pozycja (Tylko MLB)</label>
+            <select id="roleFilter">
+                <option value="all">Wszyscy</option>
+                <option value="pitcher">Miotacze (Pitchers)</option>
+                <option value="batter">Pałkarze (Batters)</option>
+            </select>
+        </div>
+
         <div class="filter-group">
             <label>Typ</label>
             <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
@@ -375,15 +384,20 @@
 
         async function wczytajAudytora() {
             try {
-                const response = await fetch(`statystyki_bota.json?v=${new Date().getTime()}`);
+                // Skrypt automatycznie dopasuje nazwę pliku: statystyki_bota.json (dla nba) lub statystyki_mlb.json
+                let fileName = currentSport === 'nba' ? 'statystyki_bota.json' : 'statystyki_mlb.json';
+                const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
+                
                 if (!response.ok) throw new Error("Brak pliku");
                 statystykiBota = await response.json();
+                
                 if (statystykiBota && statystykiBota.length > 0) {
                     renderAuditorView('wczoraj'); 
+                } else {
+                    document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Oczekuje na rozliczenie...)`;
                 }
             } catch (error) {
-                console.log("Audytor: Brak pliku z wczorajszymi statystykami.");
-                document.getElementById('audytor-title').innerText = "📊 Raport Skuteczności Modelu (Brak Danych)";
+                document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Brak Danych)`;
             }
         }
         
@@ -402,25 +416,25 @@
                 hitRate = wczoraj.hit_rate;
                 roi = wczoraj.roi;
                 zyskJednostki = wczoraj.profit_jednostki;
-                w = wczoraj.wygrane; l = wczoraj.przegrane; p = wczoraj.zwroty;
+                w = wczoraj.wygrane || 0; l = wczoraj.przegrane || 0; p = wczoraj.zwroty || 0;
                 
                 if(wczoraj.kategorie) {
-                    cGraalW = wczoraj.kategorie.graal.w; cGraalT = wczoraj.kategorie.graal.t;
-                    cValueW = wczoraj.kategorie.value.w; cValueT = wczoraj.kategorie.value.t;
-                    cSafeW = wczoraj.kategorie.safe.w; cSafeT = wczoraj.kategorie.safe.t;
-                    cStableW = wczoraj.kategorie.stable.w; cStableT = wczoraj.kategorie.stable.t;
+                    cGraalW = wczoraj.kategorie.graal?.w || 0; cGraalT = wczoraj.kategorie.graal?.t || 0;
+                    cValueW = wczoraj.kategorie.value?.w || 0; cValueT = wczoraj.kategorie.value?.t || 0;
+                    cSafeW = wczoraj.kategorie.safe?.w || 0; cSafeT = wczoraj.kategorie.safe?.t || 0;
+                    cStableW = wczoraj.kategorie.stable?.w || 0; cStableT = wczoraj.kategorie.stable?.t || 0;
                 }
             } else {
                 dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
                 let sumW = 0, sumL = 0, sumP = 0, sumProfit = 0;
                 
                 statystykiBota.forEach(d => {
-                    sumW += d.wygrane; sumL += d.przegrane; sumP += d.zwroty; sumProfit += d.profit_jednostki;
+                    sumW += d.wygrane || 0; sumL += d.przegrane || 0; sumP += d.zwroty || 0; sumProfit += d.profit_jednostki || 0;
                     if(d.kategorie) {
-                        cGraalW += d.kategorie.graal.w; cGraalT += d.kategorie.graal.t;
-                        cValueW += d.kategorie.value.w; cValueT += d.kategorie.value.t;
-                        cSafeW += d.kategorie.safe.w; cSafeT += d.kategorie.safe.t;
-                        cStableW += d.kategorie.stable.w; cStableT += d.kategorie.stable.t;
+                        cGraalW += d.kategorie.graal?.w || 0; cGraalT += d.kategorie.graal?.t || 0;
+                        cValueW += d.kategorie.value?.w || 0; cValueT += d.kategorie.value?.t || 0;
+                        cSafeW += d.kategorie.safe?.w || 0; cSafeT += d.kategorie.safe?.t || 0;
+                        cStableW += d.kategorie.stable?.w || 0; cStableT += d.kategorie.stable?.t || 0;
                     }
                 });
                 
@@ -448,9 +462,15 @@
             document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
         }
 
+        wczytajAudytora();
+
         function loadSportData(sport) {
             document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
             
+            // Magia filtra roli: pokaż go tylko dla MLB!
+            document.getElementById('roleFilterGroup').style.display = (sport === 'mlb') ? 'flex' : 'none';
+            document.getElementById('roleFilter').value = 'all'; // Resetujemy filtr przy każdej zmianie zakładki
+
             fetch(`${sport}.json?v=` + new Date().getTime())
             .then(r => {
                 if(!r.ok) throw new Error("Brak pliku");
@@ -480,7 +500,6 @@
 
         loadSportData('nba');
 
-        // CSV EKSPORT
         document.getElementById('exportCsvBtn').addEventListener('click', () => {
             if(globalData.length === 0) return alert("Brak danych do eksportu. Baza jest pusta.");
             let headers = ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
@@ -513,7 +532,6 @@
             return `<div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div><div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span></div><div style="display: flex; gap: 8px; flex-wrap: wrap;">${pillsHtml}</div>`;
         }
 
-        // ZAAWANSOWANA LOGIKA ZŁOTEJ PARY (Naprawione działanie przycisku)
         function generateSGPHtml(currentItem) {
             let goldenHtml = "";
             let regexText = /🔗 ZŁOTA PARA SGP: (.*)/;
@@ -574,7 +592,6 @@
         window.forceAddToCoupon = function(player, market) { 
             let pLower = player.toLowerCase().trim();
             
-            // 1. Sprawdzamy czy nie ma go już w Moim Kuponie
             let alreadyInCoupon = false;
             document.querySelectorAll('#favoritesBody tr.data-row').forEach(fRow => {
                 if (fRow.dataset.player === pLower && (fRow.dataset.market === market || fRow.dataset.market.includes(market.split('(')[0].trim()))) {
@@ -587,7 +604,6 @@
                 return;
             }
 
-            // 2. Szukamy go w głównej tabeli i omijamy bug z klasą .hidden
             let mainRows = document.querySelectorAll('#mainBody tr.data-row'); 
             let added = false;
             for (let row of mainRows) { 
@@ -706,7 +722,6 @@
             });
         }
 
-        // AKO & EWK (KALKULATOR ZYSKU NA ŻYWO)
         function updateTotalOdds() {
             let rows = document.querySelectorAll('#favoritesBody tr.data-row'), tAko = 1.0, tProb = 1.0;
             rows.forEach(r => { let k = parseFloat(r.dataset.odds), p = parseFloat(r.dataset.prob); if(!isNaN(k)) tAko *= k; if(!isNaN(p)) tProb *= p; });
@@ -742,7 +757,6 @@
                 let c = r.cloneNode(true); 
                 let cChart = chartR.cloneNode(true);
                 
-                // FIX: Usuwamy ukrytą klasę w kopii (jeśli rząd był schowany przez filtry)
                 c.classList.remove('hidden');
                 cChart.classList.remove('hidden');
                 
@@ -904,12 +918,14 @@
             Array.from(markets).sort().forEach(m => marketFilter.add(new Option(m, m)));
         }
         
+        // GŁÓWNA INTELIGENTNA FUNKCJA FILTRUJĄCA
         function applyFilters() { 
             let s = document.getElementById('searchFilter').value.toLowerCase(), 
                 g = document.getElementById('gameFilter').value, 
                 m = document.getElementById('marketFilter').value, 
                 p = document.getElementById('pickFilter').value, 
-                stat = document.getElementById('statusFilter').value; 
+                stat = document.getElementById('statusFilter').value,
+                role = document.getElementById('roleFilter').value; 
             
             document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
                 let matchStatus = true; 
@@ -918,6 +934,14 @@
                 if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
                 if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
                 
+                // Nowa logika filtra: Miotacz vs Pałkarz (tylko w MLB)
+                if (currentSport === 'mlb' && role !== 'all') {
+                    // Sprawdzamy czy rynek gracza to strikeouty
+                    let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
+                    let itemRole = isPitcher ? 'pitcher' : 'batter';
+                    if (itemRole !== role) matchStatus = false;
+                }
+
                 let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; 
                 r.classList.toggle('hidden', !vis); 
                 let c = document.getElementById(`chart-${r.dataset.index}`); 
