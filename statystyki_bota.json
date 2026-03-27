@@ -1,1 +1,1075 @@
-
+[
+    {
+        "data_meczow": "2026-03-26",
+        "wygrane": 58,
+        "przegrane": 58,
+        "zwroty": 0,
+        "hit_rate": "50.0%",
+        "profit_jednostki": -0.12,
+        "roi": "-0.1%",
+        "kategorie": {
+            "graal": {
+                "w": 2,
+                "t": 4
+            },
+            "value": {
+                "w": 21,
+                "t": 46
+            },
+            "safe": {
+                "w": 4,
+                "t": 7
+            },
+            "stable": {
+                "w": 19,
+                "t": 34
+            }
+        },
+        "detale": [
+            {
+                "zawodnik": "Devin Carter",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 3,
+                "kurs": 2.5,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 2.58,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Kevin Huerter",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 11.5,
+                "wynik_realny": 22,
+                "kurs": 2.0,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Devin Carter",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 4.5,
+                "wynik_realny": 3,
+                "kurs": 2.36,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 0,
+                "kurs": 2.36,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 8.5,
+                "wynik_realny": 9,
+                "kurs": 2.22,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Daniss Jenkins",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 7.5,
+                "wynik_realny": 9,
+                "kurs": 1.9,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Daniss Jenkins",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 17.5,
+                "wynik_realny": 19,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Daniss Jenkins",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 28.5,
+                "wynik_realny": 30,
+                "kurs": 1.93,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Tobias Harris",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 2.54,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 1,
+                "kurs": 2.64,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 38.5,
+                "wynik_realny": 46,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Daniss Jenkins",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 2,
+                "kurs": 1.93,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Karl-Anthony Towns",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 10.5,
+                "wynik_realny": 3,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Tobias Harris",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 7,
+                "kurs": 2.24,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Ausar Thompson",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 11.5,
+                "wynik_realny": 11,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Derik Queen",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 11,
+                "kurs": 1.78,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Saddiq Bey",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 27.5,
+                "wynik_realny": 21,
+                "kurs": 1.94,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Saddiq Bey",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 19.5,
+                "wynik_realny": 17,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 4.5,
+                "wynik_realny": 0,
+                "kurs": 2.3,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "OG Anunoby",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 2.37,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Brunson",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 0,
+                "kurs": 2.42,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 7.5,
+                "wynik_realny": 11,
+                "kurs": 1.98,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 7,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 21.5,
+                "wynik_realny": 21,
+                "kurs": 1.93,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Karlo Matkovic",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 7.5,
+                "wynik_realny": 8,
+                "kurs": 2.04,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 2.38,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "OG Anunoby",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 5,
+                "kurs": 2.5,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Saddiq Bey",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 1.94,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jamal Cain",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 13.5,
+                "wynik_realny": 18,
+                "kurs": 1.91,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Devin Carter",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 13.5,
+                "wynik_realny": 14,
+                "kurs": 2.04,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Malik Monk",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 5,
+                "kurs": 2.24,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 4.5,
+                "wynik_realny": 6,
+                "kurs": 2.14,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Brunson",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 26.5,
+                "wynik_realny": 26,
+                "kurs": 2.0,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Saddiq Bey",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 1,
+                "kurs": 2.06,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Brunson",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 7.5,
+                "wynik_realny": 13,
+                "kurs": 2.2,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Dejounte Murray",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 28.5,
+                "wynik_realny": 23,
+                "kurs": 1.93,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 1.93,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Josh Hart",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 24.5,
+                "wynik_realny": 27,
+                "kurs": 1.94,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Duren",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 36.5,
+                "wynik_realny": 47,
+                "kurs": 1.94,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Devin Carter",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 4,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 20.5,
+                "wynik_realny": 22,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 14.5,
+                "wynik_realny": 17,
+                "kurs": 2.0,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 29.5,
+                "wynik_realny": 29,
+                "kurs": 1.83,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mitchell Robinson",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 7.5,
+                "wynik_realny": 6,
+                "kurs": 2.08,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Josh Hart",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 6.5,
+                "wynik_realny": 7,
+                "kurs": 1.7,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "DeMar DeRozan",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "wynik_realny": 0,
+                "kurs": 2.24,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 14.5,
+                "wynik_realny": 8,
+                "kurs": 2.0,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 2.18,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Saddiq Bey",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 2.18,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Dejounte Murray",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 0,
+                "kurs": 1.76,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 24.5,
+                "wynik_realny": 30,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Yves Missi",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 6.5,
+                "wynik_realny": 2,
+                "kurs": 1.8,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 4,
+                "kurs": 2.12,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Dejounte Murray",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 6.5,
+                "wynik_realny": 4,
+                "kurs": 2.1,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Josh Green",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 0,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 23.5,
+                "wynik_realny": 16,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Duren",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 11.5,
+                "wynik_realny": 10,
+                "kurs": 1.78,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Kevin Huerter",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 16.5,
+                "wynik_realny": 27,
+                "kurs": 1.93,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Malik Monk",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 2.2,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 5,
+                "kurs": 2.12,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Malik Monk",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 23.5,
+                "wynik_realny": 20,
+                "kurs": 1.83,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jamal Cain",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 8.5,
+                "wynik_realny": 11,
+                "kurs": 1.94,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Dejounte Murray",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 17.5,
+                "wynik_realny": 12,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Tobias Harris",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 9,
+                "kurs": 2.12,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Ausar Thompson",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 15,
+                "kurs": 1.8,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Yves Missi",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 14.5,
+                "wynik_realny": 7,
+                "kurs": 1.8,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Josh Hart",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 12.5,
+                "wynik_realny": 16,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 14.5,
+                "wynik_realny": 17,
+                "kurs": 2.06,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Zion Williamson",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 20.5,
+                "wynik_realny": 21,
+                "kurs": 1.78,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Derik Queen",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 15.5,
+                "wynik_realny": 24,
+                "kurs": 1.87,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mitchell Robinson",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 4,
+                "kurs": 1.78,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Devin Carter",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 21,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Daniss Jenkins",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 5,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Brunson",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 36.5,
+                "wynik_realny": 41,
+                "kurs": 1.9,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 22.5,
+                "wynik_realny": 25,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 4,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Grant Williams",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 1,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Tobias Harris",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 14.5,
+                "wynik_realny": 12,
+                "kurs": 2.0,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 27.5,
+                "wynik_realny": 32,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Dejounte Murray",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 7,
+                "kurs": 1.72,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "OG Anunoby",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 16.5,
+                "wynik_realny": 17,
+                "kurs": 2.04,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mitchell Robinson",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 12.5,
+                "wynik_realny": 11,
+                "kurs": 1.74,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 3,
+                "kurs": 1.98,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Zion Williamson",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 1.65,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Zion Williamson",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 29.5,
+                "wynik_realny": 29,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Kevin Huerter",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 2.1,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 23,
+                "kurs": 1.77,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 4,
+                "kurs": 1.7,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Yves Missi",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 6.5,
+                "wynik_realny": 4,
+                "kurs": 1.96,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Marcus Sasser",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 1.9,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 4,
+                "kurs": 1.9,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 5,
+                "kurs": 1.96,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mikal Bridges",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 2,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "DeMar DeRozan",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 25.5,
+                "wynik_realny": 50,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 8,
+                "kurs": 1.77,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mikal Bridges",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 2,
+                "kurs": 2.06,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Malik Monk",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 11.5,
+                "wynik_realny": 10,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Karl-Anthony Towns",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 2.02,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Karl-Anthony Towns",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 32.5,
+                "wynik_realny": 18,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Tobias Harris",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 22.5,
+                "wynik_realny": 28,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Kevin Huerter",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 4,
+                "kurs": 1.77,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 18.5,
+                "wynik_realny": 21,
+                "kurs": 1.87,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Mikal Bridges",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 16,
+                "kurs": 1.96,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Josh Hart",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 4,
+                "kurs": 1.72,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Malik Monk",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 15.5,
+                "wynik_realny": 13,
+                "kurs": 1.85,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Precious Achiuwa",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 12.5,
+                "wynik_realny": 14,
+                "kurs": 1.93,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Goga Bitadze",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 6,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Karl-Anthony Towns",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Derik Queen",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 7.5,
+                "wynik_realny": 11,
+                "kurs": 1.8,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "DeMar DeRozan",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 4.5,
+                "wynik_realny": 11,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Jordan Clarkson",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 0.5,
+                "wynik_realny": 0,
+                "kurs": 1.49,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "Derik Queen",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 1.86,
+                "status": "✅ WYGRANA"
+            },
+            {
+                "zawodnik": "Jalen Duren",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 22.5,
+                "wynik_realny": 30,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA"
+            },
+            {
+                "zawodnik": "OG Anunoby",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 22.5,
+                "wynik_realny": 22,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA"
+            }
+        ]
+    }
+]
