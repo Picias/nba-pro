@@ -51,6 +51,20 @@
         .cat-title { font-size: 0.75rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;}
         .cat-val { font-size: 1.1rem; font-weight: 900; color: var(--text-color); margin-top: 3px;}
 
+        /* NOWE STYLE DLA DETALI AUDYTORA */
+        .audytor-details-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--hover-bg); border: 1px dashed var(--border-color); color: var(--muted-text); border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; transition: 0.2s; text-align: center; }
+        .audytor-details-btn:hover { background: var(--border-color); color: var(--text-color); }
+        .audytor-details-panel { display: none; margin-top: 15px; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); }
+        .audytor-details-panel.open { display: block; }
+        .details-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
+        .details-table th, .details-table td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); }
+        .details-table th { position: sticky; top: 0; background: var(--card-bg); font-weight: 800; color: var(--muted-text); text-transform: uppercase; z-index: 2; }
+        .details-table tr:hover { background: var(--hover-bg); }
+        .status-win { color: #10b981; font-weight: 900; }
+        .status-loss { color: #ef4444; font-weight: 900; }
+        .status-push { color: #f59e0b; font-weight: 900; }
+        .cat-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; background: var(--card-bg); border: 1px solid var(--border-color); font-size: 0.75rem; font-weight: bold; margin-right: 4px; }
+
         .filters { display: flex; gap: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; border: 1px solid var(--border-color); margin-bottom: 2rem; align-items: flex-end;}
         .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
         .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--muted-text); }
@@ -225,6 +239,24 @@
             <div class="cat-stat cat-safe"><div class="cat-title">🎯 Pewniaki</div><div class="cat-val" id="cat-safe-val">--</div></div>
             <div class="cat-stat cat-stable"><div class="cat-title">🛡️ Stabilni</div><div class="cat-val" id="cat-stable-val">--</div></div>
         </div>
+
+        <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
+        <div class="audytor-details-panel" id="audytorDetailsPanel">
+            <table class="details-table">
+                <thead>
+                    <tr>
+                        <th>Zawodnik</th>
+                        <th>Rynek & Typ</th>
+                        <th>Linia</th>
+                        <th>Wynik Realny</th>
+                        <th>Status</th>
+                        <th>Kategorie</th>
+                    </tr>
+                </thead>
+                <tbody id="audytorDetailsBody">
+                    </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="journalModal" class="modal">
@@ -274,8 +306,8 @@
             <label>Status (Rating)</label>
             <select id="statusFilter">
                 <option value="all">Wszystkie Typy</option>
-                <option value="value">💰 Value Bety (>30% EV)</option>
-                <option value="safe">🎯 Pewniaki (>70% Szans)</option>
+                <option value="value">💰 Value Bety (>40% EV)</option>
+                <option value="safe">🎯 Pewniaki (>75% Szans)</option>
                 <option value="stable">🛡️ Stabilni gracze</option>
                 <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
             </select>
@@ -285,8 +317,8 @@
     <h2 class="section-title">
         Baza Danych PRO
         <div class="legend-box">
-            <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet (>30% EV)</div>
-            <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak (>70% Szans)</div>
+            <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet (>40% EV)</div>
+            <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak (>75% Szans)</div>
             <div class="legend-item"><span class="legend-dot" style="background: var(--stable-border);"></span> 🛡️ Stabilny</div>
         </div>
     </h2>
@@ -382,9 +414,37 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
+        function toggleAuditorDetails() {
+            const panel = document.getElementById('audytorDetailsPanel');
+            const btn = document.getElementById('toggleDetailsBtn');
+            panel.classList.toggle('open');
+            if(panel.classList.contains('open')) {
+                btn.innerText = "Zwiń szczegóły wczorajszych typów ▲";
+            } else {
+                btn.innerText = "Rozwiń szczegóły wczorajszych typów ▼";
+            }
+        }
+
         async function wczytajAudytora() {
+            // Zawsze czyścimy stare liczby przed załadowaniem nowych!
+            document.getElementById('audytor-hitrate').textContent = '--';
+            document.getElementById('audytor-roi').textContent = '--';
+            document.getElementById('audytor-roi').className = 'audytor-value text-orange';
+            document.getElementById('audytor-w').textContent = '0';
+            document.getElementById('audytor-l').textContent = '0';
+            document.getElementById('audytor-p').textContent = '0';
+            document.getElementById('cat-graal-val').textContent = '--';
+            document.getElementById('cat-value-val').textContent = '--';
+            document.getElementById('cat-safe-val').textContent = '--';
+            document.getElementById('cat-stable-val').textContent = '--';
+            
+            // Ukrywamy panel i resetujemy detale
+            document.getElementById('toggleDetailsBtn').style.display = 'none';
+            document.getElementById('audytorDetailsPanel').classList.remove('open');
+            document.getElementById('toggleDetailsBtn').innerText = "Rozwiń szczegóły wczorajszych typów ▼";
+            document.getElementById('audytorDetailsBody').innerHTML = '';
+
             try {
-                // Skrypt automatycznie dopasuje nazwę pliku: statystyki_bota.json (dla nba) lub statystyki_mlb.json
                 let fileName = currentSport === 'nba' ? 'statystyki_bota.json' : 'statystyki_mlb.json';
                 const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
                 
@@ -395,9 +455,11 @@
                     renderAuditorView('wczoraj'); 
                 } else {
                     document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Oczekuje na rozliczenie...)`;
+                    statystykiBota = []; 
                 }
             } catch (error) {
                 document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Brak Danych)`;
+                statystykiBota = [];
             }
         }
         
@@ -424,8 +486,49 @@
                     cSafeW = wczoraj.kategorie.safe?.w || 0; cSafeT = wczoraj.kategorie.safe?.t || 0;
                     cStableW = wczoraj.kategorie.stable?.w || 0; cStableT = wczoraj.kategorie.stable?.t || 0;
                 }
+
+                // Generowanie tabeli z detalami
+                const detailsBody = document.getElementById('audytorDetailsBody');
+                detailsBody.innerHTML = '';
+                if(wczoraj.detale && wczoraj.detale.length > 0) {
+                    wczoraj.detale.forEach(d => {
+                        let statusClass = 'status-push';
+                        if(d.status.includes('WYGRANA')) statusClass = 'status-win';
+                        else if(d.status.includes('PRZEGRANA')) statusClass = 'status-loss';
+
+                        let badgesHtml = '';
+                        if(d.kategoria) {
+                            d.kategoria.split('|').forEach(cat => {
+                                let c = cat.trim();
+                                if(c && c !== 'Zwykły Typ') badgesHtml += `<span class="cat-badge">${c}</span>`;
+                            });
+                        }
+                        if(badgesHtml === '') badgesHtml = '<span style="color:var(--muted-text); font-size:0.8rem;">Brak</span>';
+
+                        const pickTyp = d.typ || '-';
+                        const pickKurs = d.kurs ? `@${d.kurs}` : '';
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="font-weight:bold;">${d.zawodnik || d.zaklad}</td>
+                            <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp} ${pickKurs}</span></td>
+                            <td>${d.linia}</td>
+                            <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny || d.wynik}</td>
+                            <td class="${statusClass}">${d.status}</td>
+                            <td>${badgesHtml}</td>
+                        `;
+                        detailsBody.appendChild(tr);
+                    });
+                    document.getElementById('toggleDetailsBtn').style.display = 'block';
+                } else {
+                    document.getElementById('toggleDetailsBtn').style.display = 'none';
+                }
+
             } else {
                 dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
+                document.getElementById('toggleDetailsBtn').style.display = 'none'; // Ukrywamy detale w widoku All-Time
+                document.getElementById('audytorDetailsPanel').classList.remove('open');
+
                 let sumW = 0, sumL = 0, sumP = 0, sumProfit = 0;
                 
                 statystykiBota.forEach(d => {
@@ -444,7 +547,7 @@
                 roi = sumaAll > 0 ? (sumProfit / sumaAll * 100).toFixed(1) + '%' : "0.0%";
             }
             
-            document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności Modelu (${dataTytul})`;
+            document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) - ${dataTytul}`;
             document.getElementById('audytor-hitrate').textContent = hitRate;
             
             const roiEl = document.getElementById('audytor-roi');
@@ -462,14 +565,12 @@
             document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
         }
 
-        wczytajAudytora();
-
         function loadSportData(sport) {
+            wczytajAudytora(); // ZAŁADOWANIE AUDYTORA DLA AKTUALNEGO SPORTU
             document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
             
-            // Magia filtra roli: pokaż go tylko dla MLB!
             document.getElementById('roleFilterGroup').style.display = (sport === 'mlb') ? 'flex' : 'none';
-            document.getElementById('roleFilter').value = 'all'; // Resetujemy filtr przy każdej zmianie zakładki
+            document.getElementById('roleFilter').value = 'all';
 
             fetch(`${sport}.json?v=` + new Date().getTime())
             .then(r => {
@@ -662,8 +763,22 @@
             
             data.forEach((item, index) => {
                 let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90);
-                let isStable = false; if (item.history && item.history.length >= 5) { let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length, cv = mean > 0 ? (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean : 1; if (cv < 0.35 && mean >= (item.linia * 0.75)) isStable = true; }
-                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]), isValueBet = item.ev >= 0.30, isSafeBet = true_prob >= 0.70 && l5v >= 80;
+                
+                // Filtry dla nowej rygorystycznej analityki
+                let isValueBet = item.ev >= 0.40;
+                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]);
+                let isSafeBet = true_prob >= 0.75 && l5v >= 80;
+                let isStable = item.matchup_color === 'rank-green';
+
+                if(currentSport === 'nba') {
+                    if (item.history && item.history.length >= 5) { 
+                        let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
+                        if (mean > 0) {
+                            let cv = (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean; 
+                            if (cv < 0.30 && mean >= (item.linia * 0.75) && item.matchup_color === 'rank-green') isStable = true; 
+                        }
+                    }
+                }
                 
                 let isGraal = isValueBet && isSafeBet && isStable;
                 let rowClass = isGraal ? "super-pick" : (isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : "")));
@@ -671,9 +786,9 @@
                 let badges = []; 
                 if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
                 else {
-                    if(isValueBet) badges.push(`<span title="Value Bet (EV > 30%)" style="font-size:1.1rem">💰</span>`); 
-                    if(isSafeBet) badges.push(`<span title="Pewniak (>70% Szans)" style="font-size:1.1rem">🎯</span>`); 
-                    if(isStable) badges.push(`<span title="Stabilny" style="font-size:1.1rem">🛡️</span>`);
+                    if(isValueBet) badges.push(`<span title="Value Bet (EV > 40%)" style="font-size:1.1rem">💰</span>`); 
+                    if(isSafeBet) badges.push(`<span title="Pewniak (>75% Szans)" style="font-size:1.1rem">🎯</span>`); 
+                    if(isStable) badges.push(`<span title="Stabilny (Zielony Matchup)" style="font-size:1.1rem">🛡️</span>`);
                 }
                 if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
 
@@ -918,7 +1033,6 @@
             Array.from(markets).sort().forEach(m => marketFilter.add(new Option(m, m)));
         }
         
-        // GŁÓWNA INTELIGENTNA FUNKCJA FILTRUJĄCA
         function applyFilters() { 
             let s = document.getElementById('searchFilter').value.toLowerCase(), 
                 g = document.getElementById('gameFilter').value, 
@@ -934,9 +1048,7 @@
                 if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
                 if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
                 
-                // Nowa logika filtra: Miotacz vs Pałkarz (tylko w MLB)
                 if (currentSport === 'mlb' && role !== 'all') {
-                    // Sprawdzamy czy rynek gracza to strikeouty
                     let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
                     let itemRole = isPitcher ? 'pitcher' : 'batter';
                     if (itemRole !== role) matchStatus = false;
