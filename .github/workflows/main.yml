@@ -1,0 +1,40 @@
+name: Quant AI Bots Runner
+
+on:
+  schedule:
+    # 14:00 UTC to 16:00 czasu polskiego (w czasie letnim)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Przycisk do ręcznego odpalania
+
+jobs:
+  run-bots:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Pobranie kodu z repozytorium
+      uses: actions/checkout@v3
+
+    - name: Konfiguracja Pythona 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalacja bibliotek
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests scikit-learn beautifulsoup4
+
+    - name: 🏀 Uruchomienie bota NBA
+      env:
+        MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        MY_TELEGRAM_TOKEN: ${{ secrets.MY_TELEGRAM_TOKEN }}
+        MY_ODDS_API_KEY: ${{ secrets.MY_ODDS_API_KEY }}
+        MY_SPORTS_API_KEY: ${{ secrets.MY_SPORTS_API_KEY }}
+      run: python nba_pro.py
+
+    - name: ⚾ Uruchomienie bota MLB
+      env:
+        MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        MY_TELEGRAM_TOKEN: ${{ secrets.MY_TELEGRAM_TOKEN }}
+        MY_ODDS_API_KEY: ${{ secrets.MY_ODDS_API_KEY }}
+      run: python mlb_pro.py
