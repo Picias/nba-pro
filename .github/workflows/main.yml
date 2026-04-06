@@ -1,9 +1,9 @@
 name: Quant AI Bots Runner
 
 on:
-  schedule:
+  #schedule:
     # 14:00 UTC to 16:00 czasu polskiego (w czasie letnim)
-    - cron: '0 14 * * *'
+    #- cron: '0 14 * * *'
   workflow_dispatch: # Przycisk do ręcznego odpalania
 
 jobs:
