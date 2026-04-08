@@ -106,13 +106,12 @@ def rozlicz_wczorajsze_typy_mlb():
                         
                         if b_stats or p_stats:
                             rzeczywiste_staty[name] = {
-                                "Strikeouty (K's)": p_stats.get('strikeOuts', 0),
+                                "K's": p_stats.get('strikeOuts', 0), # <- NAPRAWIONY KLUCZ DLA MIOTACZY!
                                 'Hits': b_stats.get('hits', 0),
                                 'Home Runs': b_stats.get('homeRuns', 0),
                                 'Total Bases': b_stats.get('totalBases', 0),
                                 'Runs': b_stats.get('runs', 0),
-                                'RBIs': b_stats.get('rbi', 0),
-                                'DNP': False
+                                'RBIs': b_stats.get('rbi', 0)
                             }
     except Exception as e:
         print(f"❌ Błąd Audytora MLB: {e}")
@@ -123,7 +122,6 @@ def rozlicz_wczorajsze_typy_mlb():
     kategorie = {"graal": {"w":0,"t":0}, "value": {"w":0,"t":0}, "safe": {"w":0,"t":0}, "stable": {"w":0,"t":0}}
     
     for typ in stare_typy:
-        # 1. Zabezpieczamy typy kategoryzowane przed ucięciem przez filtr
         ma_kategorie = typ.get('is_graal', False) or typ.get('is_value', False) or typ.get('is_safe', False) or typ.get('is_stable', False)
         
         if not ma_kategorie and (typ.get('ev', 0) < 0.05 or typ.get('true_prob', 0) < 0.55): 
@@ -139,31 +137,19 @@ def rozlicz_wczorajsze_typy_mlb():
         wynik = rzeczywiste_staty[zaw].get(rynek, 0)
         czy_weszlo = (typ['typ'] == "OVER" and wynik > typ['linia']) or (typ['typ'] == "UNDER" and wynik < typ['linia'])
         
-        if czy_weszlo:
-            wygrane += 1; profit += (typ['kurs'] - 1.0); status = "✅ WYGRANA"
-        else:
-            przegrane += 1; profit -= 1.0; status = "❌ PRZEGRANA"
+        if czy_weszlo: wygrane += 1; profit += (typ['kurs'] - 1.0); status = "✅ WYGRANA"
+        else: przegrane += 1; profit -= 1.0; status = "❌ PRZEGRANA"
             
-        # 🎯 CZYTAMY ETYKIETY Z PLIKU LUB PRZELICZAMY STARE
-        if 'is_value' in typ:
-            is_value = typ['is_value']
-            is_safe = typ['is_safe']
-            is_stable = typ['is_stable']
-            is_graal = typ['is_graal']
-        else:
-            is_value = typ.get('ev', 0) >= 0.04 # Naprawiony próg: z 40% na 4%
-            try: l5_val = int(typ.get('l5', '0%').replace('%', ''))
-            except: l5_val = 0
-            is_safe = typ.get('true_prob', 0) >= 0.75 and l5_val >= 80 
-            is_stable = typ.get('matchup_color', '') == 'rank-green' 
-            is_graal = is_value and is_safe and is_stable
+        is_value = typ.get('is_value', False)
+        is_safe = typ.get('is_safe', False)
+        is_stable = typ.get('is_stable', False)
+        is_graal = typ.get('is_graal', False)
         
         if is_value: kategorie["value"]["t"] += 1; kategorie["value"]["w"] += (1 if czy_weszlo else 0)
         if is_safe: kategorie["safe"]["t"] += 1; kategorie["safe"]["w"] += (1 if czy_weszlo else 0)
         if is_stable: kategorie["stable"]["t"] += 1; kategorie["stable"]["w"] += (1 if czy_weszlo else 0)
         if is_graal: kategorie["graal"]["t"] += 1; kategorie["graal"]["w"] += (1 if czy_weszlo else 0)
             
-        # 🏷️ ETYKIETOWANIE ZAKŁADU DO HISTORII
         etykiety = []
         if is_graal: etykiety.append("🏆 Graal")
         else:
@@ -171,31 +157,16 @@ def rozlicz_wczorajsze_typy_mlb():
             if is_safe: etykiety.append("🎯 Pewniak")
             if is_stable: etykiety.append("🛡️ Stabilny")
             
-        etykiety_str = " | ".join(etykiety) if etykiety else "Zwykły Typ"
-            
-        historia.append({
-            "zawodnik": typ['zawodnik'], 
-            "rynek": rynek, 
-            "linia": typ['linia'], 
-            "wynik_realny": wynik, 
-            "status": status,
-            "kategoria": etykiety_str 
-        })
+        historia.append({"zawodnik": typ['zawodnik'], "rynek": rynek, "linia": typ['linia'], "wynik_realny": wynik, "status": status, "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"})
             
     suma = wygrane + przegrane
     if suma > 0:
-        hit_rate = round((wygrane / suma) * 100, 1)
-        roi = round((profit / suma) * 100, 1)
+        hit_rate = round((wygrane / suma) * 100, 1); roi = round((profit / suma) * 100, 1)
         try:
             with open(STATS_MLB_FILE, 'r', encoding='utf-8') as f: baza_stat = json.load(f)
         except: baza_stat = []
-            
         baza_stat = [r for r in baza_stat if r['data_meczow'] != data_typow]
-        baza_stat.insert(0, {
-            "data_meczow": data_typow, "wygrane": wygrane, "przegrane": przegrane, "zwroty": zwroty,
-            "hit_rate": f"{hit_rate}%", "profit_jednostki": round(profit, 2), "roi": f"{roi}%", 
-            "kategorie": kategorie, "detale": historia
-        })
+        baza_stat.insert(0, {"data_meczow": data_typow, "wygrane": wygrane, "przegrane": przegrane, "zwroty": zwroty, "hit_rate": f"{hit_rate}%", "profit_jednostki": round(profit, 2), "roi": f"{roi}%", "kategorie": kategorie, "detale": historia})
         with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump(baza_stat, f, ensure_ascii=False, indent=4)
         print(f"✅ Raport MLB gotowy! Hit Rate: {hit_rate}%, ROI: {roi}% (Zysk: {round(profit,2)}u)")
         wyslij_plik_na_githuba(STATS_MLB_FILE, f"Auto-Raport Skuteczności MLB ({data_typow})")
