@@ -128,11 +128,14 @@ def rozlicz_wczorajsze_typy_mlb():
         zaw = typ['zawodnik'].lower().replace(".", "").replace("'", "").strip()
         rynek = typ['rynek']
         
-        if zaw not in rzeczywiste_staty:
+        # 🧠 INTELIGENTNE SZUKANIE (Odporność na "Jr.", "Sr.", "II")
+        znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if zaw in k or k in zaw), None)
+        
+        if not znaleziony_zaw:
             historia.append({"zaklad": typ['zawodnik'], "wynik": "DNP/Przełożony", "status": "ZWROT", "kategoria": typ.get("kategoria", "Zwykły Typ")})
             zwroty += 1; continue
             
-        wynik = rzeczywiste_staty[zaw].get(rynek, 0)
+        wynik = rzeczywiste_staty[znaleziony_zaw].get(rynek, 0)
         czy_weszlo = (typ['typ'] == "OVER" and wynik > typ['linia']) or (typ['typ'] == "UNDER" and wynik < typ['linia'])
         
         if czy_weszlo: wygrane += 1; profit += (typ['kurs'] - 1.0); status = "✅ WYGRANA"
@@ -166,7 +169,7 @@ def rozlicz_wczorajsze_typy_mlb():
         with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump(baza_stat, f, ensure_ascii=False, indent=4)
         print(f"✅ Raport MLB gotowy! Hit Rate: {hit_rate}%, ROI: {roi}%")
         wyslij_plik_na_githuba(STATS_MLB_FILE, f"Auto-Raport MLB ({data_typow})")
-
+        
 # ==========================================
 # 1. POBIERANIE DANYCH MLB
 # ==========================================
