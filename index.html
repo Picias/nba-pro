@@ -426,7 +426,6 @@
         }
 
         async function wczytajAudytora() {
-            // Zawsze czyścimy stare liczby przed załadowaniem nowych!
             document.getElementById('audytor-hitrate').textContent = '--';
             document.getElementById('audytor-roi').textContent = '--';
             document.getElementById('audytor-roi').className = 'audytor-value text-orange';
@@ -438,14 +437,17 @@
             document.getElementById('cat-safe-val').textContent = '--';
             document.getElementById('cat-stable-val').textContent = '--';
             
-            // Ukrywamy panel i resetujemy detale
             document.getElementById('toggleDetailsBtn').style.display = 'none';
             document.getElementById('audytorDetailsPanel').classList.remove('open');
             document.getElementById('toggleDetailsBtn').innerText = "Rozwiń szczegóły wczorajszych typów ▼";
             document.getElementById('audytorDetailsBody').innerHTML = '';
 
             try {
-                let fileName = currentSport === 'nba' ? 'statystyki_bota.json' : 'statystyki_mlb.json';
+                let fileName = '';
+                if (currentSport === 'nba') fileName = 'statystyki_bota.json';
+                else if (currentSport === 'mlb') fileName = 'statystyki_mlb.json';
+                else if (currentSport === 'nhl') fileName = 'statystyki_nhl.json';
+
                 const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
                 
                 if (!response.ok) throw new Error("Brak pliku");
@@ -487,7 +489,6 @@
                     cStableW = wczoraj.kategorie.stable?.w || 0; cStableT = wczoraj.kategorie.stable?.t || 0;
                 }
 
-                // Generowanie tabeli z detalami
                 const detailsBody = document.getElementById('audytorDetailsBody');
                 detailsBody.innerHTML = '';
                 if(wczoraj.detale && wczoraj.detale.length > 0) {
@@ -526,7 +527,7 @@
 
             } else {
                 dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
-                document.getElementById('toggleDetailsBtn').style.display = 'none'; // Ukrywamy detale w widoku All-Time
+                document.getElementById('toggleDetailsBtn').style.display = 'none';
                 document.getElementById('audytorDetailsPanel').classList.remove('open');
 
                 let sumW = 0, sumL = 0, sumP = 0, sumProfit = 0;
@@ -566,7 +567,7 @@
         }
 
         function loadSportData(sport) {
-            wczytajAudytora(); // ZAŁADOWANIE AUDYTORA DLA AKTUALNEGO SPORTU
+            wczytajAudytora();
             document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
             
             document.getElementById('roleFilterGroup').style.display = (sport === 'mlb') ? 'flex' : 'none';
@@ -764,23 +765,12 @@
             data.forEach((item, index) => {
                 let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90);
                 
-                // Filtry dla nowej rygorystycznej analityki
-                let isValueBet = item.ev >= 0.40;
-                let l5v = parseInt((item.l5.match(/(\d+)%/) || [0, 0])[1]);
-                let isSafeBet = true_prob >= 0.75 && l5v >= 80;
-                let isStable = item.matchup_color === 'rank-green';
-
-                if(currentSport === 'nba') {
-                    if (item.history && item.history.length >= 5) { 
-                        let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
-                        if (mean > 0) {
-                            let cv = (Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length)) / mean; 
-                            if (cv < 0.30 && mean >= (item.linia * 0.75) && item.matchup_color === 'rank-green') isStable = true; 
-                        }
-                    }
-                }
+                // Twarde czytanie etykiet prosto z pliku JSON
+                let isValueBet = item.is_value === true;
+                let isSafeBet = item.is_safe === true;
+                let isStable = item.is_stable === true;
+                let isGraal = item.is_graal === true;
                 
-                let isGraal = isValueBet && isSafeBet && isStable;
                 let rowClass = isGraal ? "super-pick" : (isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : "")));
                 
                 let badges = []; 
