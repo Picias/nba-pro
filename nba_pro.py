@@ -17,8 +17,6 @@ GITHUB_REPO = 'nba-pro'
 TELEGRAM_TOKEN = os.environ.get('MY_TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
-
-# W pliku NBA będziesz miał jeszcze to (w MLB tego nie ma, więc nie dodawaj):
 SPORTS_API_KEY = os.environ.get('MY_SPORTS_API_KEY')
 
 SPORT = 'basketball_nba'
@@ -328,7 +326,6 @@ def pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
     if cache_key in CACHE_DVP: return CACHE_DVP[cache_key]
     time.sleep(0.02)
     
-    # 📉 UREALNIONE BAZY LIGOWE
     bazy = {
         'G': {'PTS': 16.0, 'REB': 4.0, 'AST': 5.0, '3PM': 1.5, 'PRA': 25.0},
         'F': {'PTS': 15.0, 'REB': 6.0, 'AST': 3.0, '3PM': 1.2, 'PRA': 24.0},
@@ -418,9 +415,6 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
                     pace_list.append(48.0 * ((t_stats['FGA'] + 0.44 * t_stats['FTA'] + t_stats['TOV']) / (t_stats['MIN'] / 5)))
 
     l10_stats = wszystkie_statystyki[-10:] if len(wszystkie_statystyki) >= 10 else wszystkie_statystyki
-    pokrycie_l5 = int((sum(1 for x in wszystkie_statystyki[-5:] if x > linia) / 5) * 100)
-    pokrycie_l10 = int((sum(1 for x in l10_stats if x > linia) / len(l10_stats)) * 100)
-    pokrycie_sezon = int((sum(1 for x in wszystkie_statystyki if x > linia) / len(wszystkie_statystyki)) * 100)
     
     l5_mins_raw = [parse_min(m.get('min')) for m in mecze_sezon[-5:]]
     true_l5_mins = [m if abs(m - season_avg_min) <= 8 else season_avg_min for m in l5_mins_raw]
@@ -506,7 +500,6 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     avg_pace = round(sum(pace_list) / len(pace_list), 1) if pace_list else 100.0
     dvp = pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader)
     
-    # 📉 UREALNIONE BAZY LIGOWE
     standardy_ligowe = {
         'G': {'PTS': 16.0, 'REB': 4.0, 'AST': 5.0, '3PM': 1.5, 'PRA': 25.0}, 
         'F': {'PTS': 15.0, 'REB': 6.0, 'AST': 3.0, '3PM': 1.2, 'PRA': 24.0}, 
@@ -550,10 +543,8 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     return {
         "projekcja": round(projekcja_finalna, 1),
         "std_dev": std_dev,
-        "history": l10_stats, 
-        "l5": f"{pokrycie_l5}%",
-        "l10": f"{pokrycie_l10}%",
-        "sezon": f"{pokrycie_sezon}%",
+        "history": l10_stats,
+        "all_stats": wszystkie_statystyki, # Zwracamy całość do wyliczenia pokrycia L5/L10 zależnie od typu
         "dvp": dvp,
         "uwagi_txt": uwagi_txt,
         "h2h_avg": h2h_avg,
@@ -613,10 +604,7 @@ def uruchom_system_pro():
                 print(f"  ❌ BŁĄD POŁĄCZENIA: {e}")
                 continue
             
-            if 'bookmakers' not in odds: 
-                continue
-                
-            if len(odds['bookmakers']) == 0:
+            if 'bookmakers' not in odds or len(odds['bookmakers']) == 0: 
                 continue
                 
             odds_cache[cache_key] = {'timestamp': obecny_czas, 'data': odds}
@@ -636,7 +624,6 @@ def uruchom_system_pro():
         for bm in odds['bookmakers']:
             for mkt in bm['markets']:
                 
-                # ZMAPOWANY NOWY RYNEK (PRA)
                 s_key, s_pl = (
                     ('PTS', 'Punkty (PTS)') if mkt['key'] == 'player_points' else 
                     ('REB', 'Zbiórki (REB)') if mkt['key'] == 'player_rebounds' else 
@@ -691,26 +678,43 @@ def uruchom_system_pro():
                                 true_prob = (1.0 - prob_under) if typ == "OVER" else prob_under
                                 ev_val = (true_prob * kurs) - 1
 
-                                # --- NOWA BLOKADA: Odrzucamy typy poniżej 55% szans ---
                                 if true_prob <= 0.55: continue
-                                # ------------------------------------------------------
 
-                                m_color = "rank-green" if s['dvp'] > linia else "rank-red"
+                                # 🚀 ZMIANA: Dynamiczne pokrycie linii w zależności od typu!
+                                all_s = s['all_stats']
+                                if typ == "OVER":
+                                    pokrycie_l5 = int((sum(1 for x in all_s[-5:] if x > linia) / 5) * 100) if len(all_s) >= 5 else 0
+                                    pokrycie_l10 = int((sum(1 for x in all_s[-10:] if x > linia) / 10) * 100) if len(all_s) >= 10 else 0
+                                    pokrycie_sezon = int((sum(1 for x in all_s if x > linia) / len(all_s)) * 100) if all_s else 0
+                                    
+                                    # OVER: Zła obrona rywala (wysokie DvP) to zielony Matchup
+                                    m_color = "rank-green" if s['dvp'] > linia else "rank-red"
+                                else:
+                                    pokrycie_l5 = int((sum(1 for x in all_s[-5:] if x < linia) / 5) * 100) if len(all_s) >= 5 else 0
+                                    pokrycie_l10 = int((sum(1 for x in all_s[-10:] if x < linia) / 10) * 100) if len(all_s) >= 10 else 0
+                                    pokrycie_sezon = int((sum(1 for x in all_s if x < linia) / len(all_s)) * 100) if all_s else 0
+                                    
+                                    # UNDER: Elitarna obrona rywala (niskie DvP) to zielony Matchup
+                                    m_color = "rank-green" if s['dvp'] < linia else "rank-red"
                                 
                                 ostateczne_uwagi = s['uwagi_txt'] + sm_text
                                 
-                                # 🏷️ TRWAŁE ZNAKOWANIE (Stemplowanie) TYPÓW!
+                                # 🏷️ TRWAŁE ZNAKOWANIE
                                 is_value_bet = ev_val >= 0.04
-                                l5_val = int(s['l5'].replace('%', '')) if '%' in str(s['l5']) else 0
-                                is_safe_bet = true_prob >= 0.75 and l5_val >= 80
+                                is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
                                 
                                 is_stable_bet = False
                                 if s['history']:
                                     mean = sum(s['history']) / len(s['history'])
                                     if mean > 0:
                                         cv = s['std_dev'] / mean
-                                        if cv < 0.30 and mean >= (linia * 0.75) and m_color == 'rank-green':
-                                            is_stable_bet = True
+                                        # 🚀 ZMIANA: Dla UNDER średnia musi być odpowiednio NIŻSZA
+                                        if typ == "OVER":
+                                            if cv < 0.30 and mean >= (linia * 0.75) and m_color == 'rank-green':
+                                                is_stable_bet = True
+                                        else:
+                                            if cv < 0.30 and mean <= (linia * 1.25) and m_color == 'rank-green':
+                                                is_stable_bet = True
                                 
                                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
                                 
@@ -720,7 +724,7 @@ def uruchom_system_pro():
                                     "roznica": round(abs(proj - linia), 2), "kurs": kurs, "typ": typ, 
                                     "ev": round(ev_val, 3), "true_prob": true_prob,
                                     "uwagi": ostateczne_uwagi, 
-                                    "l5": s['l5'], "l10": s['l10'], "sezon": s['sezon'], 
+                                    "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%", "sezon": f"{pokrycie_sezon}%", 
                                     "lokacja": "DOM" if is_home else "WYJ",
                                     "matchup_rank": f"Obrona pozwala na: {s['dvp']} (vs {s['ranga']} {pos})", 
                                     "matchup_color": m_color, 
@@ -757,7 +761,7 @@ def uruchom_system_pro():
 
 if __name__ == "__main__":
     print("==================================================")
-    print("🚀 START: QUANT AI BOTS (NBA PRO v13.5 ULTIMATE)")
+    print("🚀 START: QUANT AI BOTS (NBA PRO v13.6 ULTIMATE)")
     print("==================================================")
     
     start = time.time()
@@ -768,7 +772,7 @@ if __name__ == "__main__":
         with open('nba.json', 'w', encoding='utf-8') as f: json.dump(final_data, f, ensure_ascii=False, indent=4)
         print("\n💾 SUKCES: Zapisano plik 'nba.json' na Twoim dysku!")
         
-        wyslij_plik_na_githuba('nba.json', "Update NBA (v13.5 Ultimate)")
+        wyslij_plik_na_githuba('nba.json', "Update NBA (v13.6 Over/Under Fix)")
         print("🌐 Wysłano aktualizację JSON na stronę GitHuba!")
         
         top = [t for t in final_data if t['ev'] > 0.05 and t['true_prob'] > 0.55][:5]
