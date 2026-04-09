@@ -26,8 +26,8 @@ MLB_JSON_FILE = 'mlb.json'
 STATS_MLB_FILE = 'statystyki_mlb.json'
 
 CACHE_PLAYER_LOGS = {}
-CACHE_TEAM_K_RATE = {} # Kluczem jest teraz ID drużyny, nie jej nazwa!
-CACHE_TEAM_ERA = {}    # Kluczem jest teraz ID drużyny, nie jej nazwa!
+CACHE_TEAM_K_RATE = {}
+CACHE_TEAM_ERA = {}
 CACHE_ROSTERS = {}
 CACHE_PITCHER_STATS = {}
 
@@ -45,6 +45,10 @@ PARK_FACTORS = {
 # ==========================================
 # NARZĘDZIA POMOCNICZE
 # ==========================================
+def clean_team_name(name):
+    if not name: return ""
+    return name.lower().replace(".", "").replace(" ", "").replace("'", "").replace("-", "")
+
 def wyslij_plik_na_githuba(file_path, wiadomosc_commit):
     url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{GITHUB_REPO}/contents/{file_path}"
     headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"}
@@ -84,17 +88,27 @@ def rozlicz_wczorajsze_typy_mlb():
     data_typow = stare_typy[0].get('data', '2000-01-01')
     if data_typow >= DATA_DZIS: return
         
-    print(f"🕵️ Uruchamiam Audytora MLB: Rozliczam typy z ({data_typow})...")
+    print(f"\n🕵️ Uruchamiam Audytora MLB: Rozliczam typy z ({data_typow})...")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}&hydrate=boxscore"
     headers = {'User-Agent': 'Mozilla/5.0'}
     
     rzeczywiste_staty = {}
     try:
         res = requests.get(url, headers=headers, timeout=10).json()
-        if 'dates' not in res or not res['dates']: return
+        if 'dates' not in res or not res['dates']: 
+            print("❌ MLB API nie zwróciło żadnych meczów dla tej daty.")
+            return
+            
         mecze = res['dates'][0]['games']
+        print(f"🔍 Audytor: Znaleziono {len(mecze)} zaplanowanych meczów.")
+        
         for m in mecze:
-            if m['status']['statusCode'] in ['F', 'O']: 
+            away_t = m['teams']['away']['team']['name']
+            home_t = m['teams']['home']['team']['name']
+            status = m['status']['abstractGameState']
+            
+            if status == 'Final': 
+                print(f"  ✅ Przetwarzam statystyki z meczu: {away_t} @ {home_t}")
                 box = m.get('boxscore', {}).get('teams', {})
                 for team_side in ['away', 'home']:
                     players = box.get(team_side, {}).get('players', {})
@@ -109,6 +123,8 @@ def rozlicz_wczorajsze_typy_mlb():
                                 'Total Bases': b_stats.get('totalBases', 0), 'Runs': b_stats.get('runs', 0),
                                 'RBIs': b_stats.get('rbi', 0)
                             }
+            else:
+                print(f"  ⏳ Mecz {away_t} @ {home_t} pominięty (Status: {status})")
     except Exception as e:
         print(f"❌ Błąd Audytora MLB: {e}")
         return
@@ -128,7 +144,6 @@ def rozlicz_wczorajsze_typy_mlb():
         zaw = typ['zawodnik'].lower().replace(".", "").replace("'", "").strip()
         rynek = typ['rynek']
         
-        # 🧠 INTELIGENTNE SZUKANIE (Odporność na "Jr.", "Sr.", "II")
         znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if zaw in k or k in zaw), None)
         
         if not znaleziony_zaw:
@@ -167,9 +182,11 @@ def rozlicz_wczorajsze_typy_mlb():
         baza_stat = [r for r in baza_stat if r['data_meczow'] != data_typow]
         baza_stat.insert(0, {"data_meczow": data_typow, "wygrane": wygrane, "przegrane": przegrane, "zwroty": zwroty, "hit_rate": f"{hit_rate}%", "profit_jednostki": round(profit, 2), "roi": f"{roi}%", "kategorie": kategorie, "detale": historia})
         with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump(baza_stat, f, ensure_ascii=False, indent=4)
-        print(f"✅ Raport MLB gotowy! Hit Rate: {hit_rate}%, ROI: {roi}%")
+        print(f"📊 Audytor Zakończył: Hit Rate: {hit_rate}%, ROI: {roi}%\n")
         wyslij_plik_na_githuba(STATS_MLB_FILE, f"Auto-Raport MLB ({data_typow})")
-        
+    else:
+        print("⚠️ Audytor nie znalazł żadnych w pełni rozliczonych typów.")
+
 # ==========================================
 # 1. POBIERANIE DANYCH MLB
 # ==========================================
@@ -204,7 +221,6 @@ def pobierz_statystyki_druzyn_mlb():
     print("📊 Pobieram statystyki zespołowe po ID (K-Rate i Team ERA)...")
     headers = {'User-Agent': 'Mozilla/5.0'}
     
-    # Ważne: sportId=1 zapewnia, że pobieramy statystyki głównych drużyn MLB, a nie rezerw czy uniwersytetów
     url_hit = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R"
     try:
         res_h = requests.get(url_hit, headers=headers, timeout=10).json()
@@ -217,7 +233,7 @@ def pobierz_statystyki_druzyn_mlb():
             total_k, total_pa = 0, 0
             for team in stats_h[0]['splits']:
                 k = team['stat'].get('strikeOuts', 0); pa = team['stat'].get('plateAppearances', 1)
-                team_id = team['team']['id'] # KLUCZEM JEST TERAZ NUMER ID
+                team_id = team['team']['id'] 
                 CACHE_TEAM_K_RATE[team_id] = k / pa if pa > 0 else 0
                 total_k += k; total_pa += pa
             if total_pa > 0: LEAGUE_AVG_K_RATE = total_k / total_pa
@@ -235,10 +251,9 @@ def pobierz_statystyki_druzyn_mlb():
             total_era = 0; count = 0
             for team in stats_p[0]['splits']:
                 era_str = team['stat'].get('era', str(LEAGUE_AVG_ERA))
-                if era_str == '-.--': era_str = str(LEAGUE_AVG_ERA) # Ochrona przed ValueError "nieskończoności"
+                if era_str == '-.--': era_str = str(LEAGUE_AVG_ERA)
                 era = float(era_str)
-                
-                team_id = team['team']['id'] # KLUCZEM JEST TERAZ NUMER ID
+                team_id = team['team']['id']
                 CACHE_TEAM_ERA[team_id] = era
                 total_era += era; count += 1
             if count > 0: LEAGUE_AVG_ERA = total_era / count
@@ -258,12 +273,9 @@ def pobierz_staty_miotacza_startowego(pitcher_id):
             stats = res.get('stats', [])
             if stats and stats[0].get('splits'):
                 stat_obj = stats[0]['splits'][0]['stat']
-                
-                # Zabezpieczenia na start sezonu
                 era_str = stat_obj.get('era', str(LEAGUE_AVG_ERA))
                 if era_str == '-.--': era_str = str(LEAGUE_AVG_ERA)
                 era = float(era_str)
-                
                 avg_str = stat_obj.get('avg', '.240')
                 if avg_str == '.---': avg_str = '.240'
                 baa = float(avg_str) if avg_str.startswith('.') else LEAGUE_AVG_BAA
@@ -311,7 +323,7 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v4.6 (Culoodporny)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v4.7 (Over/Under Logic Fix)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -389,7 +401,6 @@ def uruchom_mlb_pro():
                     a_clean = dane_oficjalne['away_pitcher'].lower().replace(".", "").strip()
                     p_clean = p_name.lower().replace(".", "").strip()
                     
-                    # Logika przypisywania z twardym ID przeciwnika
                     if rola == 'pitcher':
                         if p_clean in h_clean or h_clean in p_clean: 
                             player_id = dane_oficjalne['home_pitcher_id']
@@ -438,7 +449,6 @@ def uruchom_mlb_pro():
                     m_color = "rank-yellow"; m_rank = "Neutral"
                     
                     if rola == 'pitcher':
-                        # Sztywny odczyt K-Rate po Team ID
                         opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
                         korekta *= max(0.85, min(1.15, opp_k_rate / LEAGUE_AVG_K_RATE))
                         m_color = "rank-green" if korekta > 1.05 else "rank-red"
@@ -453,7 +463,6 @@ def uruchom_mlb_pro():
                         if baa_korekta >= 1.05: m_color = "rank-green"; m_rank = "Słaby Miotacz"
                         elif baa_korekta <= 0.95: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
                         
-                        # Sztywny odczyt ERA po Team ID
                         opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
                         era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
                         
@@ -487,7 +496,6 @@ def uruchom_mlb_pro():
                     typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
                     true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
                     
-                    # LOGIKA DLA HOME RUNÓW
                     is_hr = (mlb_stat_key == 'homeRuns')
                     min_prob = 0.15 if is_hr else 0.55
                     
@@ -501,8 +509,15 @@ def uruchom_mlb_pro():
                         print(f"  ❌ Odrzucono (Złe EV) : {p_name:<20} | {nazwa_rynku_pl:<14} | EV: {round(ev_val*100,1)}%")
                         continue
                     
-                    pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
-                    pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
+                    # 🚀 NAPRAWA LOGIKI OVER/UNDER W HISTORII
+                    if typ == "OVER":
+                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
+                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
+                        pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100)
+                    else:
+                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
+                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
+                        pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
                     
                     if is_hr:
                         is_value_bet = ev_val >= 0.15 
@@ -522,7 +537,7 @@ def uruchom_mlb_pro():
                         "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
                         "ev": round(ev_val, 3), "typ": typ, "kurs": kurs,
                         "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%",
-                        "sezon": f"{int((sum(1 for x in vals if x > linia)/len(vals))*100)}%", "history": vals[-10:],
+                        "sezon": f"{pokrycie_sezon}%", "history": vals[-10:],
                         "uwagi": uwagi, "lokacja": "DOM" if is_today_home else "WYJ", "matchup_rank": m_rank,
                         "matchup_color": m_color, "opp_name": opp_name,
                         "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
@@ -534,12 +549,12 @@ def uruchom_mlb_pro():
     print(f"\n✅ Zakończono! Zapisano {len(wyniki)} typów.")
     top = [t for t in wyniki if t['ev'] > 0.05 and t['true_prob'] > 0.50][:5]
     if top:
-        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v4.6)</b> 🚨\n\n"
+        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v4.7)</b> 🚨\n\n"
         for t in top: 
             msg += f"⚾ {t['zawodnik']} - {t['rynek']}\n👉 <b>{t['typ']} {t['linia']}</b> @ {t['kurs']} (EV: +{round(t['ev']*100,1)}%)\n🤖 ML: {t['projekcja']} | {t['matchup_rank']}\n📈 L10: {list(reversed(t['history']))}\n\n"
         wyslij_powiadomienie_telegram(msg)
         
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v4.6 (Culoodporny)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v4.7 (Over/Under Fix)")
     return wyniki
 
 if __name__ == "__main__":
