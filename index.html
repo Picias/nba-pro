@@ -762,8 +762,8 @@
         function renderTable(data) {
             const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
             
-            data.forEach((item, index) => {
-                let true_prob = (item.ev + 1) / (parseFloat(item.kurs) || 1.90);
+                    data.forEach((item, index) => {
+                let true_prob = item.true_prob; // Czyste czytanie szansy z bota!
                 
                 // Twarde czytanie etykiet prosto z pliku JSON
                 let isValueBet = item.is_value === true;
