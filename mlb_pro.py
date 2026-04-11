@@ -86,9 +86,13 @@ def rozlicz_wczorajsze_typy_mlb():
 
     if not stare_typy: return
     data_typow = stare_typy[0].get('data', '2000-01-01')
-    if data_typow >= DATA_DZIS: return
+    
+    # Blokada tylko jeśli data typów to "jutro" lub dalej
+    if data_typow > DATA_DZIS: 
+        print("⚠️ Typy pochodzą z przyszłości. Audytor wstrzymuje pracę.")
+        return
         
-    print(f"\n🕵️ Uruchamiam Audytora MLB: Rozliczam typy z ({data_typow})...")
+    print(f"\n🕵️ Uruchamiam Głównego Audytora MLB: Rozliczam typy z daty {data_typow}...")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}&hydrate=boxscore"
     headers = {'User-Agent': 'Mozilla/5.0'}
     
@@ -96,19 +100,21 @@ def rozlicz_wczorajsze_typy_mlb():
     try:
         res = requests.get(url, headers=headers, timeout=10).json()
         if 'dates' not in res or not res['dates']: 
-            print("❌ MLB API nie zwróciło żadnych meczów dla tej daty.")
+            print("❌ MLB API: Brak rozegranych meczów w tym dniu.")
             return
             
         mecze = res['dates'][0]['games']
-        print(f"🔍 Audytor: Znaleziono {len(mecze)} zaplanowanych meczów.")
+        print(f"🔍 Audytor: Znalazłem {len(mecze)} meczów w terminarzu. Skanuję wyniki...")
         
+        ukonczone_mecze = 0
         for m in mecze:
             away_t = m['teams']['away']['team']['name']
             home_t = m['teams']['home']['team']['name']
-            status = m['status']['abstractGameState']
+            status_code = m['status']['statusCode']
             
-            if status == 'Final': 
-                print(f"  ✅ Przetwarzam statystyki z meczu: {away_t} @ {home_t}")
+            # F = Final, O = Game Over, C = Completed Early
+            if status_code in ['F', 'O', 'C']: 
+                ukonczone_mecze += 1
                 box = m.get('boxscore', {}).get('teams', {})
                 for team_side in ['away', 'home']:
                     players = box.get(team_side, {}).get('players', {})
@@ -116,26 +122,34 @@ def rozlicz_wczorajsze_typy_mlb():
                         name = p_data['person']['fullName'].lower().replace(".", "").replace("'", "").strip()
                         b_stats = p_data.get('stats', {}).get('batting', {})
                         p_stats = p_data.get('stats', {}).get('pitching', {})
-                        if b_stats or p_stats:
-                            rzeczywiste_staty[name] = {
-                                "K's": p_stats.get('strikeOuts', 0),
-                                'Hits': b_stats.get('hits', 0), 'Home Runs': b_stats.get('homeRuns', 0),
-                                'Total Bases': b_stats.get('totalBases', 0), 'Runs': b_stats.get('runs', 0),
-                                'RBIs': b_stats.get('rbi', 0)
-                            }
+                        
+                        # Pobieramy wszystko do słownika
+                        rzeczywiste_staty[name] = {
+                            "K's": p_stats.get('strikeOuts', 0),
+                            'Hits': b_stats.get('hits', 0), 
+                            'Home Runs': b_stats.get('homeRuns', 0),
+                            'Total Bases': b_stats.get('totalBases', 0), 
+                            'Runs': b_stats.get('runs', 0),
+                            'RBIs': b_stats.get('rbi', 0)
+                        }
             else:
-                print(f"  ⏳ Mecz {away_t} @ {home_t} pominięty (Status: {status})")
+                print(f"  ⏳ {away_t} @ {home_t} -> Mecz jeszcze trwa (Status: {m['status']['abstractGameState']})")
+                
+        if ukonczone_mecze == 0:
+            print("⚠️ Żaden mecz z tego dnia nie jest jeszcze w pełni zakończony. Audytor czeka na koniec spotkań.")
+            return
+            
     except Exception as e:
-        print(f"❌ Błąd Audytora MLB: {e}")
+        print(f"❌ Błąd Pobierania Wyników MLB: {e}")
         return
             
     wygrane = przegrane = zwroty = profit = 0
     historia = []
     kategorie = {"graal": {"w":0,"t":0}, "value": {"w":0,"t":0}, "safe": {"w":0,"t":0}, "stable": {"w":0,"t":0}}
     
+    print("\n📝 ROZLICZANIE ZAKŁADÓW:")
     for typ in stare_typy:
         ma_kategorie = typ.get('is_graal', False) or typ.get('is_value', False) or typ.get('is_safe', False) or typ.get('is_stable', False)
-        
         is_hr_bet = (typ.get('rynek') == 'Home Runs')
         if not ma_kategorie:
             if typ.get('ev', 0) < 0.05 or typ.get('true_prob', 0) < (0.15 if is_hr_bet else 0.55): 
@@ -143,18 +157,32 @@ def rozlicz_wczorajsze_typy_mlb():
             
         zaw = typ['zawodnik'].lower().replace(".", "").replace("'", "").strip()
         rynek = typ['rynek']
+        linia = typ['linia']
         
-        znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if zaw in k or k in zaw), None)
+        # 🧠 Zaawansowane wyszukiwanie (np. gdy API zwraca "Nick Hoerner" a my mamy "Nico Hoerner")
+        znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if zaw == k or zaw in k or k in zaw), None)
+        if not znaleziony_zaw:
+            zaw_parts = zaw.split()
+            for k in rzeczywiste_staty.keys():
+                k_parts = k.split()
+                if len(zaw_parts) > 1 and len(k_parts) > 1:
+                    if zaw_parts[-1] == k_parts[-1] and zaw_parts[0][0] == k_parts[0][0]:
+                        znaleziony_zaw = k; break
         
         if not znaleziony_zaw:
+            print(f"  ➖ ZWROT (DNP) : {typ['zawodnik']} -> Nie wszedł na boisko.")
             historia.append({"zaklad": typ['zawodnik'], "wynik": "DNP/Przełożony", "status": "ZWROT", "kategoria": typ.get("kategoria", "Zwykły Typ")})
             zwroty += 1; continue
             
         wynik = rzeczywiste_staty[znaleziony_zaw].get(rynek, 0)
-        czy_weszlo = (typ['typ'] == "OVER" and wynik > typ['linia']) or (typ['typ'] == "UNDER" and wynik < typ['linia'])
+        czy_weszlo = (typ['typ'] == "OVER" and wynik > linia) or (typ['typ'] == "UNDER" and wynik < linia)
         
-        if czy_weszlo: wygrane += 1; profit += (typ['kurs'] - 1.0); status = "✅ WYGRANA"
-        else: przegrane += 1; profit -= 1.0; status = "❌ PRZEGRANA"
+        if czy_weszlo: 
+            wygrane += 1; profit += (typ['kurs'] - 1.0); status = "✅ WYGRANA"
+            print(f"  ✅ WYGRANA     : {typ['zawodnik']} ({rynek}) -> Linia: {linia} | Wynik: {wynik}")
+        else: 
+            przegrane += 1; profit -= 1.0; status = "❌ PRZEGRANA"
+            print(f"  ❌ PRZEGRANA   : {typ['zawodnik']} ({rynek}) -> Linia: {linia} | Wynik: {wynik}")
             
         is_value = typ.get('is_value', False); is_safe = typ.get('is_safe', False)
         is_stable = typ.get('is_stable', False); is_graal = typ.get('is_graal', False)
@@ -171,7 +199,7 @@ def rozlicz_wczorajsze_typy_mlb():
             if is_safe: etykiety.append("🎯 Pewniak")
             if is_stable: etykiety.append("🛡️ Stabilny")
             
-        historia.append({"zawodnik": typ['zawodnik'], "rynek": rynek, "linia": typ['linia'], "wynik_realny": wynik, "status": status, "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"})
+        historia.append({"zawodnik": typ['zawodnik'], "rynek": rynek, "linia": linia, "wynik_realny": wynik, "status": status, "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"})
             
     suma = wygrane + przegrane
     if suma > 0:
@@ -182,10 +210,10 @@ def rozlicz_wczorajsze_typy_mlb():
         baza_stat = [r for r in baza_stat if r['data_meczow'] != data_typow]
         baza_stat.insert(0, {"data_meczow": data_typow, "wygrane": wygrane, "przegrane": przegrane, "zwroty": zwroty, "hit_rate": f"{hit_rate}%", "profit_jednostki": round(profit, 2), "roi": f"{roi}%", "kategorie": kategorie, "detale": historia})
         with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump(baza_stat, f, ensure_ascii=False, indent=4)
-        print(f"📊 Audytor Zakończył: Hit Rate: {hit_rate}%, ROI: {roi}%\n")
+        print(f"\n📊 Audytor Zakończył! Zapisano do bazy: Hit Rate: {hit_rate}%, ROI: {roi}% (Zysk: {round(profit,2)}u)\n")
         wyslij_plik_na_githuba(STATS_MLB_FILE, f"Auto-Raport MLB ({data_typow})")
     else:
-        print("⚠️ Audytor nie znalazł żadnych w pełni rozliczonych typów.")
+        print("\n⚠️ Audytor zakończył pracę: Brak wygranych i przegranych zakładów do rozliczenia (same zwroty lub brak typów).\n")
 
 # ==========================================
 # 1. POBIERANIE DANYCH MLB
