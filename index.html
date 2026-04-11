@@ -268,6 +268,14 @@
                     <option value="PRZEGRANA">❌ Przegrane</option>
                     <option value="ZWROT">➖ Zwroty</option>
                 </select>
+                <select id="audytorCategory">
+                    <option value="all">Wszystkie kategorie</option>
+                    <option value="🏆 Graal">🏆 Graale</option>
+                    <option value="💰 Value">💰 Value Bety</option>
+                    <option value="🎯 Pewniak">🎯 Pewniaki</option>
+                    <option value="🛡️ Stabilny">🛡️ Stabilni</option>
+                    <option value="Zwykły Typ">Zwykły Typ</option>
+                </select>
             </div>
 
             <table class="details-table">
@@ -458,18 +466,21 @@
             let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
             let marketFilter = document.getElementById('audytorMarket').value;
             let statusFilter = document.getElementById('audytorStatus').value;
+            let categoryFilter = document.getElementById('audytorCategory').value;
             
             let rows = document.querySelectorAll('#audytorDetailsBody tr');
             rows.forEach(row => {
                 let playerName = row.cells[0].innerText.toLowerCase();
                 let marketName = row.cells[1].innerText; 
                 let statusText = row.cells[4].innerText;
+                let categoryText = row.cells[5].innerText;
                 
                 let nameMatch = playerName.includes(nameFilter);
                 let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
                 let statusMatch = (statusFilter === 'all') || statusText.includes(statusFilter);
+                let categoryMatch = (categoryFilter === 'all') || categoryText.includes(categoryFilter);
                 
-                if (nameMatch && marketMatch && statusMatch) {
+                if (nameMatch && marketMatch && statusMatch && categoryMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -480,6 +491,7 @@
         document.getElementById('audytorSearch').addEventListener('input', filterAuditorDetails);
         document.getElementById('audytorMarket').addEventListener('change', filterAuditorDetails);
         document.getElementById('audytorStatus').addEventListener('change', filterAuditorDetails);
+        document.getElementById('audytorCategory').addEventListener('change', filterAuditorDetails);
 
         async function wczytajAudytora() {
             document.getElementById('audytor-hitrate').textContent = '--';
@@ -552,6 +564,7 @@
                 document.getElementById('audytorSearch').value = '';
                 document.getElementById('audytorMarket').value = 'all';
                 document.getElementById('audytorStatus').value = 'all';
+                document.getElementById('audytorCategory').value = 'all';
 
                 if(wczoraj.detale && wczoraj.detale.length > 0) {
                     wczoraj.detale.forEach(d => {
