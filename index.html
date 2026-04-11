@@ -56,7 +56,6 @@
         .audytor-details-panel { display: none; margin-top: 15px; max-height: 450px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); }
         .audytor-details-panel.open { display: block; }
         
-        /* FILTRY W AUDYTORZE */
         .audytor-filters-bar { display: flex; gap: 10px; padding: 12px; background: var(--card-bg); border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 5; flex-wrap: wrap;}
         .audytor-filters-bar input, .audytor-filters-bar select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none;}
         .audytor-filters-bar input { flex: 1; min-width: 150px; }
@@ -185,6 +184,18 @@
         .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
         .chart-visual-box { width: 100%; height: 250px; margin-bottom: 2rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; }
 
+        /* NOWE STYLE DLA ZAKŁADKI STATYSTYK DRUŻYNOWYCH */
+        .team-stats-panel { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); padding: 20px; margin-top: 2rem; display: none; }
+        .team-stats-panel.active { display: block; }
+        
+        #teamStatsTable th { font-size: 0.7rem; padding: 0.8rem 0.5rem; text-align: center; }
+        #teamStatsTable td { font-size: 0.85rem; padding: 0.8rem 0.5rem; text-align: center; font-weight: 600;}
+        #teamStatsTable td:first-child { text-align: left; font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
+        
+        .stats-group-header { border-bottom: 2px solid var(--accent-color) !important; color: var(--accent-color) !important; font-size: 0.85rem !important;}
+        .cell-bad { color: #ef4444; font-weight: 900;}
+        .cell-good { color: #10b981; font-weight: 900;}
+
         @media (max-width: 768px) {
             body { padding: 10px; }
             td:first-child, th:first-child { position: static !important; z-index: 1 !important; border-right: none !important;}
@@ -210,6 +221,7 @@
             <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Quant PRO Syndicate</p>
         </div>
         <div class="top-actions">
+            <button class="stats-btn" id="toggleTeamStatsBtn" style="background-color: #3b82f6;">📈 Statystyki Drużyn</button>
             <button id="exportCsvBtn" class="export-btn" style="background-color: #8b5cf6;">📥 Eksport CSV</button>
             <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
             <button class="theme-toggle" id="themeToggleBtn">☀️ Tryb Jasny</button>
@@ -223,79 +235,205 @@
         <button class="sport-tab" data-sport="nfl" style="opacity: 0.5;" title="Wkrótce">🏈 NFL (Wkrótce)</button>
     </div>
     
-    <div id="audytor-panel" class="audytor-card">
-        <div class="audytor-top-bar">
-            <div class="audytor-header" id="audytor-title">📊 Raport Skuteczności Modelu (Ładowanie...)</div>
-            <div class="audytor-toggle">
-                <button class="audytor-btn active" id="btn-audytor-wczoraj" onclick="renderAuditorView('wczoraj')">Ostatnia Noc</button>
-                <button class="audytor-btn" id="btn-audytor-alltime" onclick="renderAuditorView('alltime')">Cała Historia</button>
-            </div>
-        </div>
+    <div id="teamStatsPanel" class="team-stats-panel">
+        <h2 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">📊 Statystyki Drużynowe (Sezon Zasadniczy)</h2>
+        <p style="color: var(--muted-text); font-size: 0.85rem; margin-bottom: 1rem;">Dane za cały sezon. Kolor <span class="cell-good">Zielony</span> oznacza statystykę wybitnie dobrą dla typu OVER (np. w MLB dużo Walks, w NBA dużo straconych zbiórek). Kolor <span class="cell-bad">Czerwony</span> to trudny rywal dla OVERów.</p>
         
-        <div class="audytor-stats">
-            <div class="audytor-box"><span class="audytor-label">Skuteczność (Hit Rate)</span><span class="audytor-value" id="audytor-hitrate">--</span></div>
-            <div class="audytor-box"><span class="audytor-label">Czysty Zysk (ROI)</span><span class="audytor-value text-orange" id="audytor-roi">--</span></div>
-            <div class="audytor-box"><span class="audytor-label">Bilans (Win - Loss - Zwrot)</span><span class="audytor-value"><span id="audytor-w" class="text-green">0</span> - <span id="audytor-l" class="text-red">0</span> - <span id="audytor-p">0</span></span></div>
-        </div>
-        
-        <div class="audytor-categories">
-            <div class="cat-stat cat-graal"><div class="cat-title">🏆 Graale</div><div class="cat-val" id="cat-graal-val">--</div></div>
-            <div class="cat-stat cat-value"><div class="cat-title">💰 Value Bety</div><div class="cat-val" id="cat-value-val">--</div></div>
-            <div class="cat-stat cat-safe"><div class="cat-title">🎯 Pewniaki</div><div class="cat-val" id="cat-safe-val">--</div></div>
-            <div class="cat-stat cat-stable"><div class="cat-title">🛡️ Stabilni</div><div class="cat-val" id="cat-stable-val">--</div></div>
-        </div>
-
-        <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
-        <div class="audytor-details-panel" id="audytorDetailsPanel">
-            
-            <div class="audytor-filters-bar">
-                <input type="text" id="audytorSearch" placeholder="Szukaj zawodnika...">
-                <select id="audytorMarket">
-                    <option value="all">Wszystkie rynki</option>
-                    <option value="Hits">Hits</option>
-                    <option value="Home Runs">Home Runs</option>
-                    <option value="Total Bases">Total Bases</option>
-                    <option value="Runs">Runs</option>
-                    <option value="RBIs">RBIs</option>
-                    <option value="K's">Strikeouty (K's)</option>
-                    <option value="PTS">Punkty (NBA)</option>
-                    <option value="REB">Zbiórki (NBA)</option>
-                    <option value="AST">Asysty (NBA)</option>
-                </select>
-                <select id="audytorStatus">
-                    <option value="all">Każdy status</option>
-                    <option value="WYGRANA">✅ Wygrane</option>
-                    <option value="PRZEGRANA">❌ Przegrane</option>
-                    <option value="ZWROT">➖ Zwroty</option>
-                </select>
-                <select id="audytorCategory">
-                    <option value="all">Wszystkie kategorie</option>
-                    <option value="🏆 Graal">🏆 Graale</option>
-                    <option value="💰 Value">💰 Value Bety</option>
-                    <option value="🎯 Pewniak">🎯 Pewniaki</option>
-                    <option value="🛡️ Stabilny">🛡️ Stabilni</option>
-                    <option value="Zwykły Typ">Zwykły Typ</option>
-                </select>
-            </div>
-
-            <table class="details-table">
+        <div class="table-container">
+            <table id="teamStatsTable">
                 <thead>
-                    <tr>
-                        <th>Zawodnik</th>
-                        <th>Rynek & Typ</th>
-                        <th>Linia</th>
-                        <th>Wynik Realny</th>
-                        <th>Status</th>
-                        <th>Kategorie</th>
-                    </tr>
-                </thead>
-                <tbody id="audytorDetailsBody">
+                    </thead>
+                <tbody id="teamStatsBody">
                     </tbody>
             </table>
         </div>
     </div>
 
-    <div id="journalModal" class="modal">
+    <div id="mainPicksContainer">
+        
+        <div id="audytor-panel" class="audytor-card">
+            <div class="audytor-top-bar">
+                <div class="audytor-header" id="audytor-title">📊 Raport Skuteczności Modelu (Ładowanie...)</div>
+                <div class="audytor-toggle">
+                    <button class="audytor-btn active" id="btn-audytor-wczoraj" onclick="renderAuditorView('wczoraj')">Ostatnia Noc</button>
+                    <button class="audytor-btn" id="btn-audytor-alltime" onclick="renderAuditorView('alltime')">Cała Historia</button>
+                </div>
+            </div>
+            
+            <div class="audytor-stats">
+                <div class="audytor-box"><span class="audytor-label">Skuteczność (Hit Rate)</span><span class="audytor-value" id="audytor-hitrate">--</span></div>
+                <div class="audytor-box"><span class="audytor-label">Czysty Zysk (ROI)</span><span class="audytor-value text-orange" id="audytor-roi">--</span></div>
+                <div class="audytor-box"><span class="audytor-label">Bilans (Win - Loss - Zwrot)</span><span class="audytor-value"><span id="audytor-w" class="text-green">0</span> - <span id="audytor-l" class="text-red">0</span> - <span id="audytor-p">0</span></span></div>
+            </div>
+            
+            <div class="audytor-categories">
+                <div class="cat-stat cat-graal"><div class="cat-title">🏆 Graale</div><div class="cat-val" id="cat-graal-val">--</div></div>
+                <div class="cat-stat cat-value"><div class="cat-title">💰 Value Bety</div><div class="cat-val" id="cat-value-val">--</div></div>
+                <div class="cat-stat cat-safe"><div class="cat-title">🎯 Pewniaki</div><div class="cat-val" id="cat-safe-val">--</div></div>
+                <div class="cat-stat cat-stable"><div class="cat-title">🛡️ Stabilni</div><div class="cat-val" id="cat-stable-val">--</div></div>
+            </div>
+
+            <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
+            <div class="audytor-details-panel" id="audytorDetailsPanel">
+                
+                <div class="audytor-filters-bar">
+                    <input type="text" id="audytorSearch" placeholder="Szukaj zawodnika...">
+                    <select id="audytorMarket">
+                        <option value="all">Wszystkie rynki</option>
+                        <option value="Hits">Hits</option>
+                        <option value="Home Runs">Home Runs</option>
+                        <option value="Total Bases">Total Bases</option>
+                        <option value="Runs">Runs</option>
+                        <option value="RBIs">RBIs</option>
+                        <option value="K's">Strikeouty (K's)</option>
+                        <option value="PTS">Punkty (NBA)</option>
+                        <option value="REB">Zbiórki (NBA)</option>
+                        <option value="AST">Asysty (NBA)</option>
+                    </select>
+                    <select id="audytorStatus">
+                        <option value="all">Każdy status</option>
+                        <option value="WYGRANA">✅ Wygrane</option>
+                        <option value="PRZEGRANA">❌ Przegrane</option>
+                        <option value="ZWROT">➖ Zwroty</option>
+                    </select>
+                    <select id="audytorCategory">
+                        <option value="all">Wszystkie kategorie</option>
+                        <option value="🏆 Graal">🏆 Graale</option>
+                        <option value="💰 Value">💰 Value Bety</option>
+                        <option value="🎯 Pewniak">🎯 Pewniaki</option>
+                        <option value="🛡️ Stabilny">🛡️ Stabilni</option>
+                        <option value="Zwykły Typ">Zwykły Typ</option>
+                    </select>
+                </div>
+
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Zawodnik</th>
+                            <th>Rynek & Typ</th>
+                            <th>Linia</th>
+                            <th>Wynik Realny</th>
+                            <th>Status</th>
+                            <th>Kategorie</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audytorDetailsBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Szukaj gracza</label>
+                <input type="text" id="searchFilter" placeholder="np. Curry...">
+            </div>
+            <div class="filter-group">
+                <label>Mecz / Drużyna</label>
+                <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
+            </div>
+            <div class="filter-group">
+                <label>Rynek</label>
+                <select id="marketFilter"><option value="all">Wszystkie</option></select>
+            </div>
+            
+            <div class="filter-group" id="roleFilterGroup" style="display: none;">
+                <label>Pozycja (Tylko MLB)</label>
+                <select id="roleFilter">
+                    <option value="all">Wszyscy</option>
+                    <option value="pitcher">Miotacze (Pitchers)</option>
+                    <option value="batter">Pałkarze (Batters)</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Typ</label>
+                <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
+            </div>
+            <div class="filter-group">
+                <label>Status (Rating)</label>
+                <select id="statusFilter">
+                    <option value="all">Wszystkie Typy</option>
+                    <option value="value">💰 Value Bety (>40% EV)</option>
+                    <option value="safe">🎯 Pewniaki (>75% Szans)</option>
+                    <option value="stable">🛡️ Stabilni gracze</option>
+                    <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="section-title">
+            Baza Danych PRO
+            <div class="legend-box">
+                <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet (>40% EV)</div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak (>75% Szans)</div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--stable-border);"></span> 🛡️ Stabilny</div>
+            </div>
+        </h2>
+        <div class="table-container">
+            <table id="mainTable">
+                <thead>
+                    <tr>
+                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Typ</th>
+                        <th class="sortable" data-sort="l5">L5</th>
+                        <th class="sortable" data-sort="l10">L10</th>
+                        <th class="sortable" data-sort="sezon">Sezon</th>
+                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
+                        <th>Akcja</th>
+                    </tr>
+                </thead>
+                <tbody id="mainBody"></tbody>
+            </table>
+        </div>
+
+        <div class="section-title" style="margin-top: 3rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <h2 style="margin: 0;">Mój Kupon</h2>
+                <div class="ako-dashboard">
+                    <div class="ako-stat"><span class="ako-label">AKO</span><span class="ako-value highlight" id="totalOddsDisplay">1.00</span></div>
+                    <div class="ako-stat bordered"><span class="ako-label">Szansa</span><span class="ako-value" id="akoProbDisplay">-</span></div>
+                    <div class="ako-stat bordered">
+                        <span class="ako-label">Twoja Stawka</span>
+                        <input type="number" id="customStakeInput" value="50" style="width: 70px; background: transparent; border: none; border-bottom: 2px solid var(--accent-color); color: var(--text-color); font-weight: 900; font-size: 1.2rem; text-align: center; outline: none;">
+                    </div>
+                    <div class="ako-stat bordered"><span class="ako-label">Ew. Wygrana</span><span class="ako-value text-green" id="akoEwkDisplay">0.00 PLN</span></div>
+                </div>
+            </div>
+            <div class="generator-bar">
+                <input type="number" id="targetOddsInput" class="odds-input" placeholder="Min. Kurs (5.0)" step="0.5">
+                <button id="generateBtn" class="export-btn" style="background-color: var(--accent-color);">🤖 Auto-Kupon</button>
+                <button id="saveJournalBtn" class="export-btn" style="background-color: #f59e0b;">💾 Zapisz do Historii</button>
+            </div>
+        </div>
+        
+        <div class="table-container" style="max-height: 70vh; margin-bottom: 3rem;">
+            <table id="favoritesTable">
+                <thead>
+                    <tr>
+                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Typ</th>
+                        <th class="sortable" data-sort="l5">L5</th>
+                        <th class="sortable" data-sort="l10">L10</th>
+                        <th class="sortable" data-sort="sezon">Sezon</th>
+                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
+                        <th>Akcja</th>
+                    </tr>
+                </thead>
+                <tbody id="favoritesBody"></tbody>
+            </table>
+        </div>
+    </div> <div id="journalModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeJournalBtn">&times;</span>
             <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (Kupony)</h2>
@@ -311,117 +449,6 @@
         </div>
     </div>
 
-    <div class="filters">
-        <div class="filter-group">
-            <label>Szukaj gracza</label>
-            <input type="text" id="searchFilter" placeholder="np. Curry...">
-        </div>
-        <div class="filter-group">
-            <label>Mecz / Drużyna</label>
-            <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
-        </div>
-        <div class="filter-group">
-            <label>Rynek</label>
-            <select id="marketFilter"><option value="all">Wszystkie</option></select>
-        </div>
-        
-        <div class="filter-group" id="roleFilterGroup" style="display: none;">
-            <label>Pozycja (Tylko MLB)</label>
-            <select id="roleFilter">
-                <option value="all">Wszyscy</option>
-                <option value="pitcher">Miotacze (Pitchers)</option>
-                <option value="batter">Pałkarze (Batters)</option>
-            </select>
-        </div>
-
-        <div class="filter-group">
-            <label>Typ</label>
-            <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
-        </div>
-        <div class="filter-group">
-            <label>Status (Rating)</label>
-            <select id="statusFilter">
-                <option value="all">Wszystkie Typy</option>
-                <option value="value">💰 Value Bety (>40% EV)</option>
-                <option value="safe">🎯 Pewniaki (>75% Szans)</option>
-                <option value="stable">🛡️ Stabilni gracze</option>
-                <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
-            </select>
-        </div>
-    </div>
-
-    <h2 class="section-title">
-        Baza Danych PRO
-        <div class="legend-box">
-            <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet (>40% EV)</div>
-            <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak (>75% Szans)</div>
-            <div class="legend-item"><span class="legend-dot" style="background: var(--stable-border);"></span> 🛡️ Stabilny</div>
-        </div>
-    </h2>
-    <div class="table-container">
-        <table id="mainTable">
-            <thead>
-                <tr>
-                    <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
-                    <th class="sortable" data-sort="rynek">Rynek</th>
-                    <th class="sortable" data-sort="linia">Linia</th>
-                    <th class="sortable" data-sort="projekcja">Projekcja</th>
-                    <th class="sortable" data-sort="true_prob">Szansa (%)</th>
-                    <th class="sortable" data-sort="ev">Edge (EV)</th>
-                    <th>Typ</th>
-                    <th class="sortable" data-sort="l5">L5</th>
-                    <th class="sortable" data-sort="l10">L10</th>
-                    <th class="sortable" data-sort="sezon">Sezon</th>
-                    <th class="sortable" data-sort="matchup_rank">Matchup</th>
-                    <th>Akcja</th>
-                </tr>
-            </thead>
-            <tbody id="mainBody"></tbody>
-        </table>
-    </div>
-
-    <div class="section-title" style="margin-top: 3rem;">
-        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-            <h2 style="margin: 0;">Mój Kupon</h2>
-            <div class="ako-dashboard">
-                <div class="ako-stat"><span class="ako-label">AKO</span><span class="ako-value highlight" id="totalOddsDisplay">1.00</span></div>
-                <div class="ako-stat bordered"><span class="ako-label">Szansa</span><span class="ako-value" id="akoProbDisplay">-</span></div>
-                <div class="ako-stat bordered">
-                    <span class="ako-label">Twoja Stawka</span>
-                    <input type="number" id="customStakeInput" value="50" style="width: 70px; background: transparent; border: none; border-bottom: 2px solid var(--accent-color); color: var(--text-color); font-weight: 900; font-size: 1.2rem; text-align: center; outline: none;">
-                </div>
-                <div class="ako-stat bordered"><span class="ako-label">Ew. Wygrana</span><span class="ako-value text-green" id="akoEwkDisplay">0.00 PLN</span></div>
-            </div>
-        </div>
-        <div class="generator-bar">
-            <input type="number" id="targetOddsInput" class="odds-input" placeholder="Min. Kurs (5.0)" step="0.5">
-            <button id="generateBtn" class="export-btn" style="background-color: var(--accent-color);">🤖 Auto-Kupon</button>
-            <button id="saveJournalBtn" class="export-btn" style="background-color: #f59e0b;">💾 Zapisz do Historii</button>
-        </div>
-    </div>
-    
-    <div class="table-container" style="max-height: 70vh; margin-bottom: 3rem;">
-        <table id="favoritesTable">
-            <thead>
-                <tr>
-                    <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
-                    <th class="sortable" data-sort="rynek">Rynek</th>
-                    <th class="sortable" data-sort="linia">Linia</th>
-                    <th class="sortable" data-sort="projekcja">Projekcja</th>
-                    <th class="sortable" data-sort="true_prob">Szansa (%)</th>
-                    <th class="sortable" data-sort="ev">Edge (EV)</th>
-                    <th>Typ</th>
-                    <th class="sortable" data-sort="l5">L5</th>
-                    <th class="sortable" data-sort="l10">L10</th>
-                    <th class="sortable" data-sort="sezon">Sezon</th>
-                    <th class="sortable" data-sort="matchup_rank">Matchup</th>
-                    <th>Akcja</th>
-                </tr>
-            </thead>
-            <tbody id="favoritesBody"></tbody>
-        </table>
-    </div>
-
     <script>
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA error:', err)); }); }
         
@@ -434,12 +461,15 @@
         });
 
         let globalData = [];
+        let teamData = [];
         let currentSortCol = '';
         let sortAsc = false;
+        let currentTeamSortCol = 'Zespol';
+        let teamSortAsc = true;
+        
         let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
         let profitChartInstance = null; 
         let currentSport = 'nba';
-        
         let statystykiBota = []; 
 
         function normalCDF(x, mean, stdDev) {
@@ -450,6 +480,173 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
+        // LOGIKA PANELU STATYSTYK DRUŻYNOWYCH
+        const toggleTeamStatsBtn = document.getElementById('toggleTeamStatsBtn');
+        const teamStatsPanel = document.getElementById('teamStatsPanel');
+        const mainPicksContainer = document.getElementById('mainPicksContainer');
+
+        toggleTeamStatsBtn.addEventListener('click', () => {
+            const isShowing = teamStatsPanel.classList.contains('active');
+            if (isShowing) {
+                teamStatsPanel.classList.remove('active');
+                mainPicksContainer.style.display = 'block';
+                toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
+            } else {
+                teamStatsPanel.classList.add('active');
+                mainPicksContainer.style.display = 'none';
+                toggleTeamStatsBtn.innerText = '🔙 Wróć do Typów';
+                loadTeamStats();
+            }
+        });
+
+        function loadTeamStats() {
+            let fileName = currentSport === 'nba' ? 'nba_teams.json' : 'mlb_teams.json';
+            fetch(`${fileName}?v=` + new Date().getTime())
+                .then(r => {
+                    if(!r.ok) throw new Error("Brak pliku statystyk drużynowych");
+                    return r.json();
+                })
+                .then(data => {
+                    teamData = data;
+                    renderTeamStatsTable(teamData);
+                })
+                .catch(e => {
+                    document.getElementById('teamStatsBody').innerHTML = `<tr><td colspan="15" style="color:var(--muted-text); text-align:center; padding: 2rem;">Brak danych drużynowych dla tego sportu. Upewnij się, że bot wygenerował raport.</td></tr>`;
+                });
+        }
+
+        function renderTeamStatsTable(data) {
+            const tbody = document.getElementById('teamStatsBody');
+            const thead = document.querySelector('#teamStatsTable document, #teamStatsTable thead');
+            tbody.innerHTML = '';
+            
+            if (currentSport === 'nba') {
+                thead.innerHTML = `
+                    <tr>
+                        <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
+                        <th rowspan="2" class="sortable-team" data-sort="Pace" style="vertical-align: bottom;">TEMPO (PACE)</th>
+                        <th colspan="3" class="stats-group-header">OFENSYWA (ZDOBYWANE)</th>
+                        <th colspan="6" class="stats-group-header">DEFENSYWA (NA CO POZWALAJĄ RYWALE)</th>
+                    </tr>
+                    <tr>
+                        <th class="sortable-team" data-sort="Zdobyte_PTS">PTS</th>
+                        <th class="sortable-team" data-sort="Zdobyte_REB">REB</th>
+                        <th class="sortable-team" data-sort="Zdobyte_3PM">3PM</th>
+                        
+                        <th class="sortable-team" data-sort="Tracone_PTS">Opp PTS</th>
+                        <th class="sortable-team" data-sort="Tracone_REB">Opp REB</th>
+                        <th class="sortable-team" data-sort="Tracone_AST">Opp AST</th>
+                        <th class="sortable-team" data-sort="Tracone_3PM">Opp 3PM</th>
+                        <th class="sortable-team" data-sort="Tracone_3PA">Opp 3PA</th>
+                        <th class="sortable-team" data-sort="Wymuszone_Faule">Faule Rywala</th>
+                    </tr>
+                `;
+                
+                let maxPace = Math.max(...data.map(d => parseFloat(d.Pace)||0)), minPace = Math.min(...data.map(d => parseFloat(d.Pace)||100));
+                let maxOpp3PM = Math.max(...data.map(d => parseFloat(d.Tracone_3PM)||0)), minOpp3PM = Math.min(...data.map(d => parseFloat(d.Tracone_3PM)||100));
+                let maxOppReb = Math.max(...data.map(d => parseFloat(d.Tracone_REB)||0)), minOppReb = Math.min(...data.map(d => parseFloat(d.Tracone_REB)||100));
+                
+                data.forEach(team => {
+                    let tr = document.createElement('tr');
+                    let pVal = parseFloat(team.Pace)||0;
+                    let o3Val = parseFloat(team.Tracone_3PM)||0;
+                    let orVal = parseFloat(team.Tracone_REB)||0;
+                    
+                    let paceClass = pVal >= maxPace * 0.98 ? 'cell-good' : (pVal <= minPace * 1.02 ? 'cell-bad' : '');
+                    let opp3PMClass = o3Val >= maxOpp3PM * 0.95 ? 'cell-good' : (o3Val <= minOpp3PM * 1.05 ? 'cell-bad' : '');
+                    let oppRebClass = orVal >= maxOppReb * 0.96 ? 'cell-good' : (orVal <= minOppReb * 1.04 ? 'cell-bad' : '');
+                    
+                    tr.innerHTML = `
+                        <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
+                        <td class="${paceClass}">${team.Pace}</td>
+                        <td>${team.Zdobyte_PTS}</td>
+                        <td>${team.Zdobyte_REB}</td>
+                        <td>${team.Zdobyte_3PM}</td>
+                        <td style="border-left: 2px solid var(--border-color);">${team.Tracone_PTS}</td>
+                        <td class="${oppRebClass}">${team.Tracone_REB}</td>
+                        <td>${team.Tracone_AST}</td>
+                        <td class="${opp3PMClass}">${team.Tracone_3PM}</td>
+                        <td>${team.Tracone_3PA}</td>
+                        <td>${team.Wymuszone_Faule}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } else if (currentSport === 'mlb') {
+                thead.innerHTML = `
+                    <tr>
+                        <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
+                        <th colspan="4" class="stats-group-header">OFENSYWA (PAŁKARZE)</th>
+                        <th colspan="6" class="stats-group-header">DEFENSYWA (MIOTACZE I OBRONA)</th>
+                    </tr>
+                    <tr>
+                        <th class="sortable-team" data-sort="Zdobyte_Runs">Runs</th>
+                        <th class="sortable-team" data-sort="Zdobyte_HR">HR</th>
+                        <th class="sortable-team" data-sort="Ofensywa_AVG">AVG</th>
+                        <th class="sortable-team" data-sort="Ofensywa_OPS">OPS</th>
+                        
+                        <th class="sortable-team" data-sort="Obrona_ERA" style="border-left: 2px solid var(--border-color);">ERA</th>
+                        <th class="sortable-team" data-sort="Obrona_WHIP">WHIP</th>
+                        <th class="sortable-team" data-sort="Obrona_BAA">BAA</th>
+                        <th class="sortable-team" data-sort="Tracone_HR">Opp HR</th>
+                        <th class="sortable-team" data-sort="Oddane_Walks">Oddane Walks</th>
+                        <th class="sortable-team" data-sort="Miotacze_K">Strikeouty</th>
+                    </tr>
+                `;
+
+                let maxWhip = Math.max(...data.map(d => parseFloat(d.Obrona_WHIP)||0));
+                let minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
+                let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0));
+                let minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
+                
+                data.forEach(team => {
+                    let tr = document.createElement('tr');
+                    let wVal = parseFloat(team.Obrona_WHIP)||0;
+                    let bVal = parseFloat(team.Obrona_BAA)||0;
+                    
+                    let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
+                    let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
+                    
+                    tr.innerHTML = `
+                        <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
+                        <td>${team.Zdobyte_Runs}</td>
+                        <td>${team.Zdobyte_HR}</td>
+                        <td>${team.Ofensywa_AVG}</td>
+                        <td>${team.Ofensywa_OPS}</td>
+                        <td style="border-left: 2px solid var(--border-color);">${team.Obrona_ERA}</td>
+                        <td class="${whipClass}">${team.Obrona_WHIP}</td>
+                        <td class="${baaClass}">${team.Obrona_BAA}</td>
+                        <td>${team.Tracone_HR}</td>
+                        <td class="cell-good">${team.Oddane_Walks}</td>
+                        <td>${team.Miotacze_K}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+            
+            // Podpinamy sortowanie na nowo
+            document.querySelectorAll('th.sortable-team').forEach(th => {
+                th.addEventListener('click', () => {
+                    const col = th.dataset.sort;
+                    if (currentTeamSortCol === col) teamSortAsc = !teamSortAsc;
+                    else { teamSortAsc = false; currentTeamSortCol = col; }
+                    
+                    teamData.sort((a, b) => {
+                        let vA = a[col], vB = b[col];
+                        if (typeof vA === 'string' && isNaN(parseFloat(vA))) {
+                            vA = vA.toLowerCase(); vB = vB.toLowerCase();
+                        } else {
+                            vA = parseFloat(vA) || 0; vB = parseFloat(vB) || 0;
+                        }
+                        return vA < vB ? (teamSortAsc ? -1 : 1) : (vA > vB ? (teamSortAsc ? 1 : -1) : 0);
+                    });
+                    
+                    renderTeamStatsTable(teamData);
+                });
+            });
+        }
+
+        // AUDYTOR DETAILS TOGGLE & FILTERS
         function toggleAuditorDetails() {
             const panel = document.getElementById('audytorDetailsPanel');
             const btn = document.getElementById('toggleDetailsBtn');
@@ -461,7 +658,6 @@
             }
         }
 
-        // LOGIKA FILTROWANIA AUDYTORA
         function filterAuditorDetails() {
             let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
             let marketFilter = document.getElementById('audytorMarket').value;
@@ -560,7 +756,6 @@
                 const detailsBody = document.getElementById('audytorDetailsBody');
                 detailsBody.innerHTML = '';
                 
-                // Reset filtrów po przełączeniu sportu/widoku
                 document.getElementById('audytorSearch').value = '';
                 document.getElementById('audytorMarket').value = 'all';
                 document.getElementById('audytorStatus').value = 'all';
@@ -642,6 +837,10 @@
         }
 
         function loadSportData(sport) {
+            teamStatsPanel.classList.remove('active');
+            mainPicksContainer.style.display = 'block';
+            toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
+            
             wczytajAudytora();
             document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
             
