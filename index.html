@@ -184,7 +184,6 @@
         .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
         .chart-visual-box { width: 100%; height: 250px; margin-bottom: 2rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; }
 
-        /* NOWE STYLE DLA ZAKŁADKI STATYSTYK DRUŻYNOWYCH */
         .team-stats-panel { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); padding: 20px; margin-top: 2rem; display: none; overflow: hidden; }
         .team-stats-panel.active { display: block; }
         
@@ -447,7 +446,9 @@
                 <tbody id="favoritesBody"></tbody>
             </table>
         </div>
-    </div> <div id="journalModal" class="modal">
+    </div> 
+
+    <div id="journalModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeJournalBtn">&times;</span>
             <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (Kupony)</h2>
@@ -494,7 +495,6 @@
             return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
         }
 
-        // LOGIKA PANELU STATYSTYK DRUŻYNOWYCH
         const toggleTeamStatsBtn = document.getElementById('toggleTeamStatsBtn');
         const teamStatsPanel = document.getElementById('teamStatsPanel');
         const mainPicksContainer = document.getElementById('mainPicksContainer');
@@ -590,20 +590,23 @@
                 thead.innerHTML = `
                     <tr>
                         <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
-                        <th colspan="4" class="stats-group-header">OFENSYWA (PAŁKARZE)</th>
-                        <th colspan="6" class="stats-group-header">DEFENSYWA (MIOTACZE I OBRONA)</th>
+                        <th colspan="6" class="stats-group-header">OFENSYWA (PAŁKARZE)</th>
+                        <th colspan="7" class="stats-group-header">DEFENSYWA (MIOTACZE I OBRONA)</th>
                     </tr>
                     <tr>
                         <th class="sortable-team" data-sort="Zdobyte_Runs"><span class="tooltip-abbr" title="Zdobyte obiegi bazy (punkty).">Runs</span></th>
                         <th class="sortable-team" data-sort="Zdobyte_HR"><span class="tooltip-abbr" title="Wybite Home Runy.">HR</span></th>
                         <th class="sortable-team" data-sort="Ofensywa_AVG"><span class="tooltip-abbr" title="Batting Average: Skuteczność uderzeń pałkarzy w procentach.">AVG</span></th>
                         <th class="sortable-team" data-sort="Ofensywa_OPS"><span class="tooltip-abbr" title="On-Base Plus Slugging: Ogólna, najbardziej kompletna ocena siły ataku. Powyżej .750 to elita.">OPS</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_K"><span class="tooltip-abbr" title="Strikeouty Pałkarzy: Im więcej razy dają się wyautować, tym łatwiejszy OVER dla miotacza rywali!">Ofensywa K</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_BB"><span class="tooltip-abbr" title="Wymuszone Walks: Jak często pałkarze tej drużyny dostają darmową bazę po błędach miotacza.">Ofensywa BB</span></th>
                         
                         <th class="sortable-team" data-sort="Obrona_ERA" style="border-left: 2px solid var(--border-color);"><span class="tooltip-abbr" title="Earned Run Average: Średnia liczba punktów traconych przez miotaczy na 9 inningów. Mniej = lepiej.">ERA</span></th>
                         <th class="sortable-team" data-sort="Obrona_WHIP"><span class="tooltip-abbr" title="Walks & Hits per Inning Pitched: Ile darmowych baz i odbić oddają w każdym inningu. Mniej = lepsza obrona.">WHIP</span></th>
                         <th class="sortable-team" data-sort="Obrona_BAA"><span class="tooltip-abbr" title="Batting Average Against: Z jaką skutecznością przeciwnicy uderzają piłki tych miotaczy.">BAA</span></th>
                         <th class="sortable-team" data-sort="Blown_Saves"><span class="tooltip-abbr" title="Zmarnowane Przewagi w Końcówce: Im więcej, tym gorszy i bardziej dziurawy Bullpen (zmiennicy).">Blown Saves</span></th>
-                        <th class="sortable-team" data-sort="Oddane_Walks"><span class="tooltip-abbr" title="Oddane bazy za darmo (BB): Dużo walków oznacza, że rywale łatwiej punktują (dobrze dla OVERów rywali).">Walks</span></th>
+                        <th class="sortable-team" data-sort="Udane_Saves"><span class="tooltip-abbr" title="Udane Obrony w Końcówce: Im więcej, tym pewniej potrafią 'zamknąć' mecz bez starty punktów.">Saves</span></th>
+                        <th class="sortable-team" data-sort="Oddane_Walks"><span class="tooltip-abbr" title="Oddane bazy za darmo (BB): Dużo walków oznacza, że rywale łatwiej punktują (dobrze dla OVERów rywali).">Oddane Walks</span></th>
                         <th class="sortable-team" data-sort="Miotacze_K"><span class="tooltip-abbr" title="Strikeouty Obrony: Ile razy miotacze tej drużyny wyautowali rywala bez uderzenia piłki.">K's</span></th>
                     </tr>
                 `;
@@ -612,12 +615,19 @@
                 let minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
                 let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0));
                 let minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
+                
                 let maxWalks = Math.max(...data.map(d => parseFloat(d.Oddane_Walks)||0));
                 let minWalks = Math.min(...data.map(d => parseFloat(d.Oddane_Walks)||1000));
                 let maxK = Math.max(...data.map(d => parseFloat(d.Miotacze_K)||0));
                 let minK = Math.min(...data.map(d => parseFloat(d.Miotacze_K)||1000));
                 let maxBS = Math.max(...data.map(d => parseFloat(d.Blown_Saves)||0));
                 let minBS = Math.min(...data.map(d => parseFloat(d.Blown_Saves)||100));
+                let maxOffK = Math.max(...data.map(d => parseFloat(d.Ofensywa_K)||0));
+                let minOffK = Math.min(...data.map(d => parseFloat(d.Ofensywa_K)||1000));
+                let maxOffBB = Math.max(...data.map(d => parseFloat(d.Ofensywa_BB)||0));
+                let minOffBB = Math.min(...data.map(d => parseFloat(d.Ofensywa_BB)||1000));
+                let maxSaves = Math.max(...data.map(d => parseFloat(d.Udane_Saves)||0));
+                let minSaves = Math.min(...data.map(d => parseFloat(d.Udane_Saves)||100));
                 
                 data.forEach(team => {
                     let tr = document.createElement('tr');
@@ -626,18 +636,20 @@
                     let walkVal = parseFloat(team.Oddane_Walks)||0;
                     let kVal = parseFloat(team.Miotacze_K)||0;
                     let bsVal = parseFloat(team.Blown_Saves)||0;
+                    let offKVal = parseFloat(team.Ofensywa_K)||0;
+                    let offBBVal = parseFloat(team.Ofensywa_BB)||0;
+                    let savesVal = parseFloat(team.Udane_Saves)||0;
                     
                     let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
                     let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
                     
-                    // Walks: Im więcej, tym gorzej dla drużyny, a LEPIEJ dla nas (OVER) = Zielony
+                    // Logika kolorowania MLB
                     let walkClass = walkVal >= maxWalks * 0.90 ? 'cell-good' : (walkVal <= minWalks * 1.10 ? 'cell-bad' : '');
-                    
-                    // Strikeouty K's: Im więcej K's robi miotacz, tym GORZEJ dla nas (OVERów). Więc dużo K's = Czerwony.
                     let kClass = kVal <= minK * 1.05 ? 'cell-good' : (kVal >= maxK * 0.95 ? 'cell-bad' : '');
-                    
-                    // Blown Saves: Im więcej, tym gorszy Bullpen. Lepiej dla nas (OVER) = Zielony
                     let bsClass = bsVal >= maxBS * 0.85 ? 'cell-good' : (bsVal <= minBS * 1.15 ? 'cell-bad' : '');
+                    let offKClass = offKVal >= maxOffK * 0.90 ? 'cell-good' : (offKVal <= minOffK * 1.10 ? 'cell-bad' : '');
+                    let offBBClass = offBBVal >= maxOffBB * 0.90 ? 'cell-good' : (offBBVal <= minOffBB * 1.10 ? 'cell-bad' : '');
+                    let savesClass = savesVal >= maxSaves * 0.85 ? 'cell-bad' : (savesVal <= minSaves * 1.15 ? 'cell-good' : '');
                     
                     tr.innerHTML = `
                         <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
@@ -645,10 +657,14 @@
                         <td>${team.Zdobyte_HR}</td>
                         <td>${team.Ofensywa_AVG}</td>
                         <td>${team.Ofensywa_OPS}</td>
+                        <td class="${offKClass}">${team.Ofensywa_K}</td>
+                        <td class="${offBBClass}">${team.Ofensywa_BB}</td>
+                        
                         <td style="border-left: 2px solid var(--border-color);">${team.Obrona_ERA}</td>
                         <td class="${whipClass}">${team.Obrona_WHIP}</td>
                         <td class="${baaClass}">${team.Obrona_BAA}</td>
                         <td class="${bsClass}">${team.Blown_Saves}</td>
+                        <td class="${savesClass}">${team.Udane_Saves}</td>
                         <td class="${walkClass}">${team.Oddane_Walks}</td>
                         <td class="${kClass}">${team.Miotacze_K}</td>
                     `;
@@ -656,7 +672,6 @@
                 });
             }
             
-            // Podpinamy sortowanie na nowo
             document.querySelectorAll('th.sortable-team').forEach(th => {
                 th.addEventListener('click', () => {
                     const col = th.dataset.sort;
@@ -678,7 +693,6 @@
             });
         }
 
-        // AUDYTOR DETAILS TOGGLE & FILTERS
         function toggleAuditorDetails() {
             const panel = document.getElementById('audytorDetailsPanel');
             const btn = document.getElementById('toggleDetailsBtn');
