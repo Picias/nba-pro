@@ -138,13 +138,17 @@ def generuj_pelny_raport_druzynowy_mlb():
             baa_str = st.get('avg', '.000')
             if baa_str == '.---': baa_str = '.000'
             
+            # Nowość: Statystyka uosabiająca "kruchość" Bullpenu
+            blown_saves = st.get('blownSaves', 0)
+            
             druzyny_dane[t_name].update({
                 "Obrona_ERA": era_str,
                 "Obrona_WHIP": whip_str,
                 "Obrona_BAA": baa_str,
                 "Tracone_HR": st.get('homeRuns', 0),
                 "Oddane_Walks": st.get('baseOnBalls', 0),
-                "Miotacze_K": st.get('strikeOuts', 0)
+                "Miotacze_K": st.get('strikeOuts', 0),
+                "Blown_Saves": blown_saves
             })
 
     raport_finalny = list(druzyny_dane.values())
