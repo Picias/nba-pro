@@ -88,13 +88,12 @@ def rozlicz_wczorajsze_typy_mlb():
     if not stare_typy: return
     data_typow = stare_typy[0].get('data', '2000-01-01')
     
-    # Blokada tylko jeśli data typów to "jutro" lub dalej
     if data_typow > DATA_DZIS: 
         print("⚠️ Typy pochodzą z przyszłości. Audytor wstrzymuje pracę.")
         return
         
     print(f"\n🕵️ Uruchamiam Głównego Audytora MLB: Rozliczam typy z daty {data_typow}...")
-    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}&hydrate=boxscore"
+    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}"
     headers = {'User-Agent': 'Mozilla/5.0'}
     
     rzeczywiste_staty = {}
@@ -105,34 +104,43 @@ def rozlicz_wczorajsze_typy_mlb():
             return
             
         mecze = res['dates'][0]['games']
-        print(f"🔍 Audytor: Znalazłem {len(mecze)} meczów w terminarzu. Skanuję wyniki...")
+        print(f"🔍 Audytor: Znalazłem {len(mecze)} meczów w terminarzu. Skanuję twarde Boxscore'y...")
         
         ukonczone_mecze = 0
         for m in mecze:
             away_t = m['teams']['away']['team']['name']
             home_t = m['teams']['home']['team']['name']
             status_code = m['status']['statusCode']
+            game_id = m['gamePk']
             
             # F = Final, O = Game Over, C = Completed Early
-            if status_code in ['F', 'O', 'C']: 
+            if status_code in ['F', 'O', 'C'] or m['status']['abstractGameState'] == 'Final': 
                 ukonczone_mecze += 1
-                box = m.get('boxscore', {}).get('teams', {})
-                for team_side in ['away', 'home']:
-                    players = box.get(team_side, {}).get('players', {})
-                    for p_key, p_data in players.items():
-                        name = p_data['person']['fullName'].lower().replace(".", "").replace("'", "").strip()
-                        b_stats = p_data.get('stats', {}).get('batting', {})
-                        p_stats = p_data.get('stats', {}).get('pitching', {})
-                        
-                        # Pobieramy wszystko do słownika
-                        rzeczywiste_staty[name] = {
-                            "K's": p_stats.get('strikeOuts', 0),
-                            'Hits': b_stats.get('hits', 0), 
-                            'Home Runs': b_stats.get('homeRuns', 0),
-                            'Total Bases': b_stats.get('totalBases', 0), 
-                            'Runs': b_stats.get('runs', 0),
-                            'RBIs': b_stats.get('rbi', 0)
-                        }
+                try:
+                    # TWARDE POBRANIE WYNIKÓW MECZU (100% pewności)
+                    box_url = f"https://statsapi.mlb.com/api/v1/game/{game_id}/boxscore"
+                    box_res = requests.get(box_url, headers=headers, timeout=5).json()
+                    teams = box_res.get('teams', {})
+                    
+                    for team_side in ['away', 'home']:
+                        players = teams.get(team_side, {}).get('players', {})
+                        for p_key, p_data in players.items():
+                            name = p_data.get('person', {}).get('fullName', '').lower().replace(".", "").replace("'", "").strip()
+                            if not name: continue
+                            
+                            b_stats = p_data.get('stats', {}).get('batting', {})
+                            p_stats = p_data.get('stats', {}).get('pitching', {})
+                            
+                            rzeczywiste_staty[name] = {
+                                "K's": p_stats.get('strikeOuts', 0),
+                                'Hits': b_stats.get('hits', 0), 
+                                'Home Runs': b_stats.get('homeRuns', 0),
+                                'Total Bases': b_stats.get('totalBases', 0), 
+                                'Runs': b_stats.get('runs', 0),
+                                'RBIs': b_stats.get('rbi', 0)
+                            }
+                except Exception as box_err:
+                    print(f"  ❌ Błąd pobierania statystyk dla {away_t} @ {home_t}: {box_err}")
             else:
                 print(f"  ⏳ {away_t} @ {home_t} -> Mecz jeszcze trwa (Status: {m['status']['abstractGameState']})")
                 
@@ -141,7 +149,7 @@ def rozlicz_wczorajsze_typy_mlb():
             return
             
     except Exception as e:
-        print(f"❌ Błąd Pobierania Wyników MLB: {e}")
+        print(f"❌ Błąd Pobierania Terminarza MLB: {e}")
         return
             
     wygrane = przegrane = zwroty = profit = 0
@@ -160,7 +168,6 @@ def rozlicz_wczorajsze_typy_mlb():
         rynek = typ['rynek']
         linia = typ['linia']
         
-        # 🧠 Zaawansowane wyszukiwanie (np. gdy API zwraca "Nick Hoerner" a my mamy "Nico Hoerner")
         znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if zaw == k or zaw in k or k in zaw), None)
         if not znaleziony_zaw:
             zaw_parts = zaw.split()
