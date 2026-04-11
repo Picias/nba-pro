@@ -51,14 +51,19 @@
         .cat-title { font-size: 0.75rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;}
         .cat-val { font-size: 1.1rem; font-weight: 900; color: var(--text-color); margin-top: 3px;}
 
-        /* NOWE STYLE DLA DETALI AUDYTORA */
         .audytor-details-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--hover-bg); border: 1px dashed var(--border-color); color: var(--muted-text); border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; transition: 0.2s; text-align: center; }
         .audytor-details-btn:hover { background: var(--border-color); color: var(--text-color); }
-        .audytor-details-panel { display: none; margin-top: 15px; max-height: 350px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); }
+        .audytor-details-panel { display: none; margin-top: 15px; max-height: 450px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); }
         .audytor-details-panel.open { display: block; }
+        
+        /* FILTRY W AUDYTORZE */
+        .audytor-filters-bar { display: flex; gap: 10px; padding: 12px; background: var(--card-bg); border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 5; flex-wrap: wrap;}
+        .audytor-filters-bar input, .audytor-filters-bar select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none;}
+        .audytor-filters-bar input { flex: 1; min-width: 150px; }
+        
         .details-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
         .details-table th, .details-table td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); }
-        .details-table th { position: sticky; top: 0; background: var(--card-bg); font-weight: 800; color: var(--muted-text); text-transform: uppercase; z-index: 2; }
+        .details-table th { position: sticky; top: 48px; background: var(--card-bg); font-weight: 800; color: var(--muted-text); text-transform: uppercase; z-index: 2; }
         .details-table tr:hover { background: var(--hover-bg); }
         .status-win { color: #10b981; font-weight: 900; }
         .status-loss { color: #ef4444; font-weight: 900; }
@@ -242,6 +247,29 @@
 
         <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
         <div class="audytor-details-panel" id="audytorDetailsPanel">
+            
+            <div class="audytor-filters-bar">
+                <input type="text" id="audytorSearch" placeholder="Szukaj zawodnika...">
+                <select id="audytorMarket">
+                    <option value="all">Wszystkie rynki</option>
+                    <option value="Hits">Hits</option>
+                    <option value="Home Runs">Home Runs</option>
+                    <option value="Total Bases">Total Bases</option>
+                    <option value="Runs">Runs</option>
+                    <option value="RBIs">RBIs</option>
+                    <option value="K's">Strikeouty (K's)</option>
+                    <option value="PTS">Punkty (NBA)</option>
+                    <option value="REB">Zbiórki (NBA)</option>
+                    <option value="AST">Asysty (NBA)</option>
+                </select>
+                <select id="audytorStatus">
+                    <option value="all">Każdy status</option>
+                    <option value="WYGRANA">✅ Wygrane</option>
+                    <option value="PRZEGRANA">❌ Przegrane</option>
+                    <option value="ZWROT">➖ Zwroty</option>
+                </select>
+            </div>
+
             <table class="details-table">
                 <thead>
                     <tr>
@@ -425,6 +453,34 @@
             }
         }
 
+        // LOGIKA FILTROWANIA AUDYTORA
+        function filterAuditorDetails() {
+            let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
+            let marketFilter = document.getElementById('audytorMarket').value;
+            let statusFilter = document.getElementById('audytorStatus').value;
+            
+            let rows = document.querySelectorAll('#audytorDetailsBody tr');
+            rows.forEach(row => {
+                let playerName = row.cells[0].innerText.toLowerCase();
+                let marketName = row.cells[1].innerText; 
+                let statusText = row.cells[4].innerText;
+                
+                let nameMatch = playerName.includes(nameFilter);
+                let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
+                let statusMatch = (statusFilter === 'all') || statusText.includes(statusFilter);
+                
+                if (nameMatch && marketMatch && statusMatch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('audytorSearch').addEventListener('input', filterAuditorDetails);
+        document.getElementById('audytorMarket').addEventListener('change', filterAuditorDetails);
+        document.getElementById('audytorStatus').addEventListener('change', filterAuditorDetails);
+
         async function wczytajAudytora() {
             document.getElementById('audytor-hitrate').textContent = '--';
             document.getElementById('audytor-roi').textContent = '--';
@@ -491,6 +547,12 @@
 
                 const detailsBody = document.getElementById('audytorDetailsBody');
                 detailsBody.innerHTML = '';
+                
+                // Reset filtrów po przełączeniu sportu/widoku
+                document.getElementById('audytorSearch').value = '';
+                document.getElementById('audytorMarket').value = 'all';
+                document.getElementById('audytorStatus').value = 'all';
+
                 if(wczoraj.detale && wczoraj.detale.length > 0) {
                     wczoraj.detale.forEach(d => {
                         let statusClass = 'status-push';
@@ -607,7 +669,7 @@
             let headers = ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
             let csvRows = [headers.join(",")];
             globalData.forEach(d => {
-                let true_prob = (((d.ev + 1) / (parseFloat(d.kurs) || 1.90)) * 100).toFixed(1);
+                let true_prob = (d.true_prob * 100).toFixed(1);
                 let ev = (d.ev * 100).toFixed(1);
                 let row = [
                     `"${d.zawodnik}"`, `"${d.mecz}"`, `"${d.rynek}"`, `"${d.typ}"`, 
@@ -762,10 +824,9 @@
         function renderTable(data) {
             const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
             
-                    data.forEach((item, index) => {
-                let true_prob = item.true_prob; // Czyste czytanie szansy z bota!
+            data.forEach((item, index) => {
+                let true_prob = item.true_prob;
                 
-                // Twarde czytanie etykiet prosto z pliku JSON
                 let isValueBet = item.is_value === true;
                 let isSafeBet = item.is_safe === true;
                 let isStable = item.is_stable === true;
