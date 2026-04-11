@@ -589,12 +589,138 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     }, "OK"
 
 # ==========================================
+# 📊 MODUŁ STATYSTYK DRUŻYNOWYCH (SMART CACHE)
+# ==========================================
+def generuj_pelny_raport_druzynowy_nba():
+    plik_raportu = 'nba_teams.json'
+    plik_cache = 'nba_season_cache.json'
+    
+    # 🛑 BEZPIECZNIK: Wykonaj tylko raz dziennie
+    if os.path.exists(plik_raportu):
+        mod_time = datetime.fromtimestamp(os.path.getmtime(plik_raportu))
+        if mod_time.strftime('%Y-%m-%d') == datetime.now().strftime('%Y-%m-%d'):
+            return 
+
+    print("\n📊 Generowanie ZAAWANSOWANEGO raportu NBA (Statystyki z całego sezonu)...")
+    inicjalizuj_druzyny()
+    
+    try:
+        with open(plik_cache, 'r', encoding='utf-8') as f: cache_meczow = json.load(f)
+    except:
+        cache_meczow = {}
+
+    try:
+        res = requests.get(f"https://v2.nba.api-sports.io/games?season={SEZON_NBA}", headers=HEADERS_SPORTS).json()
+        wszystkie_mecze = [m for m in res.get('response', []) if m['status']['long'] == 'Finished']
+    except Exception as e:
+        print(f"❌ Błąd pobierania terminarza: {e}")
+        return
+
+    brakujace_id = [str(m['id']) for m in wszystkie_mecze if str(m['id']) not in cache_meczow]
+
+    if brakujace_id:
+        print(f"🔄 Pobieram szczegóły dla {len(brakujace_id)} nowych meczów (Smart Cache)...")
+        for i, g_id in enumerate(brakujace_id):
+            if i > 0 and i % 50 == 0: print(f"  -> Pobrano {i} z {len(brakujace_id)}...")
+            time.sleep(0.05) 
+            try:
+                s_res = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&game={g_id}", headers=HEADERS_SPORTS).json()
+                dane = s_res.get('response', [])
+                teams_stats = {}
+                
+                for z in dane:
+                    t_id = str(z['team']['id'])
+                    if t_id not in teams_stats:
+                        teams_stats[t_id] = {'pts': 0, 'reb': 0, 'ast': 0, '3pm': 0, '3pa': 0, 'fta': 0, 'fouls': 0, 'fga': 0, 'tov': 0, 'min': 0.0}
+
+                    minuty = parse_min(z.get('min', '0'))
+                    if minuty > 0:
+                        teams_stats[t_id]['min'] += minuty
+                        teams_stats[t_id]['pts'] += z.get('points', 0) or 0
+                        teams_stats[t_id]['reb'] += z.get('totReb', 0) or 0
+                        teams_stats[t_id]['ast'] += z.get('assists', 0) or 0
+                        teams_stats[t_id]['3pm'] += z.get('tpm', 0) or 0
+                        teams_stats[t_id]['3pa'] += z.get('tpa', 0) or 0
+                        teams_stats[t_id]['fta'] += z.get('fta', 0) or 0
+                        teams_stats[t_id]['fga'] += z.get('fga', 0) or 0
+                        teams_stats[t_id]['tov'] += z.get('turnovers', 0) or 0
+                        teams_stats[t_id]['fouls'] += (z.get('pfouls', 0) or z.get('fouls', 0) or 0)
+
+                if len(teams_stats) == 2:
+                    cache_meczow[g_id] = teams_stats
+
+            except: pass
+
+        with open(plik_cache, 'w', encoding='utf-8') as f:
+            json.dump(cache_meczow, f)
+
+    # 🧮 AGREGACJA WYNIKÓW
+    druzyny_sumy = {str(tid): {'games':0, 'pts':0, 'reb':0, 'ast':0, '3pm':0, '3pa':0, 'fta':0, 'pace':0,
+                               'opp_pts':0, 'opp_reb':0, 'opp_ast':0, 'opp_3pm':0, 'opp_3pa':0, 'opp_fta':0, 'opp_fouls':0}
+                    for tid in NBA_TEAMS.values()}
+
+    for g_id, data in cache_meczow.items():
+        t_keys = list(data.keys())
+        if len(t_keys) != 2: continue
+        t1, t2 = t_keys[0], t_keys[1]
+
+        for team_id, opp_id in [(t1, t2), (t2, t1)]:
+            if team_id in druzyny_sumy and opp_id in data:
+                druzyny_sumy[team_id]['games'] += 1
+                druzyny_sumy[team_id]['pts'] += data[team_id]['pts']
+                druzyny_sumy[team_id]['reb'] += data[team_id]['reb']
+                druzyny_sumy[team_id]['ast'] += data[team_id]['ast']
+                druzyny_sumy[team_id]['3pm'] += data[team_id]['3pm']
+                druzyny_sumy[team_id]['3pa'] += data[team_id]['3pa']
+                druzyny_sumy[team_id]['fta'] += data[team_id]['fta']
+                druzyny_sumy[team_id]['pace'] += data[team_id]['fga'] + (0.44 * data[team_id]['fta']) + data[team_id]['tov']
+
+                druzyny_sumy[team_id]['opp_pts'] += data[opp_id]['pts']
+                druzyny_sumy[team_id]['opp_reb'] += data[opp_id]['reb']
+                druzyny_sumy[team_id]['opp_ast'] += data[opp_id]['ast']
+                druzyny_sumy[team_id]['opp_3pm'] += data[opp_id]['3pm']
+                druzyny_sumy[team_id]['opp_3pa'] += data[opp_id]['3pa']
+                druzyny_sumy[team_id]['opp_fta'] += data[opp_id]['fta']
+                druzyny_sumy[team_id]['opp_fouls'] += data[opp_id]['fouls']
+
+    raport_finalny = []
+    for nazwa, tid in NBA_TEAMS.items():
+        s = druzyny_sumy.get(str(tid))
+        if not s or s['games'] == 0: continue
+        g = s['games']
+        raport_finalny.append({
+            "Zespol": nazwa,
+            "Mecze": g,
+            "Pace": round(s['pace']/g, 1),
+            "Zdobyte_PTS": round(s['pts']/g, 1),
+            "Zdobyte_REB": round(s['reb']/g, 1),
+            "Zdobyte_AST": round(s['ast']/g, 1),
+            "Zdobyte_3PM": round(s['3pm']/g, 1),
+            "Zdobyte_FTA": round(s['fta']/g, 1),
+            "Tracone_PTS": round(s['opp_pts']/g, 1),
+            "Tracone_REB": round(s['opp_reb']/g, 1),
+            "Tracone_AST": round(s['opp_ast']/g, 1),
+            "Tracone_3PM": round(s['opp_3pm']/g, 1),
+            "Tracone_3PA": round(s['opp_3pa']/g, 1),
+            "Tracone_FTA": round(s['opp_fta']/g, 1),
+            "Wymuszone_Faule": round(s['opp_fouls']/g, 1)
+        })
+
+    if raport_finalny:
+        raport_finalny = sorted(raport_finalny, key=lambda x: x['Zespol'])
+        with open(plik_raportu, 'w', encoding='utf-8') as f:
+            json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
+        print("✅ Zapisano kompletne statystyki drużynowe NBA (Cały Sezon)!")
+        wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych NBA")
+
+# ==========================================
 # GŁÓWNA PĘTLA
 # ==========================================
 def uruchom_system_pro():
     inicjalizuj_druzyny()
     rozlicz_wczorajsze_typy()
     pobierz_dzisiejsze_kontuzje() 
+    generuj_pelny_raport_druzynowy_nba() # 🚀 GENERATOR STATYSTYK DRUŻYNOWYCH
     
     try:
         with open(SMART_MONEY_FILE, 'r') as f: 
@@ -790,7 +916,7 @@ def uruchom_system_pro():
 
 if __name__ == "__main__":
     print("==================================================")
-    print("🚀 START: QUANT AI BOTS (NBA PRO v14.0 PLAYOFF EDITION)")
+    print("🚀 START: QUANT AI BOTS (NBA PRO v14.1 PLAYOFF EDITION + TEAM STATS)")
     print("==================================================")
     
     start = time.time()
@@ -801,7 +927,7 @@ if __name__ == "__main__":
         with open('nba.json', 'w', encoding='utf-8') as f: json.dump(final_data, f, ensure_ascii=False, indent=4)
         print("\n💾 SUKCES: Zapisano plik 'nba.json' na Twoim dysku!")
         
-        wyslij_plik_na_githuba('nba.json', "Update NBA (v14.0 Playoff Edition)")
+        wyslij_plik_na_githuba('nba.json', "Update NBA (v14.1 Playoff Edition)")
         print("🌐 Wysłano aktualizację JSON na stronę GitHuba!")
         
         top = [t for t in final_data if t['ev'] > 0.05 and t['true_prob'] > 0.55][:5]
