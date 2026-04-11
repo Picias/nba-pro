@@ -122,7 +122,8 @@ def generuj_pelny_raport_druzynowy_mlb():
                 "Zdobyte_HR": st.get('homeRuns', 0),
                 "Ofensywa_AVG": st.get('avg', '.000'),
                 "Ofensywa_OPS": st.get('ops', '.000'),
-                "Ofensywa_K": st.get('strikeOuts', 0)
+                "Ofensywa_K": st.get('strikeOuts', 0),
+                "Ofensywa_BB": st.get('baseOnBalls', 0)
             }
             
     if stats_p and stats_p[0].get('splits'):
@@ -138,9 +139,6 @@ def generuj_pelny_raport_druzynowy_mlb():
             baa_str = st.get('avg', '.000')
             if baa_str == '.---': baa_str = '.000'
             
-            # Nowość: Statystyka uosabiająca "kruchość" Bullpenu
-            blown_saves = st.get('blownSaves', 0)
-            
             druzyny_dane[t_name].update({
                 "Obrona_ERA": era_str,
                 "Obrona_WHIP": whip_str,
@@ -148,7 +146,8 @@ def generuj_pelny_raport_druzynowy_mlb():
                 "Tracone_HR": st.get('homeRuns', 0),
                 "Oddane_Walks": st.get('baseOnBalls', 0),
                 "Miotacze_K": st.get('strikeOuts', 0),
-                "Blown_Saves": blown_saves
+                "Blown_Saves": st.get('blownSaves', 0),
+                "Udane_Saves": st.get('saves', 0)
             })
 
     raport_finalny = list(druzyny_dane.values())
@@ -158,7 +157,7 @@ def generuj_pelny_raport_druzynowy_mlb():
             json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
         print("✅ Zapisano kompletne statystyki drużynowe MLB (Cały Sezon)!")
         wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych MLB")
-
+        
 # ==========================================
 # 📊 AUDYTOR MLB (AUTO-ROZLICZANIE)
 # ==========================================
