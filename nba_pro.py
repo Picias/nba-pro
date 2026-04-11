@@ -44,6 +44,10 @@ CACHE_GAME_STATS = {}
 CACHE_INJURIES = {}
 NBA_TEAMS = {}
 
+# Średnie Ligowe do wyliczania siły stref:
+L_AVG_3PM = 12.8
+L_AVG_REB = 43.5
+
 # ==========================================
 # FUNKCJE POMOCNICZE
 # ==========================================
@@ -321,7 +325,8 @@ def pobierz_staty_meczu_global(game_id):
         return teams
     except: return None
 
-def pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
+# 🚀 NOWOŚĆ: Pobiera DvP oraz dokładne statystyki zespołu przeciwnika!
+def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
     cache_key = f"{opp_team_id}_{pozycja}_{stat_key}_{is_leader}"
     if cache_key in CACHE_DVP: return CACHE_DVP[cache_key]
     time.sleep(0.02)
@@ -332,14 +337,16 @@ def pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
         'C': {'PTS': 14.0, 'REB': 9.0, 'AST': 2.0, '3PM': 0.3, 'PRA': 25.0}
     }
     poz_baza = bazy.get(pozycja, bazy['F'])
-    domyslne = poz_baza.get(stat_key, 10.0)
+    domyslne_dvp = poz_baza.get(stat_key, 10.0)
     
     try:
         res_games = requests.get(f"https://v2.nba.api-sports.io/games?team={opp_team_id}&season={SEZON_NBA}", headers=HEADERS_SPORTS).json()
         mecze_zakonczone = sorted([m for m in res_games.get('response', []) if m['status']['long'] == 'Finished'], key=lambda x: x['date']['start'])
-    except: return domyslne 
+    except: return domyslne_dvp, L_AVG_3PM, L_AVG_REB 
     
     suma_stat = 0; przeanalizowane = 0
+    total_3pm = 0; total_reb = 0
+    
     for mecz in reversed(mecze_zakonczone):
         if przeanalizowane >= limit_meczow: break
         game_id = mecz['id']
@@ -348,21 +355,33 @@ def pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
         try:
             res_stats = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&game={game_id}", headers=HEADERS_SPORTS).json()
             gracze_na_pozycji = []
+            game_3pm = 0; game_reb = 0
+            
             for z in res_stats.get('response', []):
+                # Zliczamy sumaryczne trójki i zbiórki przeciwników (czyli to, na co pozwala analizowana obrona)
                 if z['team']['id'] == opp_id:
+                    game_3pm += get_stat_val(z, '3PM')
+                    game_reb += get_stat_val(z, 'REB')
+                    
                     pos = z.get('pos'); minuty = parse_min(z.get('min'))
                     if pos and pozycja in pos and minuty > 5.0:
                         val = get_stat_val(z, stat_key)
                         gracze_na_pozycji.append({'val': val or 0, 'min': minuty})
+                        
             if gracze_na_pozycji:
                 gracze_na_pozycji.sort(key=lambda x: x['min'], reverse=True)
                 suma_stat += gracze_na_pozycji[0]['val'] if is_leader else (gracze_na_pozycji[1]['val'] if len(gracze_na_pozycji) > 1 else gracze_na_pozycji[0]['val'])
+                total_3pm += game_3pm
+                total_reb += game_reb
                 przeanalizowane += 1
         except: continue
             
-    wynik_dvp = round(suma_stat / przeanalizowane, 1) if przeanalizowane > 0 else domyslne
-    CACHE_DVP[cache_key] = wynik_dvp
-    return wynik_dvp
+    wynik_dvp = round(suma_stat / przeanalizowane, 1) if przeanalizowane > 0 else domyslne_dvp
+    avg_3pm = total_3pm / przeanalizowane if przeanalizowane > 0 else L_AVG_3PM
+    avg_reb = total_reb / przeanalizowane if przeanalizowane > 0 else L_AVG_REB
+    
+    CACHE_DVP[cache_key] = (wynik_dvp, avg_3pm, avg_reb)
+    return CACHE_DVP[cache_key]
 
 def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_team_id, linia, data_dzis, team_spread, game_total, is_home_game):
     cache_key = f"stats_{player_id}"
@@ -420,6 +439,10 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     true_l5_mins = [m if abs(m - season_avg_min) <= 8 else season_avg_min for m in l5_mins_raw]
     avg_min_l5 = sum(true_l5_mins) / len(true_l5_mins) if true_l5_mins else 30.0
     is_leader = True if season_avg_min >= 26.0 else False
+    
+    # 🔥 PLAYOFF MINUTES BUMP (Dla Starterów)
+    if is_leader:
+        avg_min_l5 = min(42.0, avg_min_l5 * 1.08)
 
     dzis_date = datetime.strptime(data_dzis, '%Y-%m-%d')
     prev_dates = []
@@ -495,10 +518,11 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
                 korekta_kontuzji = max(0.8, min(1.3, ratio))
                 on_off_text = f" (Śr. bez niego: {round(on_off_avg, 1)})"
             
-    
     avg_usg = round(sum(usg_list) / len(usg_list), 1) if usg_list else 20.0
     avg_pace = round(sum(pace_list) / len(pace_list), 1) if pace_list else 100.0
-    dvp = pobierz_dvp(opp_team_id, pozycja, stat_key, is_leader)
+    
+    # 🎯 ROZPAKOWANIE ZAAWANSOWANEJ OBRONY
+    dvp, opp_3pm_allowed, opp_reb_allowed = pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader)
     
     standardy_ligowe = {
         'G': {'PTS': 16.0, 'REB': 4.0, 'AST': 5.0, '3PM': 1.5, 'PRA': 25.0}, 
@@ -512,7 +536,18 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     roznica_w_procentach = (dvp - baza_dvp) / baza_dvp if baza_dvp > 0 else 0
     korekta_dvp = max(0.94, min(1.06, 1.0 + (roznica_w_procentach * 0.10)))
     
-    projekcja_finalna = max(0.0, proj_baza * korekta_dvp * korekta_kontuzji * fatigue_multi * blowout_multi)
+    # 🧱 ZAAWANSOWANE STREFY RZUTÓW (Playoff Update)
+    korekta_strefy = 1.0
+    strefa_txt = ""
+    
+    if stat_key == '3PM' or (stat_key == 'PTS' and pozycja == 'G'):
+        korekta_strefy = max(0.92, min(1.08, opp_3pm_allowed / L_AVG_3PM))
+        strefa_txt = f" | 🎯 Obrona 3PT: Tracą {round(opp_3pm_allowed, 1)} trójek"
+    elif stat_key == 'REB' or (stat_key == 'PTS' and pozycja in ['C', 'F']):
+        korekta_strefy = max(0.92, min(1.08, opp_reb_allowed / L_AVG_REB))
+        strefa_txt = f" | 🧱 Pomalowane: Tracą {round(opp_reb_allowed, 1)} zbiórek"
+    
+    projekcja_finalna = max(0.0, proj_baza * korekta_dvp * korekta_strefy * korekta_kontuzji * fatigue_multi * blowout_multi)
     
     y_train = y[-15:]
     std_dev = math.sqrt(sum((x - (sum(y_train) / len(y_train))) ** 2 for x in y_train) / (len(y_train) - 1)) if len(y_train) > 1 else 2.0
@@ -528,7 +563,8 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     
     split_avg = round(sum(split_stats)/len(split_stats), 1) if split_stats else 0.0
     
-    uwagi_txt = f"USG: {avg_usg}% | Tempo: {avg_pace}"
+    uwagi_txt = f"USG: {avg_usg}% | Tempo: {avg_pace}{strefa_txt}"
+    if is_leader: uwagi_txt += " | 🔥 Playoff Mins"
     if is_b2b: uwagi_txt += " | 😴 ZMĘCZENIE (B2B)"
     if is_blowout: uwagi_txt += f" | 🚨 BLOWOUT RISK"
     if absencje_wplywajace:
@@ -544,7 +580,7 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
         "projekcja": round(projekcja_finalna, 1),
         "std_dev": std_dev,
         "history": l10_stats,
-        "all_stats": wszystkie_statystyki, # Zwracamy całość do wyliczenia pokrycia L5/L10 zależnie od typu
+        "all_stats": wszystkie_statystyki,
         "dvp": dvp,
         "uwagi_txt": uwagi_txt,
         "h2h_avg": h2h_avg,
@@ -680,26 +716,20 @@ def uruchom_system_pro():
 
                                 if true_prob <= 0.55: continue
 
-                                # 🚀 ZMIANA: Dynamiczne pokrycie linii w zależności od typu!
                                 all_s = s['all_stats']
                                 if typ == "OVER":
                                     pokrycie_l5 = int((sum(1 for x in all_s[-5:] if x > linia) / 5) * 100) if len(all_s) >= 5 else 0
                                     pokrycie_l10 = int((sum(1 for x in all_s[-10:] if x > linia) / 10) * 100) if len(all_s) >= 10 else 0
                                     pokrycie_sezon = int((sum(1 for x in all_s if x > linia) / len(all_s)) * 100) if all_s else 0
-                                    
-                                    # OVER: Zła obrona rywala (wysokie DvP) to zielony Matchup
                                     m_color = "rank-green" if s['dvp'] > linia else "rank-red"
                                 else:
                                     pokrycie_l5 = int((sum(1 for x in all_s[-5:] if x < linia) / 5) * 100) if len(all_s) >= 5 else 0
                                     pokrycie_l10 = int((sum(1 for x in all_s[-10:] if x < linia) / 10) * 100) if len(all_s) >= 10 else 0
                                     pokrycie_sezon = int((sum(1 for x in all_s if x < linia) / len(all_s)) * 100) if all_s else 0
-                                    
-                                    # UNDER: Elitarna obrona rywala (niskie DvP) to zielony Matchup
                                     m_color = "rank-green" if s['dvp'] < linia else "rank-red"
                                 
                                 ostateczne_uwagi = s['uwagi_txt'] + sm_text
                                 
-                                # 🏷️ TRWAŁE ZNAKOWANIE
                                 is_value_bet = ev_val >= 0.04
                                 is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
                                 
@@ -708,7 +738,6 @@ def uruchom_system_pro():
                                     mean = sum(s['history']) / len(s['history'])
                                     if mean > 0:
                                         cv = s['std_dev'] / mean
-                                        # 🚀 ZMIANA: Dla UNDER średnia musi być odpowiednio NIŻSZA
                                         if typ == "OVER":
                                             if cv < 0.30 and mean >= (linia * 0.75) and m_color == 'rank-green':
                                                 is_stable_bet = True
@@ -761,7 +790,7 @@ def uruchom_system_pro():
 
 if __name__ == "__main__":
     print("==================================================")
-    print("🚀 START: QUANT AI BOTS (NBA PRO v13.6 ULTIMATE)")
+    print("🚀 START: QUANT AI BOTS (NBA PRO v14.0 PLAYOFF EDITION)")
     print("==================================================")
     
     start = time.time()
@@ -772,7 +801,7 @@ if __name__ == "__main__":
         with open('nba.json', 'w', encoding='utf-8') as f: json.dump(final_data, f, ensure_ascii=False, indent=4)
         print("\n💾 SUKCES: Zapisano plik 'nba.json' na Twoim dysku!")
         
-        wyslij_plik_na_githuba('nba.json', "Update NBA (v13.6 Over/Under Fix)")
+        wyslij_plik_na_githuba('nba.json', "Update NBA (v14.0 Playoff Edition)")
         print("🌐 Wysłano aktualizację JSON na stronę GitHuba!")
         
         top = [t for t in final_data if t['ev'] > 0.05 and t['true_prob'] > 0.55][:5]
