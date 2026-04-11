@@ -192,7 +192,6 @@
         #teamStatsTable td { font-size: 0.85rem; padding: 0.8rem 0.5rem; text-align: center; font-weight: 600;}
         #teamStatsTable td:first-child { text-align: left; font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
         
-        /* FIX: Naprawa przyklejania dwurzędowego nagłówka i likwidacja rozjechanej niebieskiej linii */
         #teamStatsTable thead tr:first-child th { position: sticky; top: 0; z-index: 12; }
         #teamStatsTable thead tr:nth-child(2) th { position: sticky; top: 42px; z-index: 11; box-shadow: inset 0 1px 0 var(--border-color); }
         #teamStatsTable thead tr:first-child th:first-child { z-index: 13; left: 0; }
@@ -207,6 +206,9 @@
         
         .cell-bad { color: #ef4444; font-weight: 900;}
         .cell-good { color: #10b981; font-weight: 900;}
+
+        /* NOWOŚĆ: Tooltipy do skrótów */
+        .tooltip-abbr { cursor: help; border-bottom: 1px dotted var(--muted-text); display: inline-block; padding-bottom: 2px;}
 
         @media (max-width: 768px) {
             body { padding: 10px; }
@@ -249,7 +251,7 @@
     
     <div id="teamStatsPanel" class="team-stats-panel">
         <h2 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">📊 Statystyki Drużynowe (Sezon Zasadniczy)</h2>
-        <p style="color: var(--muted-text); font-size: 0.85rem; margin-bottom: 1rem;">Dane za cały sezon. Kolor <span class="cell-good">Zielony</span> oznacza statystykę wybitnie dobrą dla typu OVER (np. w MLB dużo Walks, w NBA dużo straconych zbiórek). Kolor <span class="cell-bad">Czerwony</span> to trudny rywal dla OVERów.</p>
+        <p style="color: var(--muted-text); font-size: 0.85rem; margin-bottom: 1rem;">Dane za cały sezon. Kolor <span class="cell-good">Zielony</span> oznacza statystykę wybitnie dobrą dla typu OVER na gracza (słaba obrona). Kolor <span class="cell-bad">Czerwony</span> to elitarna obrona (raj dla UNDERów).</p>
         
         <div class="table-container">
             <table id="teamStatsTable">
@@ -536,21 +538,21 @@
                 thead.innerHTML = `
                     <tr>
                         <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
-                        <th rowspan="2" class="sortable-team" data-sort="Pace" style="vertical-align: bottom;">TEMPO (PACE)</th>
+                        <th rowspan="2" class="sortable-team" data-sort="Pace" style="vertical-align: bottom;"><span class="tooltip-abbr" title="Tempo gry: Szacunkowa liczba posiadań w meczu. Szybkie tempo = więcej punktów.">TEMPO (PACE)</span></th>
                         <th colspan="3" class="stats-group-header">OFENSYWA (ZDOBYWANE)</th>
                         <th colspan="6" class="stats-group-header">DEFENSYWA (NA CO POZWALAJĄ RYWALE)</th>
                     </tr>
                     <tr>
-                        <th class="sortable-team" data-sort="Zdobyte_PTS">PTS</th>
-                        <th class="sortable-team" data-sort="Zdobyte_REB">REB</th>
-                        <th class="sortable-team" data-sort="Zdobyte_3PM">3PM</th>
+                        <th class="sortable-team" data-sort="Zdobyte_PTS"><span class="tooltip-abbr" title="Średnia liczba zdobytych punktów na mecz.">PTS</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_REB"><span class="tooltip-abbr" title="Średnia liczba zbiórek na mecz.">REB</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_3PM"><span class="tooltip-abbr" title="Średnia liczba trafionych rzutów za 3 punkty.">3PM</span></th>
                         
-                        <th class="sortable-team" data-sort="Tracone_PTS">Opp PTS</th>
-                        <th class="sortable-team" data-sort="Tracone_REB">Opp REB</th>
-                        <th class="sortable-team" data-sort="Tracone_AST">Opp AST</th>
-                        <th class="sortable-team" data-sort="Tracone_3PM">Opp 3PM</th>
-                        <th class="sortable-team" data-sort="Tracone_3PA">Opp 3PA</th>
-                        <th class="sortable-team" data-sort="Wymuszone_Faule">Faule Rywala</th>
+                        <th class="sortable-team" data-sort="Tracone_PTS"><span class="tooltip-abbr" title="Punkty tracone: Ile punktów obrona pozwala rzucić rywalom.">Opp PTS</span></th>
+                        <th class="sortable-team" data-sort="Tracone_REB"><span class="tooltip-abbr" title="Zbiórki oddane rywalom: Słaba obrona pod koszem to dużo oddanych zbiórek.">Opp REB</span></th>
+                        <th class="sortable-team" data-sort="Tracone_AST"><span class="tooltip-abbr" title="Asysty przeciwników: Ile asyst notują przeciwnicy przeciwko tej obronie.">Opp AST</span></th>
+                        <th class="sortable-team" data-sort="Tracone_3PM"><span class="tooltip-abbr" title="Trafione trójki przeciwników: Ważne przy typowaniu strzelców dystansowych rywala.">Opp 3PM</span></th>
+                        <th class="sortable-team" data-sort="Tracone_3PA"><span class="tooltip-abbr" title="Oddane rzuty za 3 przez rywala: Pokazuje, czy obrona zostawia wolne miejsce na obwodzie.">Opp 3PA</span></th>
+                        <th class="sortable-team" data-sort="Wymuszone_Faule"><span class="tooltip-abbr" title="Faule popełniane przez tę drużynę: Daje darmowe rzuty osobiste dla zawodników przeciwnej drużyny.">Faule Rywala</span></th>
                     </tr>
                 `;
                 
@@ -592,17 +594,17 @@
                         <th colspan="6" class="stats-group-header">DEFENSYWA (MIOTACZE I OBRONA)</th>
                     </tr>
                     <tr>
-                        <th class="sortable-team" data-sort="Zdobyte_Runs">Runs</th>
-                        <th class="sortable-team" data-sort="Zdobyte_HR">HR</th>
-                        <th class="sortable-team" data-sort="Ofensywa_AVG">AVG</th>
-                        <th class="sortable-team" data-sort="Ofensywa_OPS">OPS</th>
+                        <th class="sortable-team" data-sort="Zdobyte_Runs"><span class="tooltip-abbr" title="Zdobyte obiegi bazy (punkty).">Runs</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_HR"><span class="tooltip-abbr" title="Wybite Home Runy.">HR</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_AVG"><span class="tooltip-abbr" title="Batting Average: Skuteczność uderzeń pałkarzy w procentach.">AVG</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_OPS"><span class="tooltip-abbr" title="On-Base Plus Slugging: Ogólna, najbardziej kompletna ocena siły ataku. Powyżej .750 to elita.">OPS</span></th>
                         
-                        <th class="sortable-team" data-sort="Obrona_ERA" style="border-left: 2px solid var(--border-color);">ERA</th>
-                        <th class="sortable-team" data-sort="Obrona_WHIP">WHIP</th>
-                        <th class="sortable-team" data-sort="Obrona_BAA">BAA</th>
-                        <th class="sortable-team" data-sort="Tracone_HR">Opp HR</th>
-                        <th class="sortable-team" data-sort="Oddane_Walks">Oddane Walks</th>
-                        <th class="sortable-team" data-sort="Miotacze_K">Strikeouty</th>
+                        <th class="sortable-team" data-sort="Obrona_ERA" style="border-left: 2px solid var(--border-color);"><span class="tooltip-abbr" title="Earned Run Average: Średnia liczba punktów traconych przez miotaczy na 9 inningów. Mniej = lepiej.">ERA</span></th>
+                        <th class="sortable-team" data-sort="Obrona_WHIP"><span class="tooltip-abbr" title="Walks & Hits per Inning Pitched: Ile darmowych baz i odbić oddają w każdym inningu. Mniej = lepsza obrona.">WHIP</span></th>
+                        <th class="sortable-team" data-sort="Obrona_BAA"><span class="tooltip-abbr" title="Batting Average Against: Z jaką skutecznością przeciwnicy uderzają piłki tych miotaczy.">BAA</span></th>
+                        <th class="sortable-team" data-sort="Blown_Saves"><span class="tooltip-abbr" title="Zmarnowane Przewagi w Końcówce: Im więcej, tym gorszy i bardziej dziurawy Bullpen (zmiennicy).">Blown Saves</span></th>
+                        <th class="sortable-team" data-sort="Oddane_Walks"><span class="tooltip-abbr" title="Oddane bazy za darmo (BB): Dużo walków oznacza, że rywale łatwiej punktują (dobrze dla OVERów rywali).">Walks</span></th>
+                        <th class="sortable-team" data-sort="Miotacze_K"><span class="tooltip-abbr" title="Strikeouty Obrony: Ile razy miotacze tej drużyny wyautowali rywala bez uderzenia piłki.">K's</span></th>
                     </tr>
                 `;
 
@@ -610,14 +612,32 @@
                 let minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
                 let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0));
                 let minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
+                let maxWalks = Math.max(...data.map(d => parseFloat(d.Oddane_Walks)||0));
+                let minWalks = Math.min(...data.map(d => parseFloat(d.Oddane_Walks)||1000));
+                let maxK = Math.max(...data.map(d => parseFloat(d.Miotacze_K)||0));
+                let minK = Math.min(...data.map(d => parseFloat(d.Miotacze_K)||1000));
+                let maxBS = Math.max(...data.map(d => parseFloat(d.Blown_Saves)||0));
+                let minBS = Math.min(...data.map(d => parseFloat(d.Blown_Saves)||100));
                 
                 data.forEach(team => {
                     let tr = document.createElement('tr');
                     let wVal = parseFloat(team.Obrona_WHIP)||0;
                     let bVal = parseFloat(team.Obrona_BAA)||0;
+                    let walkVal = parseFloat(team.Oddane_Walks)||0;
+                    let kVal = parseFloat(team.Miotacze_K)||0;
+                    let bsVal = parseFloat(team.Blown_Saves)||0;
                     
                     let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
                     let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
+                    
+                    // Walks: Im więcej, tym gorzej dla drużyny, a LEPIEJ dla nas (OVER) = Zielony
+                    let walkClass = walkVal >= maxWalks * 0.90 ? 'cell-good' : (walkVal <= minWalks * 1.10 ? 'cell-bad' : '');
+                    
+                    // Strikeouty K's: Im więcej K's robi miotacz, tym GORZEJ dla nas (OVERów). Więc dużo K's = Czerwony.
+                    let kClass = kVal <= minK * 1.05 ? 'cell-good' : (kVal >= maxK * 0.95 ? 'cell-bad' : '');
+                    
+                    // Blown Saves: Im więcej, tym gorszy Bullpen. Lepiej dla nas (OVER) = Zielony
+                    let bsClass = bsVal >= maxBS * 0.85 ? 'cell-good' : (bsVal <= minBS * 1.15 ? 'cell-bad' : '');
                     
                     tr.innerHTML = `
                         <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
@@ -628,9 +648,9 @@
                         <td style="border-left: 2px solid var(--border-color);">${team.Obrona_ERA}</td>
                         <td class="${whipClass}">${team.Obrona_WHIP}</td>
                         <td class="${baaClass}">${team.Obrona_BAA}</td>
-                        <td>${team.Tracone_HR}</td>
-                        <td class="cell-good">${team.Oddane_Walks}</td>
-                        <td>${team.Miotacze_K}</td>
+                        <td class="${bsClass}">${team.Blown_Saves}</td>
+                        <td class="${walkClass}">${team.Oddane_Walks}</td>
+                        <td class="${kClass}">${team.Miotacze_K}</td>
                     `;
                     tbody.appendChild(tr);
                 });
