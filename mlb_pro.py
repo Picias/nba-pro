@@ -30,6 +30,7 @@ CACHE_TEAM_K_RATE = {}
 CACHE_TEAM_ERA = {}
 CACHE_ROSTERS = {}
 CACHE_PITCHER_STATS = {}
+CACHE_BULLPEN_FATIGUE = {}
 
 LEAGUE_AVG_K_RATE = 0.225 
 LEAGUE_AVG_ERA = 4.20
@@ -74,7 +75,7 @@ def poisson_prob_over(lam, line):
     prob_under = 0.0
     for k in range(k_max + 1):
         prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
-    return 1.0 - prob_under 
+    return 1.0 - prob_under
 
 # ==========================================
 # 📊 AUDYTOR MLB (AUTO-ROZLICZANIE)
@@ -219,7 +220,6 @@ def rozlicz_wczorajsze_typy_mlb():
 # 1. POBIERANIE DANYCH MLB
 # ==========================================
 def pobierz_oficjalny_terminarz_mlb(data_str):
-    print(f"⚾ Pobieram kalendarz i składy na {data_str}...")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_str}&hydrate=probablePitcher,lineups"
     headers = {'User-Agent': 'Mozilla/5.0'}
     baza_mlb = {}
@@ -243,6 +243,39 @@ def pobierz_oficjalny_terminarz_mlb(data_str):
                 }
     except: pass
     return baza_mlb
+
+def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
+    """Sprawdza, ile meczów rozegrała drużyna w ciągu ostatnich 72 godzin."""
+    if team_id in CACHE_BULLPEN_FATIGUE: return CACHE_BULLPEN_FATIGUE[team_id]
+    
+    dzis = datetime.strptime(data_dzis_str, '%Y-%m-%d')
+    start_date = (dzis - timedelta(days=3)).strftime('%Y-%m-%d')
+    end_date = (dzis - timedelta(days=1)).strftime('%Y-%m-%d')
+    
+    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={team_id}&startDate={start_date}&endDate={end_date}"
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    
+    rozegrane_mecze = 0
+    try:
+        res = requests.get(url, headers=headers, timeout=5).json()
+        for d in res.get('dates', []):
+            for g in d.get('games', []):
+                if g['status']['statusCode'] in ['F', 'O', 'C']:
+                    rozegrane_mecze += 1
+    except: pass
+
+    # Modyfikator dla pałkarzy grających PRZECIWKO temu bullpenowi
+    if rozegrane_mecze >= 4:
+        bonus = 1.08; msg = "🥵 Bullpen ZAJECHANY (4+ mecze w 72h) (+8%)."
+    elif rozegrane_mecze == 3:
+        bonus = 1.04; msg = "🥱 Bullpen zmęczony (3 mecze w 72h) (+4%)."
+    elif rozegrane_mecze <= 1:
+        bonus = 0.97; msg = "🔋 Bullpen wypoczęty (0-1 mecz w 72h) (-3%)."
+    else:
+        bonus = 1.0; msg = ""
+        
+    CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
+    return CACHE_BULLPEN_FATIGUE[team_id]
 
 def pobierz_statystyki_druzyn_mlb():
     global LEAGUE_AVG_K_RATE, LEAGUE_AVG_ERA
@@ -351,7 +384,7 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v4.7 (Over/Under Logic Fix)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v4.9 (Bullpen 72h)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -414,9 +447,17 @@ def uruchom_mlb_pro():
                 if mkt['key'] not in rynek_map: continue
                 nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[mkt['key']]
                 
+                player_odds = {}
                 for oc in mkt['outcomes']:
-                    if oc['name'] != 'Over': continue
-                    p_name = oc['description']; linia = oc['point']; kurs = oc['price']
+                    p_name = oc['description']
+                    if p_name not in player_odds: 
+                        player_odds[p_name] = {'Over': 1.85, 'Under': 1.85, 'point': oc.get('point', 0.5)}
+                    player_odds[p_name][oc['name']] = oc['price']
+                
+                for p_name, d_odds in player_odds.items():
+                    linia = d_odds['point']
+                    kurs_over = d_odds['Over']
+                    kurs_under = d_odds['Under']
                     
                     if mlb_stat_key == 'totalBases': linia = 1.5
                     elif mlb_stat_key == 'hits': linia = 0.5
@@ -494,10 +535,14 @@ def uruchom_mlb_pro():
                         opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
                         era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
                         
-                        korekta *= (baa_korekta * era_korekta)
+                        # 💥 ZMĘCZENIE BULLPENU (72h)
+                        bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
+                        
+                        korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
                         
                         uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
-                        uwagi += f" 🛡️ Bullpen ERA: {round(opp_era, 2)}."
+                        uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
+                        if bullpen['uwaga']: uwagi += f" {bullpen['uwaga']}"
                         
                         pf = PARK_FACTORS.get(ev['home_team'], 1.0)
                         if mlb_stat_key == 'homeRuns': pf = ((pf - 1.0) * 1.5) + 1.0 
@@ -523,6 +568,7 @@ def uruchom_mlb_pro():
                     
                     typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
                     true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
+                    kurs_final = kurs_over if typ == "OVER" else kurs_under
                     
                     is_hr = (mlb_stat_key == 'homeRuns')
                     min_prob = 0.15 if is_hr else 0.55
@@ -531,13 +577,12 @@ def uruchom_mlb_pro():
                         print(f"  ❌ Odrzucono (Szansa): {p_name:<20} | {nazwa_rynku_pl:<14} | Szansa: {round(true_prob*100,1)}%")
                         continue
                     
-                    ev_val = (true_prob * (kurs if typ == "OVER" else 1.85)) - 1.0
+                    ev_val = (true_prob * kurs_final) - 1.0 
                     
                     if is_hr and ev_val < 0.05:
                         print(f"  ❌ Odrzucono (Złe EV) : {p_name:<20} | {nazwa_rynku_pl:<14} | EV: {round(ev_val*100,1)}%")
                         continue
                     
-                    # 🚀 NAPRAWA LOGIKI OVER/UNDER W HISTORII
                     if typ == "OVER":
                         pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
                         pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
@@ -546,6 +591,7 @@ def uruchom_mlb_pro():
                         pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
                         pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
                         pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
+                        m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
                     
                     if is_hr:
                         is_value_bet = ev_val >= 0.15 
@@ -563,7 +609,7 @@ def uruchom_mlb_pro():
                     wyniki.append({
                         "zawodnik": p_name, "mecz": m_str, "data": DATA_DZIS, "rynek": nazwa_rynku_pl,
                         "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
-                        "ev": round(ev_val, 3), "typ": typ, "kurs": kurs,
+                        "ev": round(ev_val, 3), "typ": typ, "kurs": kurs_final,
                         "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%",
                         "sezon": f"{pokrycie_sezon}%", "history": vals[-10:],
                         "uwagi": uwagi, "lokacja": "DOM" if is_today_home else "WYJ", "matchup_rank": m_rank,
@@ -577,12 +623,12 @@ def uruchom_mlb_pro():
     print(f"\n✅ Zakończono! Zapisano {len(wyniki)} typów.")
     top = [t for t in wyniki if t['ev'] > 0.05 and t['true_prob'] > 0.50][:5]
     if top:
-        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v4.7)</b> 🚨\n\n"
+        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v4.9)</b> 🚨\n\n"
         for t in top: 
             msg += f"⚾ {t['zawodnik']} - {t['rynek']}\n👉 <b>{t['typ']} {t['linia']}</b> @ {t['kurs']} (EV: +{round(t['ev']*100,1)}%)\n🤖 ML: {t['projekcja']} | {t['matchup_rank']}\n📈 L10: {list(reversed(t['history']))}\n\n"
         wyslij_powiadomienie_telegram(msg)
         
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v4.7 (Over/Under Fix)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v4.9 (Bullpen 72h Fatigue)")
     return wyniki
 
 if __name__ == "__main__":
