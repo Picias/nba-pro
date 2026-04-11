@@ -75,7 +75,85 @@ def poisson_prob_over(lam, line):
     prob_under = 0.0
     for k in range(k_max + 1):
         prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
-    return 1.0 - prob_under
+    return 1.0 - prob_under 
+
+# ==========================================
+# 📊 MODUŁ STATYSTYK DRUŻYNOWYCH MLB
+# ==========================================
+def generuj_pelny_raport_druzynowy_mlb():
+    plik_raportu = 'mlb_teams.json'
+    
+    if os.path.exists(plik_raportu):
+        mod_time = datetime.fromtimestamp(os.path.getmtime(plik_raportu))
+        if mod_time.strftime('%Y-%m-%d') == datetime.now().strftime('%Y-%m-%d'):
+            return 
+
+    print("\n📊 Generowanie ZAAWANSOWANEGO raportu MLB (Statystyki drużynowe)...")
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    
+    url_hit = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R"
+    try:
+        res_h = requests.get(url_hit, headers=headers, timeout=10).json()
+        stats_h = res_h.get('stats', [])
+        if not stats_h or not stats_h[0].get('splits'):
+            res_h = requests.get(url_hit.replace(str(SEZON_MLB), str(SEZON_MLB - 1)), headers=headers, timeout=10).json()
+            stats_h = res_h.get('stats', [])
+    except: stats_h = []
+
+    url_pitch = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R"
+    try:
+        res_p = requests.get(url_pitch, headers=headers, timeout=10).json()
+        stats_p = res_p.get('stats', [])
+        if not stats_p or not stats_p[0].get('splits'):
+            res_p = requests.get(url_pitch.replace(str(SEZON_MLB), str(SEZON_MLB - 1)), headers=headers, timeout=10).json()
+            stats_p = res_p.get('stats', [])
+    except: stats_p = []
+
+    druzyny_dane = {}
+    
+    if stats_h and stats_h[0].get('splits'):
+        for t in stats_h[0]['splits']:
+            t_name = t['team']['name']
+            st = t['stat']
+            druzyny_dane[t_name] = {
+                "Zespol": t_name,
+                "Mecze": st.get('gamesPlayed', 0),
+                "Zdobyte_Runs": st.get('runs', 0),
+                "Zdobyte_HR": st.get('homeRuns', 0),
+                "Ofensywa_AVG": st.get('avg', '.000'),
+                "Ofensywa_OPS": st.get('ops', '.000'),
+                "Ofensywa_K": st.get('strikeOuts', 0)
+            }
+            
+    if stats_p and stats_p[0].get('splits'):
+        for t in stats_p[0]['splits']:
+            t_name = t['team']['name']
+            st = t['stat']
+            if t_name not in druzyny_dane: continue
+            
+            era_str = st.get('era', '0.00')
+            if era_str == '-.--': era_str = '0.00'
+            whip_str = st.get('whip', '0.00')
+            if whip_str == '-.--': whip_str = '0.00'
+            baa_str = st.get('avg', '.000')
+            if baa_str == '.---': baa_str = '.000'
+            
+            druzyny_dane[t_name].update({
+                "Obrona_ERA": era_str,
+                "Obrona_WHIP": whip_str,
+                "Obrona_BAA": baa_str,
+                "Tracone_HR": st.get('homeRuns', 0),
+                "Oddane_Walks": st.get('baseOnBalls', 0),
+                "Miotacze_K": st.get('strikeOuts', 0)
+            })
+
+    raport_finalny = list(druzyny_dane.values())
+    if raport_finalny:
+        raport_finalny = sorted(raport_finalny, key=lambda x: x['Zespol'])
+        with open(plik_raportu, 'w', encoding='utf-8') as f:
+            json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
+        print("✅ Zapisano kompletne statystyki drużynowe MLB (Cały Sezon)!")
+        wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych MLB")
 
 # ==========================================
 # 📊 AUDYTOR MLB (AUTO-ROZLICZANIE)
@@ -113,11 +191,9 @@ def rozlicz_wczorajsze_typy_mlb():
             status_code = m['status']['statusCode']
             game_id = m['gamePk']
             
-            # F = Final, O = Game Over, C = Completed Early
             if status_code in ['F', 'O', 'C'] or m['status']['abstractGameState'] == 'Final': 
                 ukonczone_mecze += 1
                 try:
-                    # TWARDE POBRANIE WYNIKÓW MECZU (100% pewności)
                     box_url = f"https://statsapi.mlb.com/api/v1/game/{game_id}/boxscore"
                     box_res = requests.get(box_url, headers=headers, timeout=5).json()
                     teams = box_res.get('teams', {})
@@ -252,7 +328,6 @@ def pobierz_oficjalny_terminarz_mlb(data_str):
     return baza_mlb
 
 def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
-    """Sprawdza, ile meczów rozegrała drużyna w ciągu ostatnich 72 godzin."""
     if team_id in CACHE_BULLPEN_FATIGUE: return CACHE_BULLPEN_FATIGUE[team_id]
     
     dzis = datetime.strptime(data_dzis_str, '%Y-%m-%d')
@@ -271,7 +346,6 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
                     rozegrane_mecze += 1
     except: pass
 
-    # Modyfikator dla pałkarzy grających PRZECIWKO temu bullpenowi
     if rozegrane_mecze >= 4:
         bonus = 1.08; msg = "🥵 Bullpen ZAJECHANY (4+ mecze w 72h) (+8%)."
     elif rozegrane_mecze == 3:
@@ -391,7 +465,7 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v4.9 (Bullpen 72h)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v5.0 (Team Stats)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -400,6 +474,7 @@ def uruchom_mlb_pro():
     
     rozlicz_wczorajsze_typy_mlb()
     pobierz_statystyki_druzyn_mlb()
+    generuj_pelny_raport_druzynowy_mlb() # 🚀 GENERATOR STATYSTYK ZESPOŁOWYCH
     baza_mlb = pobierz_oficjalny_terminarz_mlb(DATA_DZIS)
     
     try:
@@ -542,7 +617,6 @@ def uruchom_mlb_pro():
                         opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
                         era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
                         
-                        # 💥 ZMĘCZENIE BULLPENU (72h)
                         bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
                         
                         korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
@@ -630,12 +704,12 @@ def uruchom_mlb_pro():
     print(f"\n✅ Zakończono! Zapisano {len(wyniki)} typów.")
     top = [t for t in wyniki if t['ev'] > 0.05 and t['true_prob'] > 0.50][:5]
     if top:
-        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v4.9)</b> 🚨\n\n"
+        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v5.0)</b> 🚨\n\n"
         for t in top: 
             msg += f"⚾ {t['zawodnik']} - {t['rynek']}\n👉 <b>{t['typ']} {t['linia']}</b> @ {t['kurs']} (EV: +{round(t['ev']*100,1)}%)\n🤖 ML: {t['projekcja']} | {t['matchup_rank']}\n📈 L10: {list(reversed(t['history']))}\n\n"
         wyslij_powiadomienie_telegram(msg)
         
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v4.9 (Bullpen 72h Fatigue)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v5.0 (Team Stats)")
     return wyniki
 
 if __name__ == "__main__":
