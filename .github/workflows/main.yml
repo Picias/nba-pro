@@ -24,13 +24,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests scikit-learn beautifulsoup4
 
-    - name: 🏀 Uruchomienie bota NBA
-      env:
-        MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-        MY_TELEGRAM_TOKEN: ${{ secrets.MY_TELEGRAM_TOKEN }}
-        MY_ODDS_API_KEY: ${{ secrets.MY_ODDS_API_KEY }}
-        MY_SPORTS_API_KEY: ${{ secrets.MY_SPORTS_API_KEY }}
-      run: python nba_pro.py
+    #- name: 🏀 Uruchomienie bota NBA
+    #  env:
+    #    MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+    #    MY_TELEGRAM_TOKEN: ${{ secrets.MY_TELEGRAM_TOKEN }}
+    #    MY_ODDS_API_KEY: ${{ secrets.MY_ODDS_API_KEY }}
+    #    MY_SPORTS_API_KEY: ${{ secrets.MY_SPORTS_API_KEY }}
+    #  run: python nba_pro.py
 
     - name: ⚾ Uruchomienie bota MLB
       env:
