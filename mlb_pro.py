@@ -372,7 +372,6 @@ def pobierz_staty_miotacza_startowego(pitcher_id):
     CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa, 'hand': hand}
     return CACHE_PITCHER_STATS[pitcher_id]
 
-# 🎯 FIX: Zaktualizowany moduł zmęczenia Bullpenu (Doubleheadery wyłapywane bezbłędnie)
 def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
     if team_id in CACHE_BULLPEN_FATIGUE: return CACHE_BULLPEN_FATIGUE[team_id]
     dzis = datetime.strptime(data_dzis_str, '%Y-%m-%d')
@@ -395,7 +394,6 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
                 mial_doubleheader = True
     except: pass
 
-    # Jeżeli grał doubleheader w ostatnich 3 dniach, dostaje status "Zmęczony", nawet jeśli sumarycznie rozegrał mało
     if rozegrane_mecze >= 5: bonus = 1.08; msg = "🥵 BP Mega Zajechany (+8%)"
     elif rozegrane_mecze == 4 or mial_doubleheader: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)" 
     elif rozegrane_mecze <= 2: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
@@ -452,7 +450,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.4 (Smart Fatigue & Strict 55% Probs)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.5 (Fixed Missing Under Odds & Correct Thresholds)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -693,10 +691,12 @@ def uruchom_mlb_pro():
                 if best_point is None: continue
                 
                 odds_data = points_dict[best_point]
-                if not odds_data['Over'] or not odds_data['Under']: continue
+                
+                # 🎯 FIX: Zabezpieczenie przed brakiem UNDER dla Home Runów i RBIs!
+                if not odds_data['Over']: continue 
                 
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
-                avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2)
+                avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2) if odds_data['Under'] else 0.0
                 
                 linia = best_point
                 kurs_over = avg_over
@@ -845,8 +845,7 @@ def uruchom_mlb_pro():
                 ev_o = (prob_over * kurs_over) - 1.0 if kurs_over > 0 else -100
                 ev_u = (prob_under * kurs_under) - 1.0 if kurs_under > 0 else -100
                 
-                # 🎯 FIX: Zmuszamy Bota do grania OVER dla Home Runów (under HR to loteria bez zysku)
-                if is_hr:
+                if is_hr or avg_under == 0.0:
                     typ = "OVER"
                     true_prob = prob_over
                     kurs_final = kurs_over
@@ -863,11 +862,18 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
-                # 🎯 FIX: ŻELAZNY FILTR 55% DLA ZWYKŁYCH RYNKÓW, 20% DLA HOME RUNÓW!
-                min_prob = 0.20 if is_hr else 0.55 
+                # 🎯 FIX: USTALANIE PROGÓW DLA POSZCZEGÓLNYCH RYNKÓW
+                if is_hr:
+                    min_prob = 0.08
+                elif mlb_stat_key in ['runs', 'rbi']:
+                    min_prob = 0.20
+                elif mlb_stat_key == 'totalBases':
+                    min_prob = 0.35
+                else:
+                    min_prob = 0.50 
                 
                 if true_prob < min_prob: continue
-                if ev_val < 0.02: continue # Twardy wymóg: tylko typy z pozytywnym EV (>2%)
+                if ev_val < 0.02: continue 
                 
                 if typ == "OVER":
                     pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
