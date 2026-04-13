@@ -360,8 +360,14 @@
             </div>
             
             <div class="filter-group">
-                <label>Mecz</label>
-                <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
+                <label>Status (Kategoria)</label>
+                <select id="statusFilter">
+                    <option value="all">Wszystkie Typy</option>
+                    <option value="value">💰 Value Bety (>40% EV)</option>
+                    <option value="safe">🎯 Pewniaki (>75% Szans)</option>
+                    <option value="stable">🛡️ Stabilni gracze</option>
+                    <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
+                </select>
             </div>
         </div>
 
@@ -467,10 +473,12 @@
             if (isShowing) {
                 teamStatsPanel.classList.remove('active');
                 mainPicksContainer.style.display = 'block';
+                document.querySelector('.filters').style.display = 'flex'; // ZABEZPIECZENIE (Pokazuje filtry po wyjściu)
                 toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
             } else {
                 teamStatsPanel.classList.add('active');
                 mainPicksContainer.style.display = 'none';
+                document.querySelector('.filters').style.display = 'none'; // ZABEZPIECZENIE (Ukrywa filtry)
                 toggleTeamStatsBtn.innerText = '🔙 Wróć do Typów';
                 loadTeamStats();
             }
@@ -1326,44 +1334,48 @@
         }
         
         function applyFilters() { 
-            let s = document.getElementById('searchFilter').value.toLowerCase(), 
-                g = document.getElementById('gameFilter').value, 
-                m = document.getElementById('marketFilter').value, 
-                p = document.getElementById('pickFilter').value, 
-                stat = document.getElementById('statusFilter').value,
-                role = document.getElementById('roleFilter').value; 
-            
-            let minO = parseFloat(document.getElementById('minOddsFilter').value.replace(',', '.')) || 0;
-            let maxO = parseFloat(document.getElementById('maxOddsFilter').value.replace(',', '.')) || 0;
-
-            let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
-
-            document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
-                let matchStatus = true; 
-                if (!isGames) {
-                    if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
-                    if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
-                    if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
-                    if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
-                }
-
-                if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
-                    let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
-                    let itemRole = isPitcher ? 'pitcher' : 'batter';
-                    if (itemRole !== role) matchStatus = false;
-                }
+            try {
+                let s = document.getElementById('searchFilter').value.toLowerCase(), 
+                    g = document.getElementById('gameFilter').value, 
+                    m = document.getElementById('marketFilter').value, 
+                    p = document.getElementById('pickFilter').value, 
+                    stat = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all',
+                    role = document.getElementById('roleFilter') ? document.getElementById('roleFilter').value : 'all'; 
                 
-                let rowOdds = parseFloat(r.dataset.odds) || 0;
-                let oddsMatch = (minO === 0 || rowOdds >= minO) && (maxO === 0 || rowOdds <= maxO);
+                let minO = parseFloat(document.getElementById('minOddsFilter').value.replace(',', '.')) || 0;
+                let maxO = parseFloat(document.getElementById('maxOddsFilter').value.replace(',', '.')) || 0;
 
-                let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus && oddsMatch; 
-                r.classList.toggle('hidden', !vis); 
-                let c = document.getElementById(`chart-${r.dataset.index}`); 
-                if(c) {
-                    if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
-                    else c.classList.remove('hidden'); 
-                }
-            }); 
+                let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+
+                document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
+                    let matchStatus = true; 
+                    if (!isGames) {
+                        if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
+                        if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
+                        if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
+                        if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                    }
+
+                    if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
+                        let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
+                        let itemRole = isPitcher ? 'pitcher' : 'batter';
+                        if (itemRole !== role) matchStatus = false;
+                    }
+                    
+                    let rowOdds = parseFloat(r.dataset.odds) || 0;
+                    let oddsMatch = (minO === 0 || rowOdds >= minO) && (maxO === 0 || rowOdds <= maxO);
+
+                    let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus && oddsMatch; 
+                    r.classList.toggle('hidden', !vis); 
+                    let c = document.getElementById(`chart-${r.dataset.index}`); 
+                    if(c) {
+                        if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
+                        else c.classList.remove('hidden'); 
+                    }
+                }); 
+            } catch (e) {
+                console.error("Filter error: ", e);
+            }
         }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
     </script>
