@@ -26,6 +26,25 @@ MARKETS_GAMES = 'h2h,totals'
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 
+# ==========================================
+# 🌪️ RĘCZNA KOREKTA POGODY (MANUAL OVERRIDE)
+# ==========================================
+# Jeśli nie ufasz danym ze stron internetowych, wpisz tutaj własne!
+# 'dir' może mieć wartości: 'OUT' (Wywiewa/Ułatwia HR), 'IN' (W twarz/Utrudnia HR), 'NEUTRAL'
+# Wpisuj tylko domową drużynę. Przykład:
+MANUAL_WEATHER = {
+    "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
+    "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
+    "New York Yankees": {"dir": "OUT", "mph": 16.0},
+    "Minnesota Twins": {"dir": "IN", "mph": 9.0},
+    "Athletics": {"dir": "NEUTRAL", "mph": 4.5},
+    "Baltimore Orioles": {"dir": "OUT", "mph": 14.0},
+    "Philadelphia Phillies": {"dir": "OUT", "mph": 14.0},
+    "Atlanta Braves": {"dir": "IN", "mph": 8.0},
+    "St. Louis Cardinals": {"dir": "OUT", "mph": 15.0},
+    "Los Angeles Dodgers": {"dir": "OUT", "mph": 13.0}
+}
+
 MLB_JSON_FILE = 'mlb.json'
 MLB_GAMES_FILE = 'mlb_games.json'
 STATS_MLB_FILE = 'statystyki_mlb.json'
@@ -91,93 +110,48 @@ def wyslij_plik_na_githuba(file_path, wiadomosc_commit):
 def poisson_prob_over(lam, line):
     if lam <= 0: return 0.0
     k_max = math.floor(line) 
-    prob_under = 0.0
-    for k in range(k_max + 1):
-        prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
+    prob_under = sum((math.pow(lam, k) * math.exp(-lam)) / math.factorial(k) for k in range(k_max + 1))
     return 1.0 - prob_under 
 
 # ==========================================
-# 🌤️ MODUŁ POGODY Z PRĘDKOŚCIĄ I KIERUNKIEM
+# 🌤️ MODUŁ POGODY (Z RĘCZNYM OVERRIDEM)
 # ==========================================
-def pobierz_pogode_covers():
-    print("🌤️ Pobieram dane pogodowe (Prędkość i Kierunek)...")
+def pobierz_pogode():
+    print("🌤️ Skanowanie pogody i weryfikacja RĘCZNYCH ustawień...")
     weather_data = {}
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-    }
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'}
     
-    sources = [
-        ("https://www.covers.com/sport/mlb/weather", "Covers"),
-        ("https://www.rotowire.com/baseball/weather.php", "Rotowire")
-    ]
-    
-    for url, src_name in sources:
-        try:
-            res = requests.get(url, headers=headers, timeout=10)
-            if res.status_code != 200: continue
-            
-            soup = BeautifulSoup(res.text, 'html.parser')
-            clean_text = soup.get_text(" ", strip=True).lower()
-            
-            znaleziono_dane = False
+    try:
+        res = requests.get("https://www.rotowire.com/baseball/weather.php", headers=headers, timeout=10)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        boxes = soup.find_all('div', class_=lambda c: c and 'weather' in c.lower())
+        for box in boxes:
+            text = box.get_text(" ", strip=True).lower()
+            if "mph" not in text and "dome" not in text and "roof" not in text: continue
+            w_mod = 1.0; msg = "Neutralnie/Dach"
+            if "out" in text: w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
+            elif "in" in text: w_mod = 0.92; msg = "🛑 Wiatr w twarz (-8% Runs)"
             for team in MLB_TEAMS_LIST:
-                idx = clean_text.find(team.lower())
-                if idx == -1: idx = clean_text.find(team.split()[-1].lower())
-                    
-                if idx != -1:
-                    snippet = clean_text[max(0, idx-100) : min(len(clean_text), idx+250)]
-                    
-                    speed_match = re.search(r'(\d+(?:\.\d+)?)\s*mph', snippet)
-                    speed_val = float(speed_match.group(1)) if speed_match else 0.0
-                    speed_str = f"{speed_val} mph" if speed_val > 0 else ""
-                    
-                    w_mod = 1.0
-                    msg = "🏟️ Zamknięty dach / Brak wpływu wiatru"
-                    
-                    if "dome" in snippet or "roof closed" in snippet:
-                        w_mod = 1.0
-                    elif speed_val > 0 or re.search(r'\b(out|in|left|right)\b', snippet):
-                        kierunek = "Kierunek nieznany"
-                        
-                        if re.search(r'\b(blowing out|out to center)\b', snippet):
-                            kierunek = "Wywiewa do Środka (W plecy ⬆️)"
-                            w_mod = 1.08 if speed_val > 8 else 1.04
-                        elif re.search(r'\b(blowing in|in from center)\b', snippet):
-                            kierunek = "Wieje ze Środka (W twarz ⬇️)"
-                            w_mod = 0.92 if speed_val > 8 else 0.96
-                        elif re.search(r'\b(out to left|out to lf)\b', snippet):
-                            kierunek = "Wywiewa na Lewe Zapole (↖️)"
-                            w_mod = 1.05 if speed_val > 8 else 1.02
-                        elif re.search(r'\b(out to right|out to rf)\b', snippet):
-                            kierunek = "Wywiewa na Prawe Zapole (↗️)"
-                            w_mod = 1.05 if speed_val > 8 else 1.02
-                        elif re.search(r'\b(in from left|in from lf)\b', snippet):
-                            kierunek = "Wieje z Lewego Zapola (↘️)"
-                            w_mod = 0.96
-                        elif re.search(r'\b(in from right|in from rf)\b', snippet):
-                            kierunek = "Wieje z Prawego Zapola (↙️)"
-                            w_mod = 0.96
-                        elif re.search(r'\b(left to right|l to r)\b', snippet):
-                            kierunek = "Z lewej na prawą (➡️)"
-                            w_mod = 1.0
-                        elif re.search(r'\b(right to left|r to l)\b', snippet):
-                            kierunek = "Z prawej na lewą (⬅️)"
-                            w_mod = 1.0
-                            
-                        if speed_str: msg = f"💨 Wiatr: {speed_str} | {kierunek}"
-                        else: msg = f"💨 Wiatr: {kierunek}"
+                if team.split()[-1].lower() in text: weather_data[team] = {'mod': w_mod, 'msg': msg}
+    except: pass
 
-                    weather_data[team] = {'mod': w_mod, 'msg': msg}
-                    znaleziono_dane = True
-            
-            if znaleziono_dane:
-                print(f"  ✅ Poprawnie zaciągnięto wiatry (z prędkością) z: {src_name}")
-                break 
-        except: pass
+    # NADPISANIE RĘCZNE UŻYTKOWNIKA (To jest najważniejsze!)
+    for manual_team, data in MANUAL_WEATHER.items():
+        kierunek = data.get('dir', 'NEUTRAL').upper()
+        mph = float(data.get('mph', 0))
+        w_mod = 1.0
+        msg = f"⚙️ RĘCZNIE: Neutralnie ({mph} mph)"
         
-    if not weather_data: print("  ⚠️ Brak danych o wietrze. Używam ustawień neutralnych.")
+        if kierunek == 'OUT':
+            w_mod = 1.08 if mph >= 8 else 1.04
+            msg = f"⚙️ RĘCZNIE: Wywiewa (+{int((w_mod-1)*100)}% Runs) | {mph} mph"
+        elif kierunek == 'IN':
+            w_mod = 0.92 if mph >= 8 else 0.96
+            msg = f"⚙️ RĘCZNIE: W twarz ({int((w_mod-1)*100)}% Runs) | {mph} mph"
+            
+        weather_data[manual_team] = {'mod': w_mod, 'msg': msg}
+        print(f"  🟢 Zaaplikowano RĘCZNĄ pogodę dla: {manual_team} -> {msg}")
+
     global CACHE_WEATHER
     CACHE_WEATHER = weather_data
     return weather_data
@@ -241,9 +215,11 @@ def generuj_pelny_raport_druzynowy_mlb():
             t_name = t['team']['name']
             st = t['stat']
             if t_name not in druzyny_dane: continue
+            
             era_str = st.get('era', '0.00'); era_str = '0.00' if era_str == '-.--' else era_str
             whip_str = st.get('whip', '0.00'); whip_str = '0.00' if whip_str == '-.--' else whip_str
             baa_str = st.get('avg', '.000'); baa_str = '.000' if baa_str == '.---' else baa_str
+            
             druzyny_dane[t_name].update({
                 "Obrona_ERA": era_str, "Obrona_WHIP": whip_str, "Obrona_BAA": baa_str,
                 "Tracone_HR": st.get('homeRuns', 0), "Oddane_Walks": st.get('baseOnBalls', 0),
@@ -278,14 +254,11 @@ def rozlicz_wczorajsze_typy_mlb():
         res = requests.get(url, headers=headers, timeout=10).json()
         if 'dates' not in res or not res['dates']: return
         mecze = res['dates'][0]['games']
-        print(f"🔍 Audytor: Znalazłem {len(mecze)} meczów w terminarzu. Skanuję twarde Boxscore'y...")
         
-        ukonczone_mecze = 0
         for m in mecze:
             away_t = m['teams']['away']['team']['name']; home_t = m['teams']['home']['team']['name']
             status_code = m['status']['statusCode']; game_id = m['gamePk']
             if status_code in ['F', 'O', 'C'] or m['status']['abstractGameState'] == 'Final': 
-                ukonczone_mecze += 1
                 try:
                     box_url = f"https://statsapi.mlb.com/api/v1/game/{game_id}/boxscore"
                     box_res = requests.get(box_url, headers=headers, timeout=5).json()
@@ -307,10 +280,10 @@ def rozlicz_wczorajsze_typy_mlb():
                     rzeczywiste_staty[m_key] = {
                         'Mecz: Suma Runs': away_fg + home_fg,
                         'Mecz: Zwycięzca (ML)': home_t if home_fg > away_fg else away_t,
-                        'F5: Drużyna powyżej 1.5 Runs': away_f5 if "OVER" in away_t else home_f5 
+                        'F5: Drużyna powyżej 1.5 Runs': away_f5 if "OVER" in away_t else home_f5,
+                        'F5: Drużyna poniżej 1.5 Runs': away_f5 if "UNDER" in away_t else home_f5
                     }
                 except Exception as box_err: pass
-        if ukonczone_mecze == 0: return
     except Exception as e: return
             
     wygrane = przegrane = zwroty = profit = 0
@@ -420,6 +393,7 @@ def pobierz_staty_miotacza_startowego(pitcher_id):
                 baa = float(avg_str) if avg_str.startswith('.') else LEAGUE_AVG_BAA
     except: pass
     
+    # FIX: Miotacz na początku sezonu ma 0.00 ERA? Ustawiamy średnią ligową, żeby nie niszczył kalkulacji!
     if era < 1.50: era = LEAGUE_AVG_ERA
     
     CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa, 'hand': hand}
@@ -496,7 +470,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.1 (Wind Direction + Speed)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.0 (Manual Weather Override)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -546,8 +520,7 @@ def uruchom_mlb_pro():
         home_t_id = dane_oficjalne['home_team_id']
         away_t_id = dane_oficjalne['away_team_id']
         
-        # Wyłapujemy dokładną pogodę przypisaną do domowej drużyny z cache
-        w_data = next((v for k, v in CACHE_WEATHER.items() if k.lower() in ev['home_team'].lower() or ev['home_team'].lower() in k.lower()), {'mod': 1.0, 'msg': 'Neutralnie / Dach'})
+        w_data = next((v for k, v in CACHE_WEATHER.items() if k.lower() in ev['home_team'].lower() or ev['home_team'].lower() in k.lower()), {'mod': 1.0, 'msg': 'Neutralnie/Dach'})
         p_factor = get_park_factor(ev['home_team'])
         
         away_ops_splits = pobierz_ops_splits(away_t_id)
@@ -562,6 +535,7 @@ def uruchom_mlb_pro():
         home_bp = oblicz_zmeczenie_bullpenu(home_t_id, DATA_DZIS)
         away_bp = oblicz_zmeczenie_bullpenu(away_t_id, DATA_DZIS)
 
+        # FULL GAME - Bezpieczne mnożniki pitcherów!
         away_pitcher_mod = max(0.6, min(1.5, home_p_stats['era'] / LEAGUE_AVG_ERA))
         home_pitcher_mod = max(0.6, min(1.5, away_p_stats['era'] / LEAGUE_AVG_ERA))
 
@@ -581,6 +555,7 @@ def uruchom_mlb_pro():
         try: home_win_prob_fg = (home_proj_runs_fg**1.83) / (home_proj_runs_fg**1.83 + away_proj_runs_fg**1.83)
         except: home_win_prob_fg = 0.5
 
+        # F5 INNINGS
         away_base_runs_f5 = (away_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
         away_proj_runs_f5 = away_base_runs_f5 * away_pitcher_mod * p_factor * w_data['mod']
         home_base_runs_f5 = (home_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
@@ -591,7 +566,7 @@ def uruchom_mlb_pro():
         print(f"  📈 Kalkulator Mecz: {ev['away_team']} {round(away_proj_runs_fg, 1)} - {round(home_proj_runs_fg, 1)} {ev['home_team']} (Suma: {total_proj_runs_fg})")
         print(f"  ⏱️ Kalkulator F5: {ev['away_team']} {round(away_proj_runs_f5, 1)} - {round(home_proj_runs_f5, 1)} {ev['home_team']} (Suma: {total_proj_runs_f5})")
 
-        g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
+        g_insights = f"{w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
@@ -619,6 +594,7 @@ def uruchom_mlb_pro():
             
             prob_over = poisson_prob_over(total_proj_runs_fg, t_line)
             prob_under = 1.0 - prob_over
+            
             ev_o = (prob_over * t_over) - 1; ev_u = (prob_under * t_under) - 1
             
             print(f"    🎲 Mecz Totals {t_line} | OVER: {round(prob_over*100,1)}% (EV: {round(ev_o*100,1)}%) | UNDER: {round(prob_under*100,1)}% (EV: {round(ev_u*100,1)}%)")
@@ -634,6 +610,7 @@ def uruchom_mlb_pro():
             if ev_h > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
             elif ev_a > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
 
+        # F5 TEAM TOTALS O/U 1.5
         prob_away_f5_under_1_5 = (math.pow(away_proj_runs_f5, 0) * math.exp(-away_proj_runs_f5)) / math.factorial(0) + (math.pow(away_proj_runs_f5, 1) * math.exp(-away_proj_runs_f5)) / math.factorial(1)
         prob_away_f5_over_1_5 = 1.0 - prob_away_f5_under_1_5
         prob_home_f5_under_1_5 = (math.pow(home_proj_runs_f5, 0) * math.exp(-home_proj_runs_f5)) / math.factorial(0) + (math.pow(home_proj_runs_f5, 1) * math.exp(-home_proj_runs_f5)) / math.factorial(1)
@@ -642,23 +619,25 @@ def uruchom_mlb_pro():
         if prob_away_f5_over_1_5 > 0.60:
             fair_odds_a = 1 / prob_away_f5_over_1_5
             print(f"    🎯 F5 Team Totals OVER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a,2)}")
-            wyniki_games.append({
-                "mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", 
-                "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), 
-                "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, 
-                "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"
-            })
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs!</b>"})
+        elif prob_away_f5_under_1_5 > 0.60:
+            fair_odds_a_u = 1 / prob_away_f5_under_1_5
+            print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a_u,2)}")
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_a_u, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a_u + 0.05, 2)} na UNDER 1.5 Runs!</b>"})
             
         if prob_home_f5_over_1_5 > 0.60:
             fair_odds_h = 1 / prob_home_f5_over_1_5
             print(f"    🎯 F5 Team Totals OVER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h,2)}")
-            wyniki_games.append({
-                "mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", 
-                "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), 
-                "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, 
-                "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"
-            })
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs!</b>"})
+        elif prob_home_f5_under_1_5 > 0.60:
+            fair_odds_h_u = 1 / prob_home_f5_under_1_5
+            print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h_u,2)}")
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs!</b>"})
 
+
+        # ----------------------------------------------------
+        # KROK 2B: POBIERANIE TYLKO ZAWODNIKÓW (PROPS)
+        # ----------------------------------------------------
         print(f"    🏃 Odpytuję API o zawodników...")
         try:
             time.sleep(0.5) 
@@ -785,33 +764,19 @@ def uruchom_mlb_pro():
                             korekta *= pf
                             uwagi += f" 🏟️ Stadion PF: {round(pf, 2)}x."
                         
-                        # --- FIX: Inteligentna zagnieżdżona pogoda ---
                         w_mod_raw = w_data['mod']
-                        w_msg_short = w_data['msg'].replace("💨 Wiatr: ", "").replace("💨 ", "")
-                        
                         if w_mod_raw != 1.0:
-                            if rola == 'pitcher':
-                                p_weather_mod = 1.0 - (w_mod_raw - 1.0) * 0.5 
-                                korekta *= p_weather_mod
-                                if w_mod_raw > 1.0: uwagi += f" 🌦️ Wiatr {w_msg_short} (Ostrozny Miotacz: -4% K)."
-                                else: uwagi += f" 🌦️ Wiatr {w_msg_short} (Agresywny Miotacz: +4% K)."
+                            if mlb_stat_key == 'homeRuns':
+                                hr_mod = 1.0 + (w_mod_raw - 1.0) * 2.0
+                                korekta *= hr_mod
+                            elif mlb_stat_key == 'hits':
+                                hit_mod = 1.0 + (w_mod_raw - 1.0) * 0.5
+                                korekta *= hit_mod
                             else:
-                                if mlb_stat_key == 'homeRuns':
-                                    hr_mod = 1.0 + (w_mod_raw - 1.0) * 2.0
-                                    korekta *= hr_mod
-                                    if w_mod_raw > 1.0: uwagi += f" 🌦️ Wiatr {w_msg_short} (Zysk na HR)."
-                                    else: uwagi += f" 🌦️ Wiatr {w_msg_short} (Strata na HR)."
-                                elif mlb_stat_key == 'hits':
-                                    hit_mod = 1.0 + (w_mod_raw - 1.0) * 0.5
-                                    korekta *= hit_mod
-                                    if w_mod_raw > 1.0: uwagi += f" 🌦️ Wiatr {w_msg_short} (+4% Hits)."
-                                    else: uwagi += f" 🌦️ Wiatr {w_msg_short} (-4% Hits)."
-                                else:
-                                    korekta *= w_mod_raw
-                                    uwagi += f" 🌦️ {w_data['msg']}."
-                        else:
-                            if "Wiatr" in w_data['msg'] or "Dach" in w_data['msg']:
-                                uwagi += f" 🌦️ {w_data['msg']}."
+                                korekta *= w_mod_raw
+                        
+                        # Nie duplikujemy tekstu pogody dla propsów
+                        # Pogoda dla Propsów jest od teraz dodawana w HTML-u obok drużyny!
                         
                         if p_hand and bat_side:
                             if bat_side == 'S': 
