@@ -27,9 +27,6 @@ TOP_BOOKMAKERS = ['draftkings', 'fanduel', 'betmgm', 'caesars', 'betrivers', 'bo
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 
-# ==========================================
-# 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
-# ==========================================
 MANUAL_WEATHER = {
     "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
     "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
@@ -450,7 +447,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.7 (Stable Prop Aggregation)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.8 (Strict Badge Thresholds)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -641,7 +638,6 @@ def uruchom_mlb_pro():
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
 
-        # 🎯 FIX v9.7: PRAWIDŁOWY SŁOWNIK PUNKTOWY
         aggregated_props = {}
         
         for bm in res_props.get('bookmakers', []):
@@ -659,7 +655,7 @@ def uruchom_mlb_pro():
                     if not p_name: continue
                     
                     if p_name not in aggregated_props[m_key]:
-                        aggregated_props[m_key][p_name] = {} # Fix: Czysty słownik na same linie!
+                        aggregated_props[m_key][p_name] = {}
                         
                     mlb_stat_key = rynek_map[m_key][2]
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
@@ -865,8 +861,7 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
-                # 🎯 FIX: ŻELAZNE PROGI DLA ZAWODNIKÓW (55% i 20%)
-                min_prob = 0.20 if is_hr else 0.55
+                min_prob = 0.20 if is_hr else 0.55 
                 
                 if true_prob < min_prob: continue
                 if ev_val < 0.02: continue 
@@ -883,10 +878,10 @@ def uruchom_mlb_pro():
                 
                 if is_hr:
                     is_value_bet = ev_val >= 0.15 
-                    is_safe_bet = true_prob >= 0.25 and pokrycie_l10 >= 20 
+                    is_safe_bet = true_prob >= 0.30 and pokrycie_l10 >= 20 
                 else:
                     is_value_bet = ev_val >= 0.04 
-                    is_safe_bet = true_prob >= 0.65 and pokrycie_l5 >= 60
+                    is_safe_bet = true_prob >= 0.70 and pokrycie_l5 >= 60
                     
                 is_stable_bet = (m_color == "rank-green")
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
