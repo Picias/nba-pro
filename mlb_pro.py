@@ -20,8 +20,7 @@ ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 SPORT = 'baseball_mlb'
 REGIONS = 'us'
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
-# Usunięto rynki 1st_half, które blokowały API. F5 wyliczymy z "Fair Odds"!
-MARKETS_GAMES = 'h2h,totals,spreads'
+MARKETS_GAMES = 'h2h,totals,spreads,h2h_1st_half,totals_1st_half'
 
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
@@ -45,6 +44,18 @@ LEAGUE_AVG_BAA = 0.240
 LEAGUE_AVG_OPS = 0.730
 LEAGUE_AVG_RUNS = 4.5
 LEAGUE_AVG_RUNS_F5 = 2.5
+
+# Pełna lista drużyn dla poprawnego łapania pogody z tekstów
+MLB_TEAMS_LIST = [
+    "Arizona Diamondbacks", "Atlanta Braves", "Baltimore Orioles", "Boston Red Sox",
+    "Chicago Cubs", "Chicago White Sox", "Cincinnati Reds", "Cleveland Guardians",
+    "Colorado Rockies", "Detroit Tigers", "Houston Astros", "Kansas City Royals",
+    "Los Angeles Angels", "Los Angeles Dodgers", "Miami Marlins", "Milwaukee Brewers",
+    "Minnesota Twins", "New York Mets", "New York Yankees", "Athletics", "Oakland Athletics",
+    "Philadelphia Phillies", "Pittsburgh Pirates", "San Diego Padres", "San Francisco Giants",
+    "Seattle Mariners", "St. Louis Cardinals", "Tampa Bay Rays", "Texas Rangers",
+    "Toronto Blue Jays", "Washington Nationals"
+]
 
 PARK_FACTORS = {
     'Colorado Rockies': 1.15, 'Cincinnati Reds': 1.12, 'Boston Red Sox': 1.08,
@@ -103,7 +114,7 @@ def pobierz_pogode_covers():
             
         for box in game_boxes:
             text = box.text.lower()
-            w_mod = 1.0; msg = "Dach/Brak wiatru"
+            w_mod = 1.0; msg = "Neutralnie/Dach"
             if "blowing out" in text or "out to" in text:
                 w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
             elif "blowing in" in text or "in from" in text:
@@ -111,9 +122,11 @@ def pobierz_pogode_covers():
             elif "dome" in text or "roof closed" in text:
                 w_mod = 1.0; msg = "🏟️ Zamknięty dach"
                 
-            for full_name in PARK_FACTORS.keys():
-                if full_name.lower() in text or full_name.split()[-1].lower() in text:
-                    weather_data[full_name] = {'mod': w_mod, 'msg': msg}
+            # Używamy pełnej listy drużyn, żeby zawsze dopasować pogodę!
+            for team in MLB_TEAMS_LIST:
+                team_last_word = team.split()[-1].lower()
+                if team.lower() in text or team_last_word in text:
+                    weather_data[team] = {'mod': w_mod, 'msg': msg}
     except Exception as e:
         print(f"⚠️ Błąd pobierania pogody: {e}")
     
@@ -249,7 +262,6 @@ def rozlicz_wczorajsze_typy_mlb():
             if status_code in ['F', 'O', 'C'] or m['status']['abstractGameState'] == 'Final': 
                 ukonczone_mecze += 1
                 try:
-                    # 1. Pobieranie boxscore dla Player Props
                     box_url = f"https://statsapi.mlb.com/api/v1/game/{game_id}/boxscore"
                     box_res = requests.get(box_url, headers=headers, timeout=5).json()
                     teams = box_res.get('teams', {})
@@ -267,7 +279,6 @@ def rozlicz_wczorajsze_typy_mlb():
                                 'Runs': b_stats.get('runs', 0), 'RBIs': b_stats.get('rbi', 0)
                             }
                             
-                    # 2. Pobieranie danych dla Game Lines i F5
                     linescore = requests.get(f"https://statsapi.mlb.com/api/v1/game/{game_id}/linescore", headers=headers).json()
                     innings = linescore.get('innings', [])
                     away_f5 = sum(i.get('away', {}).get('runs', 0) for i in innings[:5])
@@ -374,8 +385,8 @@ def pobierz_oficjalny_terminarz_mlb(data_str):
                 klucz_meczu = f"{away_team} @ {home_team}".lower().replace("st. ", "st ")
                 baza_mlb[klucz_meczu] = {
                     'home_team': home_team, 'home_team_id': home_team_id, 'away_team': away_team, 'away_team_id': away_team_id,
-                    'home_pitcher': home_p.get('fullName', 'TBD'), 'home_pitcher_id': home_p.get('id', None), 'home_pitcher_hand': home_p.get('pitchHand', {}).get('code', 'R'),
-                    'away_pitcher': away_p.get('fullName', 'TBD'), 'away_pitcher_id': away_p.get('id', None), 'away_pitcher_hand': away_p.get('pitchHand', {}).get('code', 'R'),
+                    'home_pitcher': home_p.get('fullName', 'TBD'), 'home_pitcher_id': home_p.get('id', None),
+                    'away_pitcher': away_p.get('fullName', 'TBD'), 'away_pitcher_id': away_p.get('id', None),
                     'lineups_home': lineups_home, 'lineups_away': lineups_away
                 }
     except: pass
@@ -415,22 +426,41 @@ def pobierz_statystyki_druzyn_mlb():
             if count > 0: LEAGUE_AVG_ERA = total_era / count
     except: pass
 
+# -----------------------------------------------
+# KRYTYCZNY FIX: Pobieranie ręki bezpośrednio od gracza!
+# -----------------------------------------------
 def pobierz_staty_miotacza_startowego(pitcher_id):
-    if not pitcher_id: return {'era': LEAGUE_AVG_ERA, 'baa': LEAGUE_AVG_BAA}
+    if not pitcher_id: return {'era': LEAGUE_AVG_ERA, 'baa': LEAGUE_AVG_BAA, 'hand': 'R'}
     if pitcher_id in CACHE_PITCHER_STATS: return CACHE_PITCHER_STATS[pitcher_id]
-    era, baa = LEAGUE_AVG_ERA, LEAGUE_AVG_BAA
-    for s in [SEZON_MLB, SEZON_MLB - 1]:
-        try:
-            url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}/stats?stats=season&group=pitching&season={s}"
-            res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
-            stats = res.get('stats', [])
+    
+    era = LEAGUE_AVG_ERA
+    baa = LEAGUE_AVG_BAA
+    hand = 'R'
+    
+    try:
+        # Ten endpoint pobiera dane osoby + wstrzykuje do nich statystyki za wskazany sezon!
+        url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}?hydrate=stats(group=[pitching],type=[season],season={SEZON_MLB})"
+        res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
+        
+        if 'people' in res and len(res['people']) > 0:
+            p_data = res['people'][0]
+            hand = p_data.get('pitchHand', {}).get('code', 'R') # <--- TUTAJ JEST FAKTYCZNA RĘKA GRACZA
+            stats = p_data.get('stats', [])
+            
+            # Fallback na stary sezon w razie braku statystyk w nowym (np. rzuca pierwszy mecz)
+            if not stats: 
+                url_prev = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}?hydrate=stats(group=[pitching],type=[season],season={SEZON_MLB-1})"
+                res_prev = requests.get(url_prev, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
+                if 'people' in res_prev and len(res_prev['people']) > 0:
+                    stats = res_prev['people'][0].get('stats', [])
+                    
             if stats and stats[0].get('splits'):
                 stat_obj = stats[0]['splits'][0]['stat']
                 era = float(stat_obj.get('era', str(LEAGUE_AVG_ERA))) if stat_obj.get('era', '-.--') != '-.--' else LEAGUE_AVG_ERA
                 baa = float(stat_obj.get('avg', '.240')) if stat_obj.get('avg', '.---') != '.---' else LEAGUE_AVG_BAA
-                break 
-        except: pass
-    CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa}
+    except: pass
+    
+    CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa, 'hand': hand}
     return CACHE_PITCHER_STATS[pitcher_id]
 
 def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
@@ -494,7 +524,7 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.1 (Fix API & Fair Odds)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.1 (Fix API & Teams)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -508,13 +538,13 @@ def uruchom_mlb_pro():
     baza_mlb = pobierz_oficjalny_terminarz_mlb(DATA_DZIS)
     
     try:
-        print("📡 Pobieram listę zdarzeń (The Odds API)...")
-        events = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events?apiKey={ODDS_API_KEY}").json()
+        print("📡 Pobieram kursy z The Odds API...")
+        events = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS},{MARKETS_GAMES}&oddsFormat=decimal").json()
         if isinstance(events, dict) and 'message' in events: 
-            print(f"❌ ODRZUCONO ZAPYTANIE: {events['message']}")
+            print(f"❌ ODRZUCONO ZAPYTANIE THE ODDS API: {events['message']}")
             return []
     except Exception as e: 
-        print(f"❌ BŁĄD POŁĄCZENIA Z API: {e}")
+        print(f"❌ BŁĄD POŁĄCZENIA Z API KURSÓW: {e}")
         return []
 
     if not isinstance(events, list): return []
@@ -543,16 +573,21 @@ def uruchom_mlb_pro():
         
         home_t_id = dane_oficjalne['home_team_id']
         away_t_id = dane_oficjalne['away_team_id']
+        
         w_data = CACHE_WEATHER.get(ev['home_team'], {'mod': 1.0, 'msg': 'Neutralnie/Dach'})
         p_factor = PARK_FACTORS.get(ev['home_team'], 1.0)
         
         # --- 🧮 KALKULATOR GAME LINES (Model Ważony + F5) ---
         away_ops_splits = pobierz_ops_splits(away_t_id)
         home_ops_splits = pobierz_ops_splits(home_t_id)
-        home_p_hand = dane_oficjalne.get('home_pitcher_hand', 'R')
-        away_p_hand = dane_oficjalne.get('away_pitcher_hand', 'R')
+        
+        # Używamy ulepszonej funkcji, żeby w 100% poprawnie pobrać rękę!
         home_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne.get('home_pitcher_id'))
         away_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne.get('away_pitcher_id'))
+        
+        home_p_hand = home_p_stats['hand']
+        away_p_hand = away_p_stats['hand']
+        
         home_bp = oblicz_zmeczenie_bullpenu(home_t_id, DATA_DZIS)
         away_bp = oblicz_zmeczenie_bullpenu(away_t_id, DATA_DZIS)
 
@@ -584,34 +619,23 @@ def uruchom_mlb_pro():
         except: home_win_prob_f5 = 0.5
 
         print(f"  📈 Kalkulator Mecz: {ev['away_team']} {round(away_proj_runs_fg, 1)} - {round(home_proj_runs_fg, 1)} {ev['home_team']} (Suma: {total_proj_runs_fg})")
-        print(f"  ⏱️ Kalkulator F5: Suma {total_proj_runs_f5} runs po 5 inningach.")
+        print(f"  ⏱️ Kalkulator F5: {ev['away_team']} {round(away_proj_runs_f5, 1)} - {round(home_proj_runs_f5, 1)} {ev['home_team']} (Suma: {total_proj_runs_f5})")
 
         g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
-        # --- 📈 POBIERANIE KURSÓW Z API (ZABEZPIECZONO!) ---
-        try:
-            time.sleep(0.1) 
-            res_odds = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS},{MARKETS_GAMES}&oddsFormat=decimal").json()
-            
-            if 'message' in res_odds:
-                print(f"  ❌ Odpowiedź The Odds API: {res_odds['message']}")
-                print("     Bot kontynuuje, ale bez kursów nie może zatwierdzić typu.")
-                continue
-                
-        except Exception as e: 
-            print(f"  ❌ Błąd sieciowy przy pobieraniu kursów: {e}")
-            continue
-        
         # Ekstrakcja Kursów
-        game_lines = {'h2h': {}, 'totals': {}}
-        for bm in res_odds.get('bookmakers', []):
+        game_lines = {'h2h': {}, 'totals': {}, 'h2h_f5': {}, 'totals_f5': {}}
+        for bm in ev.get('bookmakers', []):
             for mkt in bm.get('markets', []):
                 if mkt['key'] == 'h2h':
                     for oc in mkt['outcomes']: game_lines['h2h'][oc['name']] = oc['price']
                 elif mkt['key'] == 'totals':
                     for oc in mkt['outcomes']: 
+                        # FIX: Ignoruj drużynowe (Team Totals), bierz tylko na cały mecz
+                        if oc.get('description'): continue 
+                        if oc.get('point', 0) < 5.0: continue # Twarde zabezpieczenie
                         game_lines['totals']['point'] = oc['point']
                         game_lines['totals'][oc['name']] = oc['price']
 
@@ -636,17 +660,27 @@ def uruchom_mlb_pro():
             if ev_h > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
             elif ev_a > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
 
-        # --- 🎯 EWALUACJA ZAKŁADÓW (F5 FAIR ODDS) ---
+        # --- 🎯 EWALUACJA ZAKŁADÓW F5 (FAIR ODDS!) ---
+        # Ponieważ darmowe API nie wyrzuca live kursów na F5, wyliczamy idealny kurs ("Fair Odds").
         fair_h_f5 = 1 / home_win_prob_f5 if home_win_prob_f5 > 0 else 99
         fair_a_f5 = 1 / (1 - home_win_prob_f5) if (1-home_win_prob_f5) > 0 else 99
+        
         print(f"    ⏱️ FAIR KURS F5: {ev['home_team']} @ {round(fair_h_f5,2)} | {ev['away_team']} @ {round(fair_a_f5,2)}")
         
-        # Jeśli F5 ma dużą szansę na win, dodajemy wskazówkę z Fair Kurs (szukanie w lokalnym buku)
         if home_win_prob_f5 > 0.55:
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML (Brak Live)", "zaklad": ev['home_team'], "linia": "-", "kurs": round(fair_h_f5, 2), "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", "szansa": round(home_win_prob_f5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_h_f5 + 0.05, 2)}</b>"})
+            wyniki_games.append({
+                "mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['home_team'], 
+                "linia": "-", "kurs": round(fair_h_f5, 2), "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", 
+                "szansa": round(home_win_prob_f5 * 100, 1), "ev": 0.1, 
+                "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj w ofercie buka kursu wyższego niż {round(fair_h_f5 + 0.05, 2)}!</b>"
+            })
         elif (1-home_win_prob_f5) > 0.55:
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML (Brak Live)", "zaklad": ev['away_team'], "linia": "-", "kurs": round(fair_a_f5, 2), "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_a_f5 + 0.05, 2)}</b>"})
-
+            wyniki_games.append({
+                "mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['away_team'], 
+                "linia": "-", "kurs": round(fair_a_f5, 2), "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", 
+                "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": 0.1, 
+                "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj w ofercie buka kursu wyższego niż {round(fair_a_f5 + 0.05, 2)}!</b>"
+            })
 
         # --- 🏏 ANALIZA ZAWODNIKÓW (PROPS) ---
         h_roster = {}
@@ -659,7 +693,7 @@ def uruchom_mlb_pro():
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
 
-        for bm in res_odds.get('bookmakers', []):
+        for bm in ev.get('bookmakers', []):
             for mkt in bm.get('markets', []):
                 if mkt['key'] not in rynek_map: continue
                 nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[mkt['key']]
