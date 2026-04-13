@@ -19,7 +19,8 @@ ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
 REGIONS = 'us'
-MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases' 
+# FIX: Przywrócone WSZYSTKIE rynki na zawodników (w tym Runs i RBIs)
+MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
 SEZON_MLB = 2026
@@ -82,56 +83,57 @@ def wyslij_plik_na_githuba(file_path, wiadomosc_commit):
         requests.put(url, headers=headers, json=data)
     except: pass
 
+def wyslij_powiadomienie_telegram(wiadomosc):
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": wiadomosc, "parse_mode": "HTML"}
+    try: requests.post(url, json=payload, timeout=10)
+    except: pass
+
 def poisson_prob_over(lam, line):
     if lam <= 0: return 0.0
     k_max = math.floor(line) 
     prob_under = 0.0
     for k in range(k_max + 1):
         prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
-    return 1.0 - prob_under # Zwraca szansę na OVER
+    return 1.0 - prob_under 
 
 # ==========================================
 # 🌤️ MODUŁ POGODY & SPLITÓW
 # ==========================================
 def pobierz_pogode_covers():
-    print("🌤️ Pobieram dane pogodowe (Wiatr i Stadiony)...")
+    print("🌤️ Pobieram dane pogodowe z Covers.com (Wiatr i Stadiony)...")
     weather_data = {}
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-    }
     try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'Accept-Language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7'
+        }
         res = requests.get("https://www.covers.com/sport/mlb/weather", headers=headers, timeout=10)
         soup = BeautifulSoup(res.text, 'html.parser')
+        
         game_boxes = soup.find_all('div', class_='weather-event-box') 
         if not game_boxes: game_boxes = soup.find_all('div', class_='covers-weather-details')
         
-        if game_boxes:
-            for box in game_boxes:
-                text = box.text.lower()
-                w_mod = 1.0; msg = "Neutralnie/Dach"
-                if "blowing out" in text or "out to" in text: w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
-                elif "blowing in" in text or "in from" in text: w_mod = 0.92; msg = "🛑 Wiatr w twarz (-8% Runs)"
-                elif "dome" in text or "roof closed" in text: w_mod = 1.0; msg = "🏟️ Zamknięty dach"
-                for team in MLB_TEAMS_LIST:
-                    if team.lower() in text or team.split()[-1].lower() in text: weather_data[team] = {'mod': w_mod, 'msg': msg}
-    except: pass
+        if not game_boxes:
+            print("  ⚠️ Brak danych z Covers. Używam ustawień neutralnych.")
+            
+        for box in game_boxes:
+            text = box.text.lower()
+            w_mod = 1.0; msg = "Neutralnie/Dach"
+            if "blowing out" in text or "out to" in text:
+                w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
+            elif "blowing in" in text or "in from" in text:
+                w_mod = 0.92; msg = "🛑 Wiatr w twarz (-8% Runs)"
+            elif "dome" in text or "roof closed" in text:
+                w_mod = 1.0; msg = "🏟️ Zamknięty dach"
+                
+            for team in MLB_TEAMS_LIST:
+                team_last_word = team.split()[-1].lower()
+                if team.lower() in text or team_last_word in text:
+                    weather_data[team] = {'mod': w_mod, 'msg': msg}
+    except Exception as e:
+        print(f"  ⚠️ Błąd pobierania pogody: {e}")
     
-    # Fallback (Jeśli Covers zablokowało bota, spróbuj Rotowire)
-    if not weather_data:
-        try:
-            res = requests.get("https://www.rotowire.com/baseball/weather.php", headers=headers, timeout=10)
-            soup = BeautifulSoup(res.text, 'html.parser')
-            for box in soup.find_all('div', class_='weather__game'):
-                text = box.text.lower()
-                w_mod = 1.0; msg = "Neutralnie/Dach"
-                if "wind: out" in text or "blowing out" in text: w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
-                elif "wind: in" in text or "blowing in" in text: w_mod = 0.92; msg = "🛑 Wiatr w twarz (-8% Runs)"
-                for team in MLB_TEAMS_LIST:
-                    if team.split()[-1].lower() in text: weather_data[team] = {'mod': w_mod, 'msg': msg}
-        except: pass
-        
     global CACHE_WEATHER
     CACHE_WEATHER = weather_data
     return weather_data
@@ -152,6 +154,9 @@ def pobierz_ops_splits(team_id):
     CACHE_TEAM_SPLITS[team_id] = {'vs_LHP': ops_vs_lhp, 'vs_RHP': ops_vs_rhp}
     return CACHE_TEAM_SPLITS[team_id]
 
+# ==========================================
+# 📊 MODUŁ STATYSTYK DRUŻYNOWYCH MLB
+# ==========================================
 def generuj_pelny_raport_druzynowy_mlb():
     plik_raportu = 'mlb_teams.json'
     if os.path.exists(plik_raportu):
@@ -195,11 +200,9 @@ def generuj_pelny_raport_druzynowy_mlb():
             t_name = t['team']['name']
             st = t['stat']
             if t_name not in druzyny_dane: continue
-            
             era_str = st.get('era', '0.00'); era_str = '0.00' if era_str == '-.--' else era_str
             whip_str = st.get('whip', '0.00'); whip_str = '0.00' if whip_str == '-.--' else whip_str
             baa_str = st.get('avg', '.000'); baa_str = '.000' if baa_str == '.---' else baa_str
-            
             druzyny_dane[t_name].update({
                 "Obrona_ERA": era_str, "Obrona_WHIP": whip_str, "Obrona_BAA": baa_str,
                 "Tracone_HR": st.get('homeRuns', 0), "Oddane_Walks": st.get('baseOnBalls', 0),
@@ -439,7 +442,6 @@ def pobierz_statystyki_druzyn_mlb():
                 era = float(era_str) if era_str != '-.--' else LEAGUE_AVG_ERA
                 total_era += era; count += 1
             if count > 0: LEAGUE_AVG_ERA = total_era / count
-            print(f"✅ Zoptymalizowane ERA: {round(LEAGUE_AVG_ERA,2)}")
     except: pass
 
 # ==========================================
@@ -477,11 +479,14 @@ def uruchom_mlb_pro():
     wyniki_games = []
     przetworzeni_zawodnicy = set()
 
+    # FIX: Przywrócone WSZYSTKIE markety, w tym Runs i RBIs!
     rynek_map = {
         'pitcher_strikeouts': ('K\'s', 'pitcher', 'strikeOuts'),
         'batter_hits': ('Hits', 'batter', 'hits'),
         'batter_home_runs': ('Home Runs', 'batter', 'homeRuns'),
-        'batter_total_bases': ('Total Bases', 'batter', 'totalBases')
+        'batter_total_bases': ('Total Bases', 'batter', 'totalBases'),
+        'batter_runs_scored': ('Runs', 'batter', 'runs'),
+        'batter_rbis': ('RBIs', 'batter', 'rbi')
     }
 
     for ev in mecze_dzis:
@@ -495,7 +500,6 @@ def uruchom_mlb_pro():
         home_t_id = dane_oficjalne['home_team_id']
         away_t_id = dane_oficjalne['away_team_id']
         
-        # Pobieranie modyfikatora pogody i stadionu z naprawioną bazą!
         w_data = CACHE_WEATHER.get(ev['home_team'], {'mod': 1.0, 'msg': 'Neutralnie/Dach'})
         p_factor = PARK_FACTORS.get(ev['home_team'], 1.0)
         
@@ -568,7 +572,6 @@ def uruchom_mlb_pro():
             t_over = game_lines['totals']['Over']
             t_under = game_lines['totals']['Under']
             
-            # FIX: Zlikwidowanie podwójnego zaprzeczenia! Teraza 'over_prob' wyciąga wartość bezpośrednio!
             over_prob = poisson_prob_over(total_proj_runs_fg, t_line)
             
             ev_o = (over_prob * t_over) - 1; ev_u = ((1-over_prob) * t_under) - 1
@@ -656,12 +659,12 @@ def uruchom_mlb_pro():
                     
                     player_id = None; is_today_home = False; opp_team_id = None; opp_name = ""; bat_side = 'R'; b_order = 0
                     
-                    # FIX: Bezpieczny słownik dla zawodników
-                    h_clean = dane_oficjalne.get('home_pitcher', 'TBD').lower().replace(".", "").strip()
-                    a_clean = dane_oficjalne.get('away_pitcher', 'TBD').lower().replace(".", "").strip()
-                    p_clean = p_name.lower().replace(".", "").strip()
-                    
                     if rola == 'pitcher':
+                        # Szukamy po nazwiskach (Bezpieczne przypisanie)
+                        h_clean = dane_oficjalne.get('home_pitcher', '').lower().replace(".", "").strip()
+                        a_clean = dane_oficjalne.get('away_pitcher', '').lower().replace(".", "").strip()
+                        p_clean = p_name.lower().replace(".", "").strip()
+                        
                         if p_clean in h_clean or h_clean in p_clean: 
                             player_id = dane_oficjalne.get('home_pitcher_id')
                             is_today_home = True
@@ -673,6 +676,7 @@ def uruchom_mlb_pro():
                             opp_team_id = dane_oficjalne['home_team_id']
                             opp_name = ev['home_team']
                     else:
+                        p_clean = p_name.lower().replace(".", "").strip()
                         if p_clean in h_roster:
                             player_id = h_roster[p_clean]['id']
                             bat_side = h_roster[p_clean].get('batSide', {}).get('code', 'R')
@@ -717,7 +721,7 @@ def uruchom_mlb_pro():
                         m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
                     else:
                         opp_pitcher_id = dane_oficjalne.get('away_pitcher_id') if is_today_home else dane_oficjalne.get('home_pitcher_id')
-                        opp_pitcher_name = dane_oficjalne.get('away_pitcher') if is_today_home else dane_oficjalne.get('home_pitcher')
+                        opp_pitcher_name = dane_oficjalne.get('away_pitcher', 'TBD') if is_today_home else dane_oficjalne.get('home_pitcher', 'TBD')
                         
                         p_stats = pobierz_staty_miotacza_startowego(opp_pitcher_id)
                         baa_korekta = max(0.85, min(1.15, p_stats['baa'] / LEAGUE_AVG_BAA))
@@ -759,7 +763,6 @@ def uruchom_mlb_pro():
                             elif b_order >= 8: korekta *= 0.90
                     
                     projekcja_finalna = baza_proj * korekta
-                    # FIX: Zlikwidowane podwójne zaprzeczenie. Teraz wyciągamy poprawnie szansę!
                     prob_over = poisson_prob_over(projekcja_finalna, linia)
                     
                     typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
@@ -769,9 +772,13 @@ def uruchom_mlb_pro():
                     is_hr = (mlb_stat_key == 'homeRuns')
                     min_prob = 0.15 if is_hr else 0.55
                     
-                    if true_prob <= min_prob: continue
+                    if true_prob <= min_prob: 
+                        continue
+                    
                     ev_val = (true_prob * kurs_final) - 1.0 
-                    if is_hr and ev_val < 0.05: continue
+                    
+                    if is_hr and ev_val < 0.05:
+                        continue
                     
                     if typ == "OVER":
                         pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
