@@ -22,8 +22,6 @@ REGIONS = 'eu' # Europa
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
-# 🎯 FIX: TWARDA LISTA ELITARNYCH BUKMACHERÓW
-# Bot zignoruje giełdy zakładów (Betfair) i słabych buków z dziwnymi kursami.
 TOP_BOOKMAKERS = ['bet365', 'pinnacle', 'unibet', 'bwin', 'betclic', 'betsson', 'williamhill', '888sport']
 
 SEZON_MLB = 2026
@@ -447,7 +445,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.8 (Elite Bookmakers Only)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.9 (Fixed Missing Props)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -477,6 +475,7 @@ def uruchom_mlb_pro():
     wyniki_games = []
     przetworzeni_zawodnicy = set()
 
+    # Słownik w pełni uzupełniony o Runs i RBIs!
     rynek_map = {
         'pitcher_strikeouts': ('K\'s', 'pitcher', 'strikeOuts'),
         'batter_hits': ('Hits', 'batter', 'hits'),
@@ -557,7 +556,6 @@ def uruchom_mlb_pro():
             time.sleep(0.5) 
             res_games = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_GAMES}&oddsFormat=decimal").json()
             for bm in res_games.get('bookmakers', []):
-                # FIX: Twardy filtr bukmacherów!
                 if bm['key'] not in TOP_BOOKMAKERS: continue
                 
                 for mkt in bm.get('markets', []):
@@ -642,7 +640,6 @@ def uruchom_mlb_pro():
         aggregated_props = {}
         
         for bm in res_props.get('bookmakers', []):
-            # FIX: Twardy filtr bukmacherów!
             if bm['key'] not in TOP_BOOKMAKERS: continue
             
             for mkt in bm.get('markets', []):
@@ -677,9 +674,11 @@ def uruchom_mlb_pro():
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
                 avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2)
                 
-                if mlb_stat_key == 'totalBases': linia = 1.5
-                elif mlb_stat_key == 'hits': linia = 0.5
-                elif mlb_stat_key == 'runs' or mlb_stat_key == 'rbi': linia = 0.5
+                # FIX: Bezpieczne ustawianie linii na 0.5 i zapobieganie omijaniu pustych "points" przez API
+                if mlb_stat_key == 'totalBases': 
+                    linia = 1.5
+                elif mlb_stat_key in ['hits', 'homeRuns', 'runs', 'rbi']: 
+                    linia = 0.5
                 else:
                     if not odds_data['point']: continue
                     linia = max(set(odds_data['point']), key=odds_data['point'].count)
