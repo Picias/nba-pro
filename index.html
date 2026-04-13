@@ -287,7 +287,7 @@
             <div class="audytor-details-panel" id="audytorDetailsPanel">
                 <div class="audytor-filters-bar">
                     <input type="text" id="audytorSearch" placeholder="Szukaj...">
-                    <input type="number" id="audytorMinOdds" placeholder="Min. Kurs (np. 1.6)" step="0.01" min="1.0" style="max-width: 150px;">
+                    <input type="text" id="audytorMinOdds" placeholder="Min. Kurs (np. 1.6)" style="max-width: 150px;">
                     <select id="audytorMarket">
                         <option value="all">Wszystkie rynki</option>
                         <option value="Hits">Hits</option>
@@ -297,20 +297,21 @@
                         <option value="F5">F5 Inningów (MLB)</option>
                         <option value="PTS">Punkty (NBA)</option>
                         <option value="REB">Zbiórki (NBA)</option>
+                        <option value="AST">Asysty (NBA)</option>
                     </select>
                     <select id="audytorStatus">
                         <option value="all">Każdy status</option>
-                        <option value="WYGRANA">✅ Wygrane</option>
-                        <option value="PRZEGRANA">❌ Przegrane</option>
-                        <option value="ZWROT">➖ Zwroty</option>
+                        <option value="status-win">✅ Wygrane</option>
+                        <option value="status-loss">❌ Przegrane</option>
+                        <option value="status-push">➖ Zwroty</option>
                     </select>
                     <select id="audytorCategory">
                         <option value="all">Wszystkie kategorie</option>
-                        <option value="🏆 Graal">🏆 Graale</option>
-                        <option value="💰 Value">💰 Value Bety</option>
-                        <option value="🎯 Pewniak">🎯 Pewniaki</option>
-                        <option value="🛡️ Stabilny">🛡️ Stabilni</option>
-                        <option value="📊 Typ Meczowy">📊 Typy Meczowe</option>
+                        <option value="Graal">🏆 Graale</option>
+                        <option value="Value">💰 Value Bety</option>
+                        <option value="Pewniak">🎯 Pewniaki</option>
+                        <option value="Stabilny">🛡️ Stabilni</option>
+                        <option value="Typ Meczowy">📊 Typy Meczowe</option>
                     </select>
                 </div>
                 <table class="details-table">
@@ -529,7 +530,6 @@
             mainTh.innerHTML = html;
             favTh.innerHTML = html;
             
-            // Re-bind sort
             document.querySelectorAll('th.sortable').forEach(th => { 
                 th.addEventListener('click', () => { 
                     const col = th.dataset.sort; 
@@ -610,10 +610,7 @@
                 
                 data.forEach(team => {
                     let tr = document.createElement('tr');
-                    let pVal = parseFloat(team.Pace)||0;
-                    let o3Val = parseFloat(team.Tracone_3PM)||0;
-                    let orVal = parseFloat(team.Tracone_REB)||0;
-                    
+                    let pVal = parseFloat(team.Pace)||0; let o3Val = parseFloat(team.Tracone_3PM)||0; let orVal = parseFloat(team.Tracone_REB)||0;
                     let paceClass = pVal >= maxPace * 0.98 ? 'cell-good' : (pVal <= minPace * 1.02 ? 'cell-bad' : '');
                     let opp3PMClass = o3Val >= maxOpp3PM * 0.95 ? 'cell-good' : (o3Val <= minOpp3PM * 1.05 ? 'cell-bad' : '');
                     let oppRebClass = orVal >= maxOppReb * 0.96 ? 'cell-good' : (orVal <= minOppReb * 1.04 ? 'cell-bad' : '');
@@ -621,15 +618,10 @@
                     tr.innerHTML = `
                         <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
                         <td class="${paceClass}">${team.Pace}</td>
-                        <td>${team.Zdobyte_PTS}</td>
-                        <td>${team.Zdobyte_REB}</td>
-                        <td>${team.Zdobyte_3PM}</td>
+                        <td>${team.Zdobyte_PTS}</td><td>${team.Zdobyte_REB}</td><td>${team.Zdobyte_3PM}</td>
                         <td style="border-left: 2px solid var(--border-color);">${team.Tracone_PTS}</td>
-                        <td class="${oppRebClass}">${team.Tracone_REB}</td>
-                        <td>${team.Tracone_AST}</td>
-                        <td class="${opp3PMClass}">${team.Tracone_3PM}</td>
-                        <td>${team.Tracone_3PA}</td>
-                        <td>${team.Wymuszone_Faule}</td>
+                        <td class="${oppRebClass}">${team.Tracone_REB}</td><td>${team.Tracone_AST}</td>
+                        <td class="${opp3PMClass}">${team.Tracone_3PM}</td><td>${team.Tracone_3PA}</td><td>${team.Wymuszone_Faule}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -659,38 +651,24 @@
                     </tr>
                 `;
 
-                let maxWhip = Math.max(...data.map(d => parseFloat(d.Obrona_WHIP)||0));
-                let minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
-                let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0));
-                let minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
-                
-                let maxWalks = Math.max(...data.map(d => parseFloat(d.Oddane_Walks)||0));
-                let minWalks = Math.min(...data.map(d => parseFloat(d.Oddane_Walks)||1000));
-                let maxK = Math.max(...data.map(d => parseFloat(d.Miotacze_K)||0));
-                let minK = Math.min(...data.map(d => parseFloat(d.Miotacze_K)||1000));
-                let maxBS = Math.max(...data.map(d => parseFloat(d.Blown_Saves)||0));
-                let minBS = Math.min(...data.map(d => parseFloat(d.Blown_Saves)||100));
-                let maxOffK = Math.max(...data.map(d => parseFloat(d.Ofensywa_K)||0));
-                let minOffK = Math.min(...data.map(d => parseFloat(d.Ofensywa_K)||1000));
-                let maxOffBB = Math.max(...data.map(d => parseFloat(d.Ofensywa_BB)||0));
-                let minOffBB = Math.min(...data.map(d => parseFloat(d.Ofensywa_BB)||1000));
-                let maxSaves = Math.max(...data.map(d => parseFloat(d.Udane_Saves)||0));
-                let minSaves = Math.min(...data.map(d => parseFloat(d.Udane_Saves)||100));
+                let maxWhip = Math.max(...data.map(d => parseFloat(d.Obrona_WHIP)||0)), minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
+                let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0)), minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
+                let maxWalks = Math.max(...data.map(d => parseFloat(d.Oddane_Walks)||0)), minWalks = Math.min(...data.map(d => parseFloat(d.Oddane_Walks)||1000));
+                let maxK = Math.max(...data.map(d => parseFloat(d.Miotacze_K)||0)), minK = Math.min(...data.map(d => parseFloat(d.Miotacze_K)||1000));
+                let maxBS = Math.max(...data.map(d => parseFloat(d.Blown_Saves)||0)), minBS = Math.min(...data.map(d => parseFloat(d.Blown_Saves)||100));
+                let maxOffK = Math.max(...data.map(d => parseFloat(d.Ofensywa_K)||0)), minOffK = Math.min(...data.map(d => parseFloat(d.Ofensywa_K)||1000));
+                let maxOffBB = Math.max(...data.map(d => parseFloat(d.Ofensywa_BB)||0)), minOffBB = Math.min(...data.map(d => parseFloat(d.Ofensywa_BB)||1000));
+                let maxSaves = Math.max(...data.map(d => parseFloat(d.Udane_Saves)||0)), minSaves = Math.min(...data.map(d => parseFloat(d.Udane_Saves)||100));
                 
                 data.forEach(team => {
                     let tr = document.createElement('tr');
-                    let wVal = parseFloat(team.Obrona_WHIP)||0;
-                    let bVal = parseFloat(team.Obrona_BAA)||0;
-                    let walkVal = parseFloat(team.Oddane_Walks)||0;
-                    let kVal = parseFloat(team.Miotacze_K)||0;
-                    let bsVal = parseFloat(team.Blown_Saves)||0;
-                    let offKVal = parseFloat(team.Ofensywa_K)||0;
-                    let offBBVal = parseFloat(team.Ofensywa_BB)||0;
-                    let savesVal = parseFloat(team.Udane_Saves)||0;
+                    let wVal = parseFloat(team.Obrona_WHIP)||0; let bVal = parseFloat(team.Obrona_BAA)||0;
+                    let walkVal = parseFloat(team.Oddane_Walks)||0; let kVal = parseFloat(team.Miotacze_K)||0;
+                    let bsVal = parseFloat(team.Blown_Saves)||0; let offKVal = parseFloat(team.Ofensywa_K)||0;
+                    let offBBVal = parseFloat(team.Ofensywa_BB)||0; let savesVal = parseFloat(team.Udane_Saves)||0;
                     
                     let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
                     let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
-                    
                     let walkClass = walkVal >= maxWalks * 0.90 ? 'cell-good' : (walkVal <= minWalks * 1.10 ? 'cell-bad' : '');
                     let kClass = kVal <= minK * 1.05 ? 'cell-good' : (kVal >= maxK * 0.95 ? 'cell-bad' : '');
                     let bsClass = bsVal >= maxBS * 0.85 ? 'cell-good' : (bsVal <= minBS * 1.15 ? 'cell-bad' : '');
@@ -700,20 +678,12 @@
                     
                     tr.innerHTML = `
                         <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
-                        <td>${team.Zdobyte_Runs}</td>
-                        <td>${team.Zdobyte_HR}</td>
-                        <td>${team.Ofensywa_AVG}</td>
-                        <td>${team.Ofensywa_OPS}</td>
-                        <td class="${offKClass}">${team.Ofensywa_K}</td>
-                        <td class="${offBBClass}">${team.Ofensywa_BB}</td>
-                        
+                        <td>${team.Zdobyte_Runs}</td><td>${team.Zdobyte_HR}</td><td>${team.Ofensywa_AVG}</td><td>${team.Ofensywa_OPS}</td>
+                        <td class="${offKClass}">${team.Ofensywa_K}</td><td class="${offBBClass}">${team.Ofensywa_BB}</td>
                         <td style="border-left: 2px solid var(--border-color);">${team.Obrona_ERA}</td>
-                        <td class="${whipClass}">${team.Obrona_WHIP}</td>
-                        <td class="${baaClass}">${team.Obrona_BAA}</td>
-                        <td class="${bsClass}">${team.Blown_Saves}</td>
-                        <td class="${savesClass}">${team.Udane_Saves}</td>
-                        <td class="${walkClass}">${team.Oddane_Walks}</td>
-                        <td class="${kClass}">${team.Miotacze_K}</td>
+                        <td class="${whipClass}">${team.Obrona_WHIP}</td><td class="${baaClass}">${team.Obrona_BAA}</td>
+                        <td class="${bsClass}">${team.Blown_Saves}</td><td class="${savesClass}">${team.Udane_Saves}</td>
+                        <td class="${walkClass}">${team.Oddane_Walks}</td><td class="${kClass}">${team.Miotacze_K}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -722,16 +692,11 @@
             document.querySelectorAll('th.sortable-team').forEach(th => {
                 th.addEventListener('click', () => {
                     const col = th.dataset.sort;
-                    if (currentTeamSortCol === col) teamSortAsc = !teamSortAsc;
-                    else { teamSortAsc = false; currentTeamSortCol = col; }
-                    
+                    if (currentTeamSortCol === col) teamSortAsc = !teamSortAsc; else { teamSortAsc = false; currentTeamSortCol = col; }
                     teamData.sort((a, b) => {
                         let vA = a[col], vB = b[col];
-                        if (typeof vA === 'string' && isNaN(parseFloat(vA))) {
-                            vA = vA.toLowerCase(); vB = vB.toLowerCase();
-                        } else {
-                            vA = parseFloat(vA) || 0; vB = parseFloat(vB) || 0;
-                        }
+                        if (typeof vA === 'string' && isNaN(parseFloat(vA))) { vA = vA.toLowerCase(); vB = vB.toLowerCase(); } 
+                        else { vA = parseFloat(vA) || 0; vB = parseFloat(vB) || 0; }
                         return vA < vB ? (teamSortAsc ? -1 : 1) : (vA > vB ? (teamSortAsc ? 1 : -1) : 0);
                     });
                     renderTeamStatsTable(teamData);
@@ -743,16 +708,13 @@
             const tbody = document.getElementById('audytorDetailsBody');
             const rows = Array.from(tbody.querySelectorAll('tr'));
             audytorSortAsc = !audytorSortAsc;
-
             rows.sort((a, b) => {
                 let valA = type === 'number' ? parseFloat(a.dataset.kurs) || 0 : a.cells[colIndex].innerText;
                 let valB = type === 'number' ? parseFloat(b.dataset.kurs) || 0 : b.cells[colIndex].innerText;
-
                 if (valA < valB) return audytorSortAsc ? -1 : 1;
                 if (valA > valB) return audytorSortAsc ? 1 : -1;
                 return 0;
             });
-
             rows.forEach(row => tbody.appendChild(row));
         };
 
@@ -760,40 +722,93 @@
             const panel = document.getElementById('audytorDetailsPanel');
             const btn = document.getElementById('toggleDetailsBtn');
             panel.classList.toggle('open');
-            if(panel.classList.contains('open')) {
-                btn.innerText = "Zwiń szczegóły wczorajszych typów ▲";
-            } else {
-                btn.innerText = "Rozwiń szczegóły wczorajszych typów ▼";
-            }
+            btn.innerText = panel.classList.contains('open') ? "Zwiń szczegóły wczorajszych typów ▲" : "Rozwiń szczegóły wczorajszych typów ▼";
         }
 
+        // ==========================================
+        // NOWY KULOODPORNY SYSTEM FILTRÓW AUDYTORA
+        // ==========================================
         function filterAuditorDetails() {
-            let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
-            let marketFilter = document.getElementById('audytorMarket').value;
-            let statusFilter = document.getElementById('audytorStatus').value;
-            let categoryFilter = document.getElementById('audytorCategory').value;
-            let minOdds = parseFloat(document.getElementById('audytorMinOdds').value) || 0;
-            
-            let rows = document.querySelectorAll('#audytorDetailsBody tr');
-            rows.forEach(row => {
-                let playerName = row.cells[0].innerText.toLowerCase();
-                let marketName = row.cells[1].innerText; 
-                let oddsVal = parseFloat(row.dataset.kurs) || 0;
-                let statusText = row.cells[5].innerText;
-                let categoryText = row.cells[6].innerText;
+            try {
+                let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
+                let marketFilter = document.getElementById('audytorMarket').value;
+                let statusFilter = document.getElementById('audytorStatus').value;
+                let categoryFilter = document.getElementById('audytorCategory').value;
                 
-                let nameMatch = playerName.includes(nameFilter);
-                let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
-                let statusMatch = (statusFilter === 'all') || statusText.includes(statusFilter);
-                let categoryMatch = (categoryFilter === 'all') || categoryText.includes(categoryFilter);
-                let oddsMatch = minOdds === 0 || oddsVal >= minOdds;
+                let oddsStr = document.getElementById('audytorMinOdds').value;
+                let minOdds = parseFloat(oddsStr.replace(',', '.')) || 0;
                 
-                if (nameMatch && marketMatch && statusMatch && categoryMatch && oddsMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
+                let rows = document.querySelectorAll('#audytorDetailsBody tr');
+                
+                let w = 0, l = 0, p = 0, profit = 0.0;
+                let cGraalW=0, cGraalT=0, cValueW=0, cValueT=0, cSafeW=0, cSafeT=0, cStableW=0, cStableT=0;
+
+                rows.forEach(row => {
+                    let playerName = row.cells[0].innerText.toLowerCase();
+                    let marketName = row.cells[1].innerText; 
+                    let oddsVal = parseFloat(row.dataset.kurs) || 0;
+                    
+                    let sClass = row.dataset.status || '';
+                    let categoryText = row.dataset.cat || '';
+                    
+                    let nameMatch = playerName.includes(nameFilter);
+                    let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
+                    let statusMatch = (statusFilter === 'all') || (sClass === statusFilter);
+                    let isCatMatch = (categoryFilter === 'all') || categoryText.includes(categoryFilter);
+                    let oddsMatch = (minOdds === 0) || (oddsVal >= minOdds);
+                    
+                    if (nameMatch && marketMatch && statusMatch && isCatMatch && oddsMatch) {
+                        row.style.display = '';
+                        
+                        let k = parseFloat(row.dataset.kurs) || 1.0;
+                        let isGraal = categoryText.includes('Graal');
+                        let isValue = categoryText.includes('Value');
+                        let isSafe = categoryText.includes('Pewniak');
+                        let isStable = categoryText.includes('Stabilny');
+
+                        if (sClass === 'status-win') {
+                            w++; 
+                            if(k > 1.0) profit += (k - 1.0);
+                            
+                            if(isGraal) { cGraalW++; cGraalT++; }
+                            if(isValue) { cValueW++; cValueT++; }
+                            if(isSafe) { cSafeW++; cSafeT++; }
+                            if(isStable) { cStableW++; cStableT++; }
+                        } else if (sClass === 'status-loss') {
+                            l++; profit -= 1.0;
+                            if(isGraal) cGraalT++;
+                            if(isValue) cValueT++;
+                            if(isSafe) cSafeT++;
+                            if(isStable) cStableT++;
+                        } else if (sClass === 'status-push') {
+                            p++;
+                        }
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                let suma = w + l;
+                let hitRate = suma > 0 ? (w / suma * 100).toFixed(1) + '%' : "0.0%";
+                let roi = suma > 0 ? (profit / suma * 100).toFixed(1) + '%' : "0.0%";
+
+                document.getElementById('audytor-hitrate').textContent = hitRate;
+                const roiEl = document.getElementById('audytor-roi');
+                roiEl.textContent = (profit > 0 ? "+" : "") + roi + ` (${profit.toFixed(2)}u)`;
+                roiEl.className = profit > 0 ? "audytor-value text-green" : (profit < 0 ? "audytor-value text-red" : "audytor-value text-orange");
+                
+                document.getElementById('audytor-w').textContent = w;
+                document.getElementById('audytor-l').textContent = l;
+                document.getElementById('audytor-p').textContent = p;
+
+                const formatCat = (win, tot) => tot > 0 ? `${win}/${tot} (${(win/tot*100).toFixed(0)}%)` : "0/0 (Brak)";
+                document.getElementById('cat-graal-val').textContent = formatCat(cGraalW, cGraalT);
+                document.getElementById('cat-value-val').textContent = formatCat(cValueW, cValueT);
+                document.getElementById('cat-safe-val').textContent = formatCat(cSafeW, cSafeT);
+                document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
+            } catch (err) {
+                console.error("Błąd w filterAuditorDetails: ", err);
+            }
         }
 
         document.getElementById('audytorSearch').addEventListener('input', filterAuditorDetails);
@@ -809,10 +824,6 @@
             document.getElementById('audytor-w').textContent = '0';
             document.getElementById('audytor-l').textContent = '0';
             document.getElementById('audytor-p').textContent = '0';
-            document.getElementById('cat-graal-val').textContent = '--';
-            document.getElementById('cat-value-val').textContent = '--';
-            document.getElementById('cat-safe-val').textContent = '--';
-            document.getElementById('cat-stable-val').textContent = '--';
             
             document.getElementById('toggleDetailsBtn').style.display = 'none';
             document.getElementById('audytorDetailsPanel').classList.remove('open');
@@ -820,11 +831,7 @@
             document.getElementById('audytorDetailsBody').innerHTML = '';
 
             try {
-                let fileName = '';
-                if (currentSport === 'nba') fileName = 'statystyki_bota.json';
-                else if (currentSport === 'mlb') fileName = 'statystyki_mlb.json';
-                else if (currentSport === 'nhl') fileName = 'statystyki_nhl.json';
-
+                let fileName = currentSport === 'nba' ? 'statystyki_bota.json' : (currentSport === 'mlb' ? 'statystyki_mlb.json' : 'statystyki_nhl.json');
                 const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
                 if (!response.ok) throw new Error("Brak pliku");
                 statystykiBota = await response.json();
@@ -847,108 +854,66 @@
             document.getElementById('btn-audytor-wczoraj').classList.toggle('active', typWidoku === 'wczoraj');
             document.getElementById('btn-audytor-alltime').classList.toggle('active', typWidoku === 'alltime');
             
-            let dataTytul, hitRate, roi, w, l, p, zyskJednostki;
-            let cGraalW = 0, cGraalT = 0, cValueW = 0, cValueT = 0, cSafeW = 0, cSafeT = 0, cStableW = 0, cStableT = 0;
-            
+            let dataTytul = "";
+            let itemsToRender = [];
+
             if(typWidoku === 'wczoraj') {
                 const wczoraj = statystykiBota[0];
                 dataTytul = `Ostatnia Noc (${wczoraj.data_meczow})`;
-                hitRate = wczoraj.hit_rate;
-                roi = wczoraj.roi;
-                zyskJednostki = wczoraj.profit_jednostki;
-                w = wczoraj.wygrane || 0; l = wczoraj.przegrane || 0; p = wczoraj.zwroty || 0;
-                
-                if(wczoraj.kategorie) {
-                    cGraalW = wczoraj.kategorie.graal?.w || 0; cGraalT = wczoraj.kategorie.graal?.t || 0;
-                    cValueW = wczoraj.kategorie.value?.w || 0; cValueT = wczoraj.kategorie.value?.t || 0;
-                    cSafeW = wczoraj.kategorie.safe?.w || 0; cSafeT = wczoraj.kategorie.safe?.t || 0;
-                    cStableW = wczoraj.kategorie.stable?.w || 0; cStableT = wczoraj.kategorie.stable?.t || 0;
-                }
-
-                const detailsBody = document.getElementById('audytorDetailsBody');
-                detailsBody.innerHTML = '';
-                
-                document.getElementById('audytorSearch').value = '';
-                document.getElementById('audytorMinOdds').value = '';
-                document.getElementById('audytorMarket').value = 'all';
-                document.getElementById('audytorStatus').value = 'all';
-                document.getElementById('audytorCategory').value = 'all';
-
-                if(wczoraj.detale && wczoraj.detale.length > 0) {
-                    wczoraj.detale.forEach(d => {
-                        let statusClass = 'status-push';
-                        if(d.status.includes('WYGRANA')) statusClass = 'status-win';
-                        else if(d.status.includes('PRZEGRANA')) statusClass = 'status-loss';
-
-                        let badgesHtml = '';
-                        if(d.kategoria) {
-                            d.kategoria.split('|').forEach(cat => {
-                                let c = cat.trim();
-                                if(c && c !== 'Zwykły Typ') badgesHtml += `<span class="cat-badge">${c}</span>`;
-                            });
-                        }
-                        if(badgesHtml === '') badgesHtml = '<span style="color:var(--muted-text); font-size:0.8rem;">Brak</span>';
-
-                        const pickTyp = d.typ || '-';
-                        const pickKursStr = d.kurs ? parseFloat(d.kurs).toFixed(2) : '0.00';
-
-                        const tr = document.createElement('tr');
-                        tr.dataset.kurs = pickKursStr;
-                        tr.innerHTML = `
-                            <td style="font-weight:bold;">${d.zawodnik || d.zaklad}</td>
-                            <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp}</span></td>
-                            <td>${d.linia}</td>
-                            <td style="font-weight:bold; color:var(--accent-color);">@${pickKursStr}</td>
-                            <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny ?? d.wynik ?? '-'}</td>
-                            <td class="${statusClass}">${d.status}</td>
-                            <td>${badgesHtml}</td>
-                        `;
-                        detailsBody.appendChild(tr);
-                    });
-                    document.getElementById('toggleDetailsBtn').style.display = 'block';
-                } else {
-                    document.getElementById('toggleDetailsBtn').style.display = 'none';
-                }
-
+                if(wczoraj.detale) itemsToRender = wczoraj.detale;
+                document.getElementById('toggleDetailsBtn').style.display = 'block';
             } else {
                 dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
-                document.getElementById('toggleDetailsBtn').style.display = 'none';
-                document.getElementById('audytorDetailsPanel').classList.remove('open');
-
-                let sumW = 0, sumL = 0, sumP = 0, sumProfit = 0;
-                
-                statystykiBota.forEach(d => {
-                    sumW += d.wygrane || 0; sumL += d.przegrane || 0; sumP += d.zwroty || 0; sumProfit += d.profit_jednostki || 0;
-                    if(d.kategorie) {
-                        cGraalW += d.kategorie.graal?.w || 0; cGraalT += d.kategorie.graal?.t || 0;
-                        cValueW += d.kategorie.value?.w || 0; cValueT += d.kategorie.value?.t || 0;
-                        cSafeW += d.kategorie.safe?.w || 0; cSafeT += d.kategorie.safe?.t || 0;
-                        cStableW += d.kategorie.stable?.w || 0; cStableT += d.kategorie.stable?.t || 0;
-                    }
-                });
-                
-                w = sumW; l = sumL; p = sumP; zyskJednostki = sumProfit;
-                let sumaAll = sumW + sumL;
-                hitRate = sumaAll > 0 ? (sumW / sumaAll * 100).toFixed(1) + '%' : "0.0%";
-                roi = sumaAll > 0 ? (sumProfit / sumaAll * 100).toFixed(1) + '%' : "0.0%";
+                statystykiBota.forEach(d => { if(d.detale) itemsToRender = itemsToRender.concat(d.detale); });
+                document.getElementById('toggleDetailsBtn').style.display = 'block';
             }
-            
+
             document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) - ${dataTytul}`;
-            document.getElementById('audytor-hitrate').textContent = hitRate;
+            const detailsBody = document.getElementById('audytorDetailsBody');
+            detailsBody.innerHTML = '';
             
-            const roiEl = document.getElementById('audytor-roi');
-            roiEl.textContent = (parseFloat(zyskJednostki) > 0 ? "+" : "") + roi + ` (${parseFloat(zyskJednostki).toFixed(2)}u)`;
-            roiEl.className = parseFloat(zyskJednostki) > 0 ? "audytor-value text-green" : "audytor-value text-red";
-            
-            document.getElementById('audytor-w').textContent = w;
-            document.getElementById('audytor-l').textContent = l;
-            document.getElementById('audytor-p').textContent = p;
-            
-            const formatCat = (win, tot) => tot > 0 ? `${win}/${tot} (${(win/tot*100).toFixed(0)}%)` : "0/0 (Brak)";
-            document.getElementById('cat-graal-val').textContent = formatCat(cGraalW, cGraalT);
-            document.getElementById('cat-value-val').textContent = formatCat(cValueW, cValueT);
-            document.getElementById('cat-safe-val').textContent = formatCat(cSafeW, cSafeT);
-            document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
+            // Resetujemy filtry przed załadowaniem nowych danych
+            document.getElementById('audytorSearch').value = '';
+            document.getElementById('audytorMinOdds').value = '';
+            document.getElementById('audytorMarket').value = 'all';
+            document.getElementById('audytorStatus').value = 'all';
+            document.getElementById('audytorCategory').value = 'all';
+
+            itemsToRender.forEach(d => {
+                let statusClass = 'status-push';
+                if(d.status.includes('WYGRANA')) statusClass = 'status-win';
+                else if(d.status.includes('PRZEGRANA')) statusClass = 'status-loss';
+
+                let badgesHtml = '';
+                if(d.kategoria) {
+                    d.kategoria.split('|').forEach(cat => {
+                        let c = cat.trim();
+                        if(c && c !== 'Zwykły Typ') badgesHtml += `<span class="cat-badge">${c}</span>`;
+                    });
+                }
+                if(badgesHtml === '') badgesHtml = '<span style="color:var(--muted-text); font-size:0.8rem;">Brak</span>';
+
+                const pickTyp = d.typ || '-';
+                const pickKursStr = d.kurs ? parseFloat(d.kurs).toFixed(2) : '0.00';
+
+                const tr = document.createElement('tr');
+                tr.dataset.kurs = pickKursStr;
+                tr.dataset.status = statusClass;
+                tr.dataset.cat = d.kategoria || '';
+                tr.innerHTML = `
+                    <td style="font-weight:bold;">${d.zawodnik || d.zaklad}</td>
+                    <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp}</span></td>
+                    <td>${d.linia}</td>
+                    <td style="font-weight:bold; color:var(--accent-color);">@${pickKursStr}</td>
+                    <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny ?? d.wynik ?? '-'}</td>
+                    <td class="${statusClass}">${d.status}</td>
+                    <td>${badgesHtml}</td>
+                `;
+                detailsBody.appendChild(tr);
+            });
+
+            // Odpalamy filter na koniec, żeby załadował całą statystykę do UI na żywo!
+            filterAuditorDetails();
         }
 
         function loadSportData(sport) {
@@ -958,7 +923,6 @@
             
             document.getElementById('mlbSubNav').style.display = (sport === 'mlb') ? 'flex' : 'none';
             document.getElementById('roleFilterGroup').style.display = (sport === 'mlb' && currentSubTab === 'props') ? 'flex' : 'none';
-            
             if (sport !== 'mlb') { currentSubTab = 'props'; }
             
             wczytajAudytora();
@@ -975,20 +939,9 @@
             renderTableHeaders();
 
             fetch(`${fileName}?v=` + new Date().getTime())
-            .then(r => {
-                if(!r.ok) throw new Error("Brak pliku");
-                return r.json();
-            })
-            .then(data => { 
-                globalData = data; 
-                renderTable(globalData); 
-                populateDropdowns(data); 
-                updateTotalOdds(); 
-            })
-            .catch(e => { 
-                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza jest pusta. Odpal skrypt bota!</td></tr>`; 
-                globalData = [];
-            });
+            .then(r => { if(!r.ok) throw new Error("Brak pliku"); return r.json(); })
+            .then(data => { globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); })
+            .catch(e => { document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza jest pusta. Odpal skrypt bota!</td></tr>`; globalData = []; });
         }
 
         document.querySelectorAll('.sport-tab[data-sport]').forEach(tab => {
@@ -1001,8 +954,7 @@
                 if (currentSport === 'mlb') {
                     currentSubTab = 'props';
                     document.querySelectorAll('#mlbSubNav .sport-tab').forEach(t => {
-                        t.classList.remove('active');
-                        t.style.backgroundColor = 'transparent';
+                        t.classList.remove('active'); t.style.backgroundColor = 'transparent';
                         if(t.dataset.sub === 'props') t.classList.add('active');
                     });
                 }
@@ -1021,7 +973,6 @@
             globalData.forEach(d => {
                 let true_prob = isGames ? d.szansa.toFixed(1) : (d.true_prob * 100).toFixed(1);
                 let ev = isGames ? (d.ev * 100).toFixed(1) : (d.ev * 100).toFixed(1);
-                
                 if (isGames) {
                     csvRows.push([`"${d.mecz}"`, `"${d.rynek}"`, `"${d.zaklad}"`, d.linia, d.kurs, d.projekcja, true_prob, ev, `"${d.uwagi.replace(/<br>/g, " ")}"`].join(","));
                 } else {
@@ -1131,7 +1082,7 @@
                     break; 
                 } 
             } 
-            if(!added) alert(`Nie udało się znaleźć typu w głównej tabeli.`);
+            if(!added) alert(`Nie udało się znaleźć wybranego zakładu w głównej tabeli.`);
         };
 
         function runSimulation(idx, isFav = false) {
@@ -1372,7 +1323,7 @@
                 if (!label) {
                     label = r.querySelector('.player-name') ? r.querySelector('.player-name').innerText.split(' ')[0] : "Typ";
                 } else {
-                    label = label.toUpperCase(); // z dataset jest male litery
+                    label = label.toUpperCase();
                 }
                 matches.push(`${label} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); 
             });
