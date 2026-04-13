@@ -450,7 +450,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.6 (Hardcoded 0.5 Lines Fix)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.7 (Stable Prop Aggregation)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -641,6 +641,7 @@ def uruchom_mlb_pro():
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
 
+        # 🎯 FIX v9.7: PRAWIDŁOWY SŁOWNIK PUNKTOWY
         aggregated_props = {}
         
         for bm in res_props.get('bookmakers', []):
@@ -658,11 +659,9 @@ def uruchom_mlb_pro():
                     if not p_name: continue
                     
                     if p_name not in aggregated_props[m_key]:
-                        aggregated_props[m_key][p_name] = {'Over': [], 'Under': [], 'point': []}
+                        aggregated_props[m_key][p_name] = {} # Fix: Czysty słownik na same linie!
                         
                     mlb_stat_key = rynek_map[m_key][2]
-                    
-                    # 🎯 TWARDE WYMUSZENIE LINII (Zabezpiecza przed głupotami od buka)
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
                         point_val = 0.5 
                     elif mlb_stat_key == 'totalBases':
@@ -697,7 +696,6 @@ def uruchom_mlb_pro():
                 
                 odds_data = points_dict[best_point]
                 
-                # 🎯 FIX: ZEZWALAMY NA BRAK UNDERÓW! (Ważne dla Home Runów i RBIs)
                 if not odds_data['Over']: continue 
                 
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
@@ -867,15 +865,8 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
-                # 🎯 FIX: USTALANIE PROGÓW DLA POSZCZEGÓLNYCH RYNKÓW
-                if is_hr:
-                    min_prob = 0.08
-                elif mlb_stat_key in ['runs', 'rbi']:
-                    min_prob = 0.20
-                elif mlb_stat_key == 'totalBases':
-                    min_prob = 0.35
-                else:
-                    min_prob = 0.50 
+                # 🎯 FIX: ŻELAZNE PROGI DLA ZAWODNIKÓW (55% i 20%)
+                min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
                 if ev_val < 0.02: continue 
