@@ -288,6 +288,8 @@
                         <option value="Hits">Hits</option>
                         <option value="Home Runs">Home Runs</option>
                         <option value="Total Bases">Total Bases</option>
+                        <option value="Runs">Runs</option>
+                        <option value="RBIs">RBIs</option>
                         <option value="Mecz:">Typy Meczowe (MLB)</option>
                         <option value="F5">F5 Inningów (MLB)</option>
                         <option value="PTS">Punkty (NBA)</option>
@@ -339,11 +341,6 @@
                     <input type="text" id="maxOddsFilter" placeholder="Max" style="width: 100%;">
                 </div>
             </div>
-            
-            <div class="filter-group">
-                <label>Mecz</label>
-                <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
-            </div>
 
             <div class="filter-group">
                 <label>Rynek</label>
@@ -365,13 +362,18 @@
             </div>
             
             <div class="filter-group">
+                <label>Mecz</label>
+                <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
+            </div>
+            
+            <div class="filter-group">
                 <label>Status (Kategoria)</label>
                 <select id="statusFilter">
                     <option value="all">Wszystkie Typy</option>
-                    <option value="value">💰 Value Bety</option>
-                    <option value="safe">🎯 Pewniaki</option>
-                    <option value="stable">🛡️ Stabilni</option>
-                    <option value="graal">🏆 Graale</option>
+                    <option value="value">💰 Value Bety (>40% EV)</option>
+                    <option value="safe">🎯 Pewniaki (>75% Szans)</option>
+                    <option value="stable">🛡️ Stabilni gracze</option>
+                    <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
                 </select>
             </div>
         </div>
@@ -1118,6 +1120,11 @@
                 tr.dataset.index = index; 
                 tr.dataset.odds = item.kurs; 
                 tr.dataset.prob = true_prob;
+                
+                // FIX: Bezpiecznie dodajemy znaczniki kategorii do wierszy, zeby filtr ich znalazl!
+                tr.dataset.isValue = item.is_value === true ? "true" : "false";
+                tr.dataset.isSafe = item.is_safe === true ? "true" : "false";
+                tr.dataset.isStable = item.is_stable === true ? "true" : "false";
                 
                 let cleanUwagi = item.uwagi || "-";
                 if (!isGames && cleanUwagi !== "-") cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, "");
