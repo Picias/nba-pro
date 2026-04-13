@@ -20,7 +20,8 @@ ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 SPORT = 'baseball_mlb'
 REGIONS = 'us'
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
-MARKETS_GAMES = 'h2h,totals,spreads,h2h_1st_half,totals_1st_half'
+# Usunięto rynki 1st_half, które blokowały API. F5 wyliczymy z "Fair Odds"!
+MARKETS_GAMES = 'h2h,totals,spreads'
 
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
@@ -493,7 +494,7 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.0 (Full Engine)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.1 (Fix API & Fair Odds)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -589,16 +590,22 @@ def uruchom_mlb_pro():
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
-        # --- 📈 POBIERANIE KURSÓW (PROPS + GAMES) DLA KONKRETNEGO MECZU ---
+        # --- 📈 POBIERANIE KURSÓW Z API (ZABEZPIECZONO!) ---
         try:
-            time.sleep(0.1) # Lekki bufor na limity API
+            time.sleep(0.1) 
             res_odds = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS},{MARKETS_GAMES}&oddsFormat=decimal").json()
+            
+            if 'message' in res_odds:
+                print(f"  ❌ Odpowiedź The Odds API: {res_odds['message']}")
+                print("     Bot kontynuuje, ale bez kursów nie może zatwierdzić typu.")
+                continue
+                
         except Exception as e: 
-            print(f"  ❌ Błąd pobierania kursów dla tego meczu: {e}")
+            print(f"  ❌ Błąd sieciowy przy pobieraniu kursów: {e}")
             continue
         
         # Ekstrakcja Kursów
-        game_lines = {'h2h': {}, 'totals': {}, 'h2h_f5': {}, 'totals_f5': {}}
+        game_lines = {'h2h': {}, 'totals': {}}
         for bm in res_odds.get('bookmakers', []):
             for mkt in bm.get('markets', []):
                 if mkt['key'] == 'h2h':
@@ -607,14 +614,8 @@ def uruchom_mlb_pro():
                     for oc in mkt['outcomes']: 
                         game_lines['totals']['point'] = oc['point']
                         game_lines['totals'][oc['name']] = oc['price']
-                elif mkt['key'] == 'h2h_1st_half':
-                    for oc in mkt['outcomes']: game_lines['h2h_f5'][oc['name']] = oc['price']
-                elif mkt['key'] == 'totals_1st_half':
-                    for oc in mkt['outcomes']: 
-                        game_lines['totals_f5']['point'] = oc['point']
-                        game_lines['totals_f5'][oc['name']] = oc['price']
 
-        # --- 🎯 EWALUACJA ZAKŁADÓW MECZOWYCH (Z wizualizacją w konsoli) ---
+        # --- 🎯 EWALUACJA ZAKŁADÓW MECZOWYCH (FULL GAME) ---
         if game_lines['totals'] and 'Over' in game_lines['totals']:
             t_line = game_lines['totals']['point']
             t_over = game_lines['totals']['Over']
@@ -635,25 +636,17 @@ def uruchom_mlb_pro():
             if ev_h > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
             elif ev_a > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
 
-        if game_lines['totals_f5'] and 'Over' in game_lines['totals_f5']:
-            t_line_f5 = game_lines['totals_f5']['point']
-            t_over_f5 = game_lines['totals_f5']['Over']
-            t_under_f5 = game_lines['totals_f5']['Under']
-            over_prob_f5 = 1.0 - poisson_prob_over(total_proj_runs_f5, t_line_f5)
-            ev_o_f5 = (over_prob_f5 * t_over_f5) - 1; ev_u_f5 = ((1-over_prob_f5) * t_under_f5) - 1
-            
-            print(f"    🎲 F5 Totals {t_line_f5} | Szansa OVER: {round(over_prob_f5*100,1)}% (EV: {round(ev_o_f5*100,1)}%) | Szansa UNDER: {round((1-over_prob_f5)*100,1)}% (EV: {round(ev_u_f5*100,1)}%)")
-            if ev_o_f5 > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "OVER", "linia": t_line_f5, "kurs": t_over_f5, "projekcja": total_proj_runs_f5, "szansa": round(over_prob_f5 * 100, 1), "ev": round(ev_o_f5, 3), "uwagi": g_insights})
-            elif ev_u_f5 > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "UNDER", "linia": t_line_f5, "kurs": t_under_f5, "projekcja": total_proj_runs_f5, "szansa": round((1-over_prob_f5) * 100, 1), "ev": round(ev_u_f5, 3), "uwagi": g_insights})
+        # --- 🎯 EWALUACJA ZAKŁADÓW (F5 FAIR ODDS) ---
+        fair_h_f5 = 1 / home_win_prob_f5 if home_win_prob_f5 > 0 else 99
+        fair_a_f5 = 1 / (1 - home_win_prob_f5) if (1-home_win_prob_f5) > 0 else 99
+        print(f"    ⏱️ FAIR KURS F5: {ev['home_team']} @ {round(fair_h_f5,2)} | {ev['away_team']} @ {round(fair_a_f5,2)}")
+        
+        # Jeśli F5 ma dużą szansę na win, dodajemy wskazówkę z Fair Kurs (szukanie w lokalnym buku)
+        if home_win_prob_f5 > 0.55:
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML (Brak Live)", "zaklad": ev['home_team'], "linia": "-", "kurs": round(fair_h_f5, 2), "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", "szansa": round(home_win_prob_f5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_h_f5 + 0.05, 2)}</b>"})
+        elif (1-home_win_prob_f5) > 0.55:
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML (Brak Live)", "zaklad": ev['away_team'], "linia": "-", "kurs": round(fair_a_f5, 2), "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_a_f5 + 0.05, 2)}</b>"})
 
-        if game_lines['h2h_f5'] and ev['home_team'] in game_lines['h2h_f5']:
-            h_kurs_f5 = game_lines['h2h_f5'][ev['home_team']]
-            a_kurs_f5 = game_lines['h2h_f5'][ev['away_team']]
-            ev_h_f5 = (home_win_prob_f5 * h_kurs_f5) - 1; ev_a_f5 = ((1-home_win_prob_f5) * a_kurs_f5) - 1
-            
-            print(f"    ⚔️ F5 ML Home: {round(home_win_prob_f5*100,1)}% (EV: {round(ev_h_f5*100,1)}%) | F5 ML Away: {round((1-home_win_prob_f5)*100,1)}% (EV: {round(ev_a_f5*100,1)}%)")
-            if ev_h_f5 > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs_f5, "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", "szansa": round(home_win_prob_f5 * 100, 1), "ev": round(ev_h_f5, 3), "uwagi": g_insights})
-            elif ev_a_f5 > 0.05: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs_f5, "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": round(ev_a_f5, 3), "uwagi": g_insights})
 
         # --- 🏏 ANALIZA ZAWODNIKÓW (PROPS) ---
         h_roster = {}
