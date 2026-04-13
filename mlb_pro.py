@@ -18,11 +18,10 @@ TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
-REGIONS = 'us' # Wracamy do USA!
+REGIONS = 'us' # TOP USA Books
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
-# 🎯 TOP AMERYKAŃSCY BUKMACHERZY (Czyste linie, bez giełd i śmieci)
 TOP_BOOKMAKERS = ['draftkings', 'fanduel', 'betmgm', 'caesars', 'betrivers', 'bovada']
 
 SEZON_MLB = 2026
@@ -31,8 +30,6 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # ==========================================
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
-# 'dir' może mieć wartości: 'OUT' (Wywiewa/Ułatwia HR), 'IN' (W twarz/Utrudnia HR), 'NEUTRAL'
-# Wpisuj tylko domową drużynę. Przykład:
 MANUAL_WEATHER = {
     "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
     "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
@@ -375,6 +372,7 @@ def pobierz_staty_miotacza_startowego(pitcher_id):
     CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa, 'hand': hand}
     return CACHE_PITCHER_STATS[pitcher_id]
 
+# 🎯 FIX: Zaktualizowany moduł zmęczenia Bullpenu
 def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
     if team_id in CACHE_BULLPEN_FATIGUE: return CACHE_BULLPEN_FATIGUE[team_id]
     dzis = datetime.strptime(data_dzis_str, '%Y-%m-%d')
@@ -390,10 +388,11 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
                 if g['status']['statusCode'] in ['F', 'O', 'C']: rozegrane_mecze += 1
     except: pass
 
-    if rozegrane_mecze >= 4: bonus = 1.08; msg = "🥵 BP Zajechany (+8%)"
-    elif rozegrane_mecze == 3: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"
-    elif rozegrane_mecze <= 1: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
-    else: bonus = 1.0; msg = "BP Gotowy"
+    # Tylko prawdziwe, skrajne przeciążenie karzemy mnożnikiem
+    if rozegrane_mecze >= 5: bonus = 1.08; msg = "🥵 BP Mega Zajechany (+8%)" # 5 meczów w 3 dni
+    elif rozegrane_mecze == 4: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"     # 4 mecze w 3 dni (np. doubleheader)
+    elif rozegrane_mecze <= 2: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"    # Dzień wolny
+    else: bonus = 1.0; msg = "BP Gotowy"                                      # Standardowe 3 mecze
         
     CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
     return CACHE_BULLPEN_FATIGUE[team_id]
@@ -446,7 +445,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.1 (US Sharp Books & Smart EV Engine)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.2 (Smart Line Grouping & Exact EV)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -637,6 +636,7 @@ def uruchom_mlb_pro():
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
 
+        # 🎯 FIX: AGREGATOR KURSÓW GRUPUJĄCY PO LINIACH (POINT)
         aggregated_props = {}
         
         for bm in res_props.get('bookmakers', []):
@@ -645,42 +645,57 @@ def uruchom_mlb_pro():
             for mkt in bm.get('markets', []):
                 m_key = mkt['key']
                 if m_key not in rynek_map: continue
-                
-                if m_key not in aggregated_props:
-                    aggregated_props[m_key] = {}
+                if m_key not in aggregated_props: aggregated_props[m_key] = {}
                     
                 for oc in mkt['outcomes']:
                     p_name = oc.get('description')
                     if not p_name: continue
                     
                     if p_name not in aggregated_props[m_key]:
-                        aggregated_props[m_key][p_name] = {'Over': [], 'Under': [], 'point': []}
+                        aggregated_props[m_key][p_name] = {}
                         
-                    point = oc.get('point')
-                    if point is not None:
-                        aggregated_props[m_key][p_name]['point'].append(point)
+                    # API fallback na 0.5 lub 1.5 w przypadku braku 'point'
+                    mlb_stat_key = rynek_map[m_key][2]
+                    if 'point' in oc:
+                        point_val = float(oc['point'])
+                    else:
+                        point_val = 1.5 if mlb_stat_key == 'totalBases' else 0.5
+                        
+                    if point_val not in aggregated_props[m_key][p_name]:
+                        aggregated_props[m_key][p_name][point_val] = {'Over': [], 'Under': []}
                         
                     if oc['name'] == 'Over':
-                        aggregated_props[m_key][p_name]['Over'].append(oc['price'])
+                        aggregated_props[m_key][p_name][point_val]['Over'].append(oc['price'])
                     elif oc['name'] == 'Under':
-                        aggregated_props[m_key][p_name]['Under'].append(oc['price'])
+                        aggregated_props[m_key][p_name][point_val]['Under'].append(oc['price'])
 
         for m_key, players_data in aggregated_props.items():
             nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[m_key]
             
-            for p_name, odds_data in players_data.items():
+            for p_name, points_dict in players_data.items():
+                if not points_dict: continue
+                
+                # Bierzemy linię (point), z której korzysta najwięcej bukmacherów
+                best_point = None
+                max_count = -1
+                for pt, odds_d in points_dict.items():
+                    count = len(odds_d['Over']) + len(odds_d['Under'])
+                    if count > max_count:
+                        max_count = count
+                        best_point = pt
+                
+                if best_point is None: continue
+                
+                odds_data = points_dict[best_point]
                 if not odds_data['Over'] or not odds_data['Under']: continue
                 
+                # Uśredniamy tylko te same linie u różnych bukmacherów!
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
                 avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2)
                 
-                if mlb_stat_key == 'totalBases': 
-                    linia = 1.5 if not odds_data['point'] else max(set(odds_data['point']), key=odds_data['point'].count)
-                elif mlb_stat_key in ['hits', 'homeRuns', 'runs', 'rbi']: 
-                    linia = 0.5 if not odds_data['point'] else max(set(odds_data['point']), key=odds_data['point'].count)
-                else:
-                    if not odds_data['point']: continue
-                    linia = max(set(odds_data['point']), key=odds_data['point'].count)
+                linia = best_point
+                kurs_over = avg_over
+                kurs_under = avg_under
                 
                 if f"{p_name}_{m_key}" in przetworzeni_zawodnicy: continue
                 przetworzeni_zawodnicy.add(f"{p_name}_{m_key}")
@@ -814,27 +829,32 @@ def uruchom_mlb_pro():
                 prob_over = poisson_prob_over(projekcja_finalna, linia)
                 prob_under = 1.0 - prob_over
                 
-                # 🎯 FIX: OBLICZAMY EV DLA OBU ZAKŁADÓW (OVER i UNDER) I WYBIERAMY TEN ZYSTKOWNY
-                ev_o = (prob_over * avg_over) - 1.0 if avg_over > 0 else -100
-                ev_u = (prob_under * avg_under) - 1.0 if avg_under > 0 else -100
-                
-                if ev_o >= ev_u:
-                    typ = "OVER"
-                    true_prob = prob_over
-                    kurs_final = avg_over
-                    ev_val = ev_o
-                else:
-                    typ = "UNDER"
-                    true_prob = prob_under
-                    kurs_final = avg_under
-                    ev_val = ev_u
+                ev_o = (prob_over * kurs_over) - 1.0 if kurs_over > 0 else -100
+                ev_u = (prob_under * kurs_under) - 1.0 if kurs_under > 0 else -100
                 
                 is_hr = (mlb_stat_key == 'homeRuns')
                 
-                # Bezpieczne odcięcie dla bardzo skrajnych przypadków
-                min_prob = 0.15 if is_hr else 0.25 
-                if true_prob <= min_prob: continue
+                # 🎯 FIX: Zmuszamy Bota do grania OVER dla Home Runów (under HR to loteria bez zysku)
+                if is_hr:
+                    typ = "OVER"
+                    true_prob = prob_over
+                    kurs_final = kurs_over
+                    ev_val = ev_o
+                else:
+                    if ev_o >= ev_u:
+                        typ = "OVER"
+                        true_prob = prob_over
+                        kurs_final = kurs_over
+                        ev_val = ev_o
+                    else:
+                        typ = "UNDER"
+                        true_prob = prob_under
+                        kurs_final = kurs_under
+                        ev_val = ev_u
                 
+                min_prob = 0.15 if is_hr else 0.25 
+                
+                if true_prob <= min_prob: continue
                 if is_hr and ev_val < 0.05: continue
                 
                 if typ == "OVER":
