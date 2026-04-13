@@ -1,845 +1,1338 @@
-import requests
-import json
-import time
-import math
-import os
-import base64
-from datetime import datetime, timedelta
-from bs4 import BeautifulSoup
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quant PRO Syndicate</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Quant PRO">
 
-# ==========================================
-# KONFIGURACJA GŁÓWNA
-# ==========================================
-GITHUB_TOKEN = os.environ.get('MY_GITHUB_TOKEN')
-GITHUB_USERNAME = 'Picias'
-GITHUB_REPO = 'nba-pro' 
-TELEGRAM_TOKEN = os.environ.get('MY_TELEGRAM_TOKEN')
-TELEGRAM_CHAT_ID = '5991219765'
-ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-SPORT = 'baseball_mlb'
-REGIONS = 'us'
-MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
-MARKETS_GAMES = 'h2h,totals,spreads,h2h_1st_half,totals_1st_half'
-
-SEZON_MLB = 2026
-DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
-
-MLB_JSON_FILE = 'mlb.json'
-MLB_GAMES_FILE = 'mlb_games.json'
-STATS_MLB_FILE = 'statystyki_mlb.json'
-
-CACHE_PLAYER_LOGS = {}
-CACHE_TEAM_K_RATE = {}
-CACHE_TEAM_ERA = {}
-CACHE_ROSTERS = {}
-CACHE_PITCHER_STATS = {}
-CACHE_BULLPEN_FATIGUE = {}
-CACHE_TEAM_SPLITS = {}
-CACHE_WEATHER = {}
-
-LEAGUE_AVG_K_RATE = 0.225 
-LEAGUE_AVG_ERA = 4.20
-LEAGUE_AVG_BAA = 0.240 
-LEAGUE_AVG_OPS = 0.730
-LEAGUE_AVG_RUNS = 4.5
-LEAGUE_AVG_RUNS_F5 = 2.5
-
-PARK_FACTORS = {
-    'Colorado Rockies': 1.15, 'Cincinnati Reds': 1.12, 'Boston Red Sox': 1.08,
-    'Atlanta Athletics': 1.05, 'Texas Rangers': 1.04, 'Chicago White Sox': 1.03,
-    'Seattle Mariners': 0.90, 'San Diego Padres': 0.93, 'Oakland Athletics': 0.94,
-    'Cleveland Guardians': 0.95, 'Tampa Bay Rays': 0.96, 'New York Mets': 0.96
-}
-
-# ==========================================
-# NARZĘDZIA POMOCNICZE
-# ==========================================
-def clean_team_name(name):
-    if not name: return ""
-    return name.lower().replace(".", "").replace(" ", "").replace("'", "").replace("-", "")
-
-def wyslij_plik_na_githuba(file_path, wiadomosc_commit):
-    url = f"https://api.github.com/repos/{GITHUB_USERNAME}/{GITHUB_REPO}/contents/{file_path}"
-    headers = {"Authorization": f"token {GITHUB_TOKEN}", "Accept": "application/vnd.github.v3+json"}
-    try:
-        if not os.path.exists(file_path): return
-        with open(file_path, "r", encoding="utf-8") as f: content = f.read()
-        encoded_content = base64.b64encode(content.encode("utf-8")).decode("utf-8")
-        sha = ""; res = requests.get(url, headers=headers)
-        if res.status_code == 200: sha = res.json().get("sha", "")
-        data = {"message": wiadomosc_commit, "content": encoded_content, "sha": sha}
-        requests.put(url, headers=headers, json=data)
-    except: pass
-
-def wyslij_powiadomienie_telegram(wiadomosc):
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": wiadomosc, "parse_mode": "HTML"}
-    try: requests.post(url, json=payload, timeout=10)
-    except: pass
-
-def poisson_prob_over(lam, line):
-    if lam <= 0: return 0.0
-    k_max = math.floor(line) 
-    prob_under = 0.0
-    for k in range(k_max + 1):
-        prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
-    return 1.0 - prob_under 
-
-# ==========================================
-# 🌤️ MODUŁ POGODY & SPLITÓW
-# ==========================================
-def pobierz_pogode_covers():
-    print("🌤️ Pobieram dane pogodowe z Covers.com (Wiatr i Stadiony)...")
-    weather_data = {}
-    try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
-        res = requests.get("https://www.covers.com/sport/mlb/weather", headers=headers, timeout=10)
-        soup = BeautifulSoup(res.text, 'html.parser')
+    <style>
+        :root { --bg-color: #f8fafc; --text-color: #1e293b; --card-bg: #ffffff; --border-color: #e2e8f0; --hover-bg: #f1f5f9; --accent-color: #3b82f6; --muted-text: #64748b; --chart-bg: #f8fafc; --gold-highlight: #fffbeb; --gold-border: #fcd34d; --safe-highlight: #ecfdf5; --safe-border: #10b981; --stable-highlight: #eff6ff; --stable-border: #3b82f6; }
+        .dark-theme { --bg-color: #0f172a; --text-color: #f8fafc; --card-bg: #1e293b; --border-color: #334155; --hover-bg: #273548; --accent-color: #60a5fa; --muted-text: #94a3b8; --chart-bg: #0f172a; --gold-highlight: #332b14; --gold-border: #b45309; --safe-highlight: #022c22; --safe-border: #059669; --stable-highlight: #172554; --stable-border: #2563eb; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 2rem; transition: background-color 0.3s; }
         
-        game_boxes = soup.find_all('div', class_='weather-event-box') 
-        if not game_boxes: game_boxes = soup.find_all('div', class_='covers-weather-details')
+        .dashboard-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+        .dashboard-header h1 { font-size: 2rem; color: var(--text-color); letter-spacing: -0.5px; }
+        .top-actions { display: flex; gap: 1rem; flex-wrap: wrap;}
+        .theme-toggle, .stats-btn { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.6rem 1.2rem; border-radius: 20px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; }
+        .theme-toggle:hover, .stats-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .stats-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+
+        .sports-nav { display: flex; gap: 10px; margin-bottom: 1.5rem; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none;}
+        .sports-nav::-webkit-scrollbar { display: none; }
+        .sport-tab { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--muted-text); padding: 0.6rem 1.5rem; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.2s; white-space: nowrap; font-size: 1rem;}
+        .sport-tab:hover { background: var(--hover-bg); color: var(--text-color);}
+        .sport-tab.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+
+        .audytor-card { background: var(--card-bg); border-left: 4px solid #10b981; padding: 20px 25px; margin-bottom: 2rem; border-radius: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; }
+        .audytor-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
+        .audytor-header { font-size: 14px; color: var(--muted-text); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;}
+        .audytor-toggle { display: flex; gap: 10px; }
+        .audytor-btn { background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .audytor-btn.active { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+        
+        .audytor-stats { display: flex; gap: 40px; flex-wrap: wrap;}
+        .audytor-box { display: flex; flex-direction: column; }
+        .audytor-label { font-size: 11px; color: var(--muted-text); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+        .audytor-value { font-size: 24px; font-weight: 900; color: var(--text-color); }
+        .text-green { color: #10b981; } .text-red { color: #ef4444; } .text-orange { color: #f59e0b; }
+        
+        .audytor-categories { display: flex; gap: 20px; margin-top: 10px; background: var(--bg-color); padding: 15px; border-radius: 8px; flex-wrap: wrap;}
+        .cat-stat { flex: 1; min-width: 120px; border-left: 3px solid; padding-left: 10px; }
+        .cat-graal { border-color: #f59e0b; } .cat-value { border-color: #3b82f6; } .cat-safe { border-color: #10b981; } .cat-stable { border-color: #8b5cf6; }
+        .cat-title { font-size: 0.75rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;}
+        .cat-val { font-size: 1.1rem; font-weight: 900; color: var(--text-color); margin-top: 3px;}
+
+        .audytor-details-btn { width: 100%; margin-top: 10px; padding: 10px; background: var(--hover-bg); border: 1px dashed var(--border-color); color: var(--muted-text); border-radius: 8px; cursor: pointer; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; transition: 0.2s; text-align: center; }
+        .audytor-details-btn:hover { background: var(--border-color); color: var(--text-color); }
+        .audytor-details-panel { display: none; margin-top: 15px; max-height: 450px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-color); }
+        .audytor-details-panel.open { display: block; }
+        
+        .audytor-filters-bar { display: flex; gap: 10px; padding: 12px; background: var(--card-bg); border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 5; flex-wrap: wrap;}
+        .audytor-filters-bar input, .audytor-filters-bar select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none;}
+        .audytor-filters-bar input[type="text"] { flex: 1; min-width: 150px; }
+        
+        .details-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
+        .details-table th, .details-table td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); }
+        .details-table th { position: sticky; top: 48px; background: var(--card-bg); font-weight: 800; color: var(--muted-text); text-transform: uppercase; z-index: 2; }
+        .details-table tr:hover { background: var(--hover-bg); }
+        .status-win { color: #10b981; font-weight: 900; }
+        .status-loss { color: #ef4444; font-weight: 900; }
+        .status-push { color: #f59e0b; font-weight: 900; }
+        .cat-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; background: var(--card-bg); border: 1px solid var(--border-color); font-size: 0.75rem; font-weight: bold; margin-right: 4px; }
+
+        .filters { display: flex; gap: 1rem; background: var(--card-bg); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; border: 1px solid var(--border-color); margin-bottom: 2rem; align-items: flex-end;}
+        .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 120px; }
+        .filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--muted-text); }
+        .filter-group input, .filter-group select { padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; background: var(--bg-color); color: var(--text-color); outline: none;}
+        
+        .section-title { margin: 2rem 0 1rem 0; font-size: 1.4rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; flex-wrap: wrap; gap: 1rem;}
+        .legend-box { display: flex; gap: 15px; font-size: 0.85rem; font-weight: 600; color: var(--text-color); flex-wrap: wrap;}
+        .legend-item { display: flex; align-items: center; gap: 5px; background: var(--card-bg); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border-color);}
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; max-height: 70vh; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: center; }
+        th { position: sticky; top: 0; z-index: 10; background-color: var(--card-bg); border-bottom: 2px solid var(--border-color); padding: 1rem; font-weight: 700; color: var(--muted-text); font-size: 0.75rem; text-transform: uppercase; cursor: pointer; transition: 0.2s;}
+        th:hover { color: var(--accent-color); }
+        td { padding: 1rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+        tbody tr.data-row { transition: background-color 0.2s; cursor: pointer; }
+        tbody tr.data-row:hover { background-color: var(--hover-bg); }
+        
+        td:first-child, th:first-child { position: sticky; left: 0; z-index: 11; background-color: var(--card-bg); border-right: 1px solid var(--border-color); }
+        th:first-child { z-index: 12; }
+        
+        .col-left { text-align: left; white-space: normal; max-width: 380px; min-width: 250px; }
+        .player-name { font-weight: 800; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .matchup-info { font-size: 0.8rem; color: var(--muted-text); margin-top: 0.2rem; }
+        .uwagi-text { font-size: 0.8rem; font-weight: bold; color: #ef4444; margin-top: 0.4rem; line-height: 1.5; }
+
+        .chart-row { display: none; background-color: var(--card-bg); }
+        .chart-row.expanded { display: table-row; }
+        .chart-td { padding: 0 !important; border-bottom: 3px solid var(--accent-color) !important; position: sticky; left: 0; z-index: 5;}
+        .expanded-panel { display: flex; flex-wrap: wrap; width: 100%; padding: 1.5rem 2rem; gap: 2rem; background: var(--chart-bg); align-items: flex-start;}
+        .chart-wrapper, .simulator-box, .sgp-box, .h2h-box { flex: 1; min-width: 300px; background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: left;}
+        .panel-title { font-size: 0.9rem; font-weight: 800; color: var(--text-color); text-transform: uppercase; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 0.3rem; }
+        
+        .chart-container { display: flex; align-items: flex-end; justify-content: space-around; height: 130px; position: relative; width: 100%; }
+        .chart-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; z-index: 2; margin: 0 4px; }
+        .chart-bar { width: 100%; max-width: 35px; border-radius: 4px 4px 0 0; position: relative; transition: height 0.5s; }
+        .bar-over { background: #10b981; } .bar-under { background: #ef4444; }
+        .chart-label { font-size: 0.75rem; color: var(--muted-text); margin-top: 8px; position: absolute; bottom: -25px;}
+        .chart-val { font-size: 0.8rem; font-weight: bold; margin-bottom: 4px; }
+        .chart-line { position: absolute; width: calc(100% - 1rem); left: 0.5rem; border-top: 2px dashed var(--text-color); z-index: 1; opacity: 0.5; }
+        
+        .sim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);}
+        .sim-input-group label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--muted-text); margin-bottom: 0.4rem; }
+        .sim-input-group input { width: 100%; padding: 0.6rem; border: 1px solid var(--border-color); border-radius: 6px; font-weight: bold; background: var(--bg-color); color: var(--text-color); text-align: center;}
+        .sim-results { display: flex; gap: 1rem; }
+        .sim-res-card { flex: 1; padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); background: var(--bg-color);}
+        .res-title { font-size: 1rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .res-title.over { color: #10b981; } .res-title.under { color: #ef4444; }
+        .res-data { font-size: 0.9rem; color: var(--muted-text); margin-bottom: 0.3rem;}
+        .res-val { font-weight: 900; color: var(--text-color);}
+        
+        .sgp-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 0.8rem;}
+        .sgp-info { display: flex; flex-direction: column; gap: 0.2rem;}
+        .sgp-player { font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
+        .sgp-market { font-size: 0.8rem; color: var(--muted-text);}
+        .sgp-odds { font-weight: 900; color: var(--accent-color);}
+        .sgp-add-btn { background: #10b981; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s;}
+        .sgp-add-btn:hover { opacity: 0.8; }
+        
+        .sgp-golden { background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15); display: flex; flex-direction: column; gap: 8px;}
+        .sgp-golden-title { color: #f59e0b; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 5px;}
+        .sgp-golden-text { font-size: 0.95rem; font-weight: normal; color: var(--text-color); line-height: 1.4;}
+
+        .line, .projection { font-weight: 800; font-size: 1.1rem; }
+        
+        .pick-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 800; font-size: 0.85rem; }
+        .pick-over { background-color: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .pick-under { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .matchup-rank { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.85rem; font-weight: 800; }
+        .stat-pill { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
+        .stat-green { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .stat-yellow { background-color: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .stat-red { background-color: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        
+        .super-pick { background-color: var(--gold-highlight); border-left: 4px solid var(--gold-border); }
+        .super-safe { background-color: var(--safe-highlight); border-left: 4px solid var(--safe-border); }
+        .super-stable { background-color: var(--stable-highlight); border-left: 4px solid var(--stable-border); }
+        
+        .action-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; transition: transform 0.2s; filter: grayscale(0.5); }
+        .action-btn:hover { transform: scale(1.3); filter: grayscale(0); }
+        .export-btn { background-color: #10b981; color: white; padding: 0.6rem 1.2rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
+        .export-btn:hover { opacity: 0.8; }
+        .hidden { display: none !important; }
+        
+        .generator-bar { display: flex; gap: 10px; align-items: center; }
+        .odds-input { padding: 0.6rem; border: 2px solid var(--accent-color); border-radius: 8px; font-size: 1rem; width: 140px; font-weight: bold; background: var(--bg-color); color: var(--text-color); outline: none;}
+        .ako-dashboard { display: flex; gap: 15px; background: var(--card-bg); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); align-items: center; flex-wrap: wrap;}
+        .ako-stat { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 15px; }
+        .ako-stat.bordered { border-left: 1px solid var(--border-color); }
+        .ako-label { font-size: 0.75rem; color: var(--muted-text); text-transform: uppercase; font-weight: 700; margin-bottom: 2px;}
+        .ako-value { font-size: 1.3rem; font-weight: 900; color: var(--text-color); }
+        .ako-value.highlight { color: var(--accent-color); }
+        
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        .modal-content { background-color: var(--card-bg); margin: 5% auto; padding: 2rem; border-radius: 12px; width: 95%; max-width: 1000px; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .close-modal { color: var(--muted-text); float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-modal:hover { color: var(--text-color); }
+        .stats-overview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-box { background: var(--bg-color); padding: 1.5rem; border-radius: 8px; text-align: center; border: 1px solid var(--border-color); }
+        .stat-box-title { font-size: 0.85rem; text-transform: uppercase; font-weight: 800; color: var(--muted-text); margin-bottom: 0.5rem; }
+        .stat-box-value { font-size: 1.8rem; font-weight: 900; color: var(--text-color); }
+        .history-list { display: flex; flex-direction: column; gap: 1rem; }
+        .history-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;}
+        .history-details { flex: 1; min-width: 250px;}
+        .history-matches { font-size: 0.85rem; color: var(--muted-text); margin-top: 0.5rem; }
+        .history-actions { display: flex; gap: 0.5rem; }
+        .hist-btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
+        .btn-win { background: #10b981; } .btn-loss { background: #ef4444; } .btn-delete { background: var(--muted-text); } .btn-edit { background: #3b82f6; }
+        .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 800; color: white; }
+        
+        .h2h-pill { background: var(--bg-color); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.9rem;}
+        .h2h-pill.green { color: #10b981; border-color: rgba(16, 185, 129, 0.3);}
+        .h2h-pill.red { color: #ef4444; border-color: rgba(239, 68, 68, 0.3);}
+        .chart-visual-box { width: 100%; height: 250px; margin-bottom: 2rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; }
+
+        .team-stats-panel { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color); padding: 20px; margin-top: 2rem; display: none; overflow: hidden; }
+        .team-stats-panel.active { display: block; }
+        
+        #teamStatsTable th { font-size: 0.7rem; padding: 0.8rem 0.5rem; text-align: center; }
+        #teamStatsTable td { font-size: 0.85rem; padding: 0.8rem 0.5rem; text-align: center; font-weight: 600;}
+        #teamStatsTable td:first-child { text-align: left; font-weight: 800; font-size: 0.95rem; color: var(--text-color);}
+        
+        #teamStatsTable thead tr:first-child th { position: sticky; top: 0; z-index: 12; }
+        #teamStatsTable thead tr:nth-child(2) th { position: sticky; top: 42px; z-index: 11; box-shadow: inset 0 1px 0 var(--border-color); }
+        #teamStatsTable thead tr:first-child th:first-child { z-index: 13; left: 0; }
+        #teamStatsTable tbody td:first-child { position: sticky; left: 0; z-index: 5; background-color: var(--card-bg); }
+
+        .stats-group-header { 
+            color: var(--accent-color) !important; 
+            font-size: 0.85rem !important; 
+            background-color: var(--hover-bg) !important; 
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        
+        .cell-bad { color: #ef4444; font-weight: 900;}
+        .cell-good { color: #10b981; font-weight: 900;}
+        .tooltip-abbr { cursor: help; border-bottom: 1px dotted var(--muted-text); display: inline-block; padding-bottom: 2px;}
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            td:first-child, th:first-child { position: static !important; z-index: 1 !important; border-right: none !important;}
+            .filters { flex-direction: column; align-items: stretch; padding: 1rem; }
+            .filter-group { border-left: none !important; padding-left: 0 !important; }
+            .dashboard-header { flex-direction: column; gap: 1rem; align-items: stretch; text-align: center;}
+            .top-actions { justify-content: center; width: 100%; }
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
+            .expanded-panel { padding: 1rem; gap: 1.5rem; flex-direction: column; }
+            .simulator-box, .chart-wrapper, .h2h-box, .sgp-box { min-width: 100%; }
+            .generator-bar { flex-direction: column; width: 100%; }
+            .generator-bar input, .generator-bar button { width: 100%; }
+            .section-title { flex-direction: column; align-items: stretch; }
+            .ako-dashboard { justify-content: space-between; }
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <div class="dashboard-header">
+        <div>
+            <h1>Pewniaczki</h1>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Quant PRO Syndicate</p>
+        </div>
+        <div class="top-actions">
+            <button class="stats-btn" id="toggleTeamStatsBtn" style="background-color: #3b82f6;">📈 Statystyki Drużyn</button>
+            <button id="exportCsvBtn" class="export-btn" style="background-color: #8b5cf6;">📥 Eksport CSV</button>
+            <button class="stats-btn" id="openJournalBtn">📊 Dziennik Typera</button>
+            <button class="theme-toggle" id="themeToggleBtn">☀️ Tryb Jasny</button>
+        </div>
+    </div>
+
+    <div class="sports-nav">
+        <button class="sport-tab active" data-sport="nba">🏀 NBA</button>
+        <button class="sport-tab" data-sport="nhl">🏒 NHL</button>
+        <button class="sport-tab" data-sport="mlb">⚾ MLB</button>
+        <button class="sport-tab" data-sport="nfl" style="opacity: 0.5;" title="Wkrótce">🏈 NFL (Wkrótce)</button>
+    </div>
+    
+    <div id="mlbSubNav" style="display: none; margin-bottom: 1.5rem; gap: 10px; overflow-x: auto;">
+        <button class="sport-tab active" data-sub="props">🏃 Typy na Zawodników</button>
+        <button class="sport-tab" data-sub="games" style="background-color: #8b5cf6; color: white; border-color: #8b5cf6;">🏟️ Linie Meczowe & F5</button>
+    </div>
+
+    <div id="teamStatsPanel" class="team-stats-panel">
+        <h2 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">📊 Statystyki Drużynowe (Sezon Zasadniczy)</h2>
+        <p style="color: var(--muted-text); font-size: 0.85rem; margin-bottom: 1rem;">Dane za cały sezon. Kolor <span class="cell-good">Zielony</span> oznacza statystykę wybitnie dobrą dla typu OVER na gracza (słaba obrona). Kolor <span class="cell-bad">Czerwony</span> to elitarna obrona (raj dla UNDERów).</p>
+        <div class="table-container">
+            <table id="teamStatsTable">
+                <thead></thead>
+                <tbody id="teamStatsBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="mainPicksContainer">
+        <div id="audytor-panel" class="audytor-card">
+            <div class="audytor-top-bar">
+                <div class="audytor-header" id="audytor-title">📊 Raport Skuteczności Modelu (Ładowanie...)</div>
+                <div class="audytor-toggle">
+                    <button class="audytor-btn active" id="btn-audytor-wczoraj" onclick="renderAuditorView('wczoraj')">Ostatnia Noc</button>
+                    <button class="audytor-btn" id="btn-audytor-alltime" onclick="renderAuditorView('alltime')">Cała Historia</button>
+                </div>
+            </div>
             
-        for box in game_boxes:
-            text = box.text.lower()
-            w_mod = 1.0; msg = "Dach/Brak wiatru"
-            if "blowing out" in text or "out to" in text:
-                w_mod = 1.08; msg = "💨 Wiatr wywiewa (+8% Runs)"
-            elif "blowing in" in text or "in from" in text:
-                w_mod = 0.92; msg = "🛑 Wiatr w twarz (-8% Runs)"
-            elif "dome" in text or "roof closed" in text:
-                w_mod = 1.0; msg = "🏟️ Zamknięty dach"
-                
-            for full_name in PARK_FACTORS.keys():
-                if full_name.lower() in text or full_name.split()[-1].lower() in text:
-                    weather_data[full_name] = {'mod': w_mod, 'msg': msg}
-    except Exception as e:
-        print(f"⚠️ Błąd pobierania pogody: {e}")
-    
-    global CACHE_WEATHER
-    CACHE_WEATHER = weather_data
-    return weather_data
+            <div class="audytor-stats">
+                <div class="audytor-box"><span class="audytor-label">Skuteczność (Hit Rate)</span><span class="audytor-value" id="audytor-hitrate">--</span></div>
+                <div class="audytor-box"><span class="audytor-label">Czysty Zysk (ROI)</span><span class="audytor-value text-orange" id="audytor-roi">--</span></div>
+                <div class="audytor-box"><span class="audytor-label">Bilans (Win - Loss - Zwrot)</span><span class="audytor-value"><span id="audytor-w" class="text-green">0</span> - <span id="audytor-l" class="text-red">0</span> - <span id="audytor-p">0</span></span></div>
+            </div>
+            
+            <div class="audytor-categories">
+                <div class="cat-stat cat-graal"><div class="cat-title">🏆 Graale</div><div class="cat-val" id="cat-graal-val">--</div></div>
+                <div class="cat-stat cat-value"><div class="cat-title">💰 Value Bety</div><div class="cat-val" id="cat-value-val">--</div></div>
+                <div class="cat-stat cat-safe"><div class="cat-title">🎯 Pewniaki</div><div class="cat-val" id="cat-safe-val">--</div></div>
+                <div class="cat-stat cat-stable"><div class="cat-title">🛡️ Stabilni</div><div class="cat-val" id="cat-stable-val">--</div></div>
+            </div>
 
-def pobierz_ops_splits(team_id):
-    if team_id in CACHE_TEAM_SPLITS: return CACHE_TEAM_SPLITS[team_id]
-    
-    ops_vs_lhp = LEAGUE_AVG_OPS
-    ops_vs_rhp = LEAGUE_AVG_OPS
-    try:
-        url = f"https://statsapi.mlb.com/api/v1/teams/{team_id}/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=statSplits&sitCodes=vl,vr"
-        res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
-        splits = res.get('stats', [{}])[0].get('splits', [])
+            <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
+            <div class="audytor-details-panel" id="audytorDetailsPanel">
+                <div class="audytor-filters-bar">
+                    <input type="text" id="audytorSearch" placeholder="Szukaj...">
+                    <input type="number" id="audytorMinOdds" placeholder="Min. Kurs (np. 1.6)" step="0.01" min="1.0" style="max-width: 150px;">
+                    <select id="audytorMarket">
+                        <option value="all">Wszystkie rynki</option>
+                        <option value="Hits">Hits</option>
+                        <option value="Home Runs">Home Runs</option>
+                        <option value="Total Bases">Total Bases</option>
+                        <option value="Mecz:">Typy Meczowe (MLB)</option>
+                        <option value="F5">F5 Inningów (MLB)</option>
+                        <option value="PTS">Punkty (NBA)</option>
+                        <option value="REB">Zbiórki (NBA)</option>
+                    </select>
+                    <select id="audytorStatus">
+                        <option value="all">Każdy status</option>
+                        <option value="WYGRANA">✅ Wygrane</option>
+                        <option value="PRZEGRANA">❌ Przegrane</option>
+                        <option value="ZWROT">➖ Zwroty</option>
+                    </select>
+                    <select id="audytorCategory">
+                        <option value="all">Wszystkie kategorie</option>
+                        <option value="🏆 Graal">🏆 Graale</option>
+                        <option value="💰 Value">💰 Value Bety</option>
+                        <option value="🎯 Pewniak">🎯 Pewniaki</option>
+                        <option value="🛡️ Stabilny">🛡️ Stabilni</option>
+                        <option value="Typ Meczowy">📊 Typy Meczowe</option>
+                    </select>
+                </div>
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Zawodnik / Mecz</th>
+                            <th>Rynek & Typ</th>
+                            <th>Linia</th>
+                            <th onclick="sortAudytorTable(3, 'number')" style="cursor:pointer; color: var(--accent-color);" title="Kliknij, aby posortować">Kurs ↕</th>
+                            <th>Wynik Realny</th>
+                            <th>Status</th>
+                            <th>Kategorie</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audytorDetailsBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>Wyszukiwarka</label>
+                <input type="text" id="searchFilter" placeholder="Gracz / Drużyna...">
+            </div>
+            <div class="filter-group">
+                <label>Mecz</label>
+                <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
+            </div>
+            <div class="filter-group">
+                <label>Rynek</label>
+                <select id="marketFilter"><option value="all">Wszystkie</option></select>
+            </div>
+            
+            <div class="filter-group" id="roleFilterGroup" style="display: none;">
+                <label>Pozycja</label>
+                <select id="roleFilter">
+                    <option value="all">Wszyscy</option>
+                    <option value="pitcher">Miotacze (Pitchers)</option>
+                    <option value="batter">Pałkarze (Batters)</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Typ</label>
+                <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
+            </div>
+        </div>
+
+        <h2 class="section-title">
+            Baza Danych PRO
+            <div class="legend-box" id="mainLegendBox">
+                <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet</div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak</div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--stable-border);"></span> 🛡️ Stabilny</div>
+            </div>
+        </h2>
+        <div class="table-container">
+            <table id="mainTable">
+                <thead id="mainTableHead">
+                    </thead>
+                <tbody id="mainBody"></tbody>
+            </table>
+        </div>
+
+        <div class="section-title" style="margin-top: 3rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <h2 style="margin: 0;">Mój Kupon</h2>
+                <div class="ako-dashboard">
+                    <div class="ako-stat"><span class="ako-label">AKO</span><span class="ako-value highlight" id="totalOddsDisplay">1.00</span></div>
+                    <div class="ako-stat bordered"><span class="ako-label">Szansa</span><span class="ako-value" id="akoProbDisplay">-</span></div>
+                    <div class="ako-stat bordered">
+                        <span class="ako-label">Twoja Stawka</span>
+                        <input type="number" id="customStakeInput" value="50" style="width: 70px; background: transparent; border: none; border-bottom: 2px solid var(--accent-color); color: var(--text-color); font-weight: 900; font-size: 1.2rem; text-align: center; outline: none;">
+                    </div>
+                    <div class="ako-stat bordered"><span class="ako-label">Ew. Wygrana</span><span class="ako-value text-green" id="akoEwkDisplay">0.00 PLN</span></div>
+                </div>
+            </div>
+            <div class="generator-bar">
+                <input type="number" id="targetOddsInput" class="odds-input" placeholder="Min. Kurs (5.0)" step="0.5">
+                <button id="generateBtn" class="export-btn" style="background-color: var(--accent-color);">🤖 Auto-Kupon</button>
+                <button id="saveJournalBtn" class="export-btn" style="background-color: #f59e0b;">💾 Zapisz do Historii</button>
+            </div>
+        </div>
         
-        for s in splits:
-            desc = s.get('split', {}).get('description', '').lower()
-            ops = float(s.get('stat', {}).get('ops', str(LEAGUE_AVG_OPS)))
-            if 'left' in desc: ops_vs_lhp = ops
-            elif 'right' in desc: ops_vs_rhp = ops
-    except: pass
-    
-    CACHE_TEAM_SPLITS[team_id] = {'vs_LHP': ops_vs_lhp, 'vs_RHP': ops_vs_rhp}
-    return CACHE_TEAM_SPLITS[team_id]
+        <div class="table-container" style="max-height: 70vh; margin-bottom: 3rem;">
+            <table id="favoritesTable">
+                <thead id="favTableHead">
+                    </thead>
+                <tbody id="favoritesBody"></tbody>
+            </table>
+        </div>
+    </div> 
 
-# ==========================================
-# 📊 MODUŁ STATYSTYK DRUŻYNOWYCH MLB
-# ==========================================
-def generuj_pelny_raport_druzynowy_mlb():
-    plik_raportu = 'mlb_teams.json'
-    if os.path.exists(plik_raportu):
-        mod_time = datetime.fromtimestamp(os.path.getmtime(plik_raportu))
-        if mod_time.strftime('%Y-%m-%d') == datetime.now().strftime('%Y-%m-%d'):
-            return 
+    <div id="journalModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeJournalBtn">&times;</span>
+            <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (Kupony)</h2>
+            <div class="stats-overview">
+                <div class="stat-box"><div class="stat-box-title">Zainwestowano</div><div class="stat-box-value" id="statInvested">0 PLN</div></div>
+                <div class="stat-box"><div class="stat-box-title">Czysty Zysk</div><div class="stat-box-value" id="statProfit">0 PLN</div></div>
+                <div class="stat-box"><div class="stat-box-title">ROI (Yield)</div><div class="stat-box-value" id="statYield">0.0%</div></div>
+                <div class="stat-box"><div class="stat-box-title">Skuteczność</div><div class="stat-box-value" id="statHitRate">0/0</div></div>
+            </div>
+            <div class="chart-visual-box"><canvas id="profitChart"></canvas></div>
+            <h3 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">Zapisane Kupony</h3>
+            <div class="history-list" id="historyContainer"></div>
+        </div>
+    </div>
 
-    print("\n📊 Generowanie ZAAWANSOWANEGO raportu MLB (Statystyki drużynowe)...")
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    
-    url_hit = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R"
-    try:
-        res_h = requests.get(url_hit, headers=headers, timeout=10).json()
-        stats_h = res_h.get('stats', [])
-        if not stats_h or not stats_h[0].get('splits'):
-            res_h = requests.get(url_hit.replace(str(SEZON_MLB), str(SEZON_MLB - 1)), headers=headers, timeout=10).json()
-            stats_h = res_h.get('stats', [])
-    except: stats_h = []
+    <script>
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA error:', err)); }); }
+        
+        const themeBtn = document.getElementById('themeToggleBtn');
+        themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny';
+        
+        themeBtn.addEventListener('click', () => { 
+            document.body.classList.toggle('dark-theme'); 
+            themeBtn.innerText = document.body.classList.contains('dark-theme') ? '☀️ Tryb Jasny' : '🌙 Tryb Nocny'; 
+        });
 
-    url_pitch = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R"
-    try:
-        res_p = requests.get(url_pitch, headers=headers, timeout=10).json()
-        stats_p = res_p.get('stats', [])
-        if not stats_p or not stats_p[0].get('splits'):
-            res_p = requests.get(url_pitch.replace(str(SEZON_MLB), str(SEZON_MLB - 1)), headers=headers, timeout=10).json()
-            stats_p = res_p.get('stats', [])
-    except: stats_p = []
+        let globalData = [];
+        let teamData = [];
+        let currentSortCol = '';
+        let sortAsc = false;
+        let currentTeamSortCol = 'Zespol';
+        let teamSortAsc = true;
+        let audytorSortAsc = false;
+        
+        let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
+        let profitChartInstance = null; 
+        
+        let currentSport = 'nba';
+        let currentSubTab = 'props'; 
+        let statystykiBota = []; 
 
-    druzyny_dane = {}
-    if stats_h and stats_h[0].get('splits'):
-        for t in stats_h[0]['splits']:
-            t_name = t['team']['name']
-            st = t['stat']
-            druzyny_dane[t_name] = {
-                "Zespol": t_name, "Mecze": st.get('gamesPlayed', 0), "Zdobyte_Runs": st.get('runs', 0),
-                "Zdobyte_HR": st.get('homeRuns', 0), "Ofensywa_AVG": st.get('avg', '.000'), "Ofensywa_OPS": st.get('ops', '.000'),
-                "Ofensywa_K": st.get('strikeOuts', 0), "Ofensywa_BB": st.get('baseOnBalls', 0)
+        function normalCDF(x, mean, stdDev) {
+            let z = (x - mean) / (stdDev * Math.sqrt(2));
+            let t = 1 / (1 + 0.3275911 * Math.abs(z));
+            let a1 =  0.254829592, a2 = -0.284496736, a3 =  1.421413741, a4 = -1.453152027, a5 =  1.061405429;
+            let erf = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-z * z);
+            return 0.5 * (1 + (z < 0 ? -1 : 1) * erf);
+        }
+
+        const toggleTeamStatsBtn = document.getElementById('toggleTeamStatsBtn');
+        const teamStatsPanel = document.getElementById('teamStatsPanel');
+        const mainPicksContainer = document.getElementById('mainPicksContainer');
+
+        toggleTeamStatsBtn.addEventListener('click', () => {
+            const isShowing = teamStatsPanel.classList.contains('active');
+            if (isShowing) {
+                teamStatsPanel.classList.remove('active');
+                mainPicksContainer.style.display = 'block';
+                toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
+            } else {
+                teamStatsPanel.classList.add('active');
+                mainPicksContainer.style.display = 'none';
+                toggleTeamStatsBtn.innerText = '🔙 Wróć do Typów';
+                loadTeamStats();
+            }
+        });
+
+        document.querySelectorAll('#mlbSubNav .sport-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('#mlbSubNav .sport-tab').forEach(t => {
+                    t.classList.remove('active');
+                    if(t.dataset.sub === 'games') t.style.backgroundColor = 'transparent';
+                });
+                tab.classList.add('active');
+                if(tab.dataset.sub === 'games') {
+                    tab.style.backgroundColor = '#8b5cf6';
+                    tab.style.color = 'white';
+                }
+                currentSubTab = tab.dataset.sub;
+                loadSportData(currentSport);
+            });
+        });
+
+        function renderTableHeaders() {
+            const mainTh = document.getElementById('mainTableHead');
+            const favTh = document.getElementById('favTableHead');
+            const isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+            
+            let html = "";
+            if (isGames) {
+                html = `
+                    <tr>
+                        <th class="col-left sortable" data-sort="mecz">Mecz & Analiza</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="szansa">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Zakład</th>
+                        <th>-</th><th>-</th><th>-</th><th>-</th>
+                        <th>Akcja</th>
+                    </tr>
+                `;
+            } else {
+                html = `
+                    <tr>
+                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Typ</th>
+                        <th class="sortable" data-sort="l5">L5</th>
+                        <th class="sortable" data-sort="l10">L10</th>
+                        <th class="sortable" data-sort="sezon">Sezon</th>
+                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
+                        <th>Akcja</th>
+                    </tr>
+                `;
+            }
+            mainTh.innerHTML = html; favTh.innerHTML = html;
+            
+            document.querySelectorAll('th.sortable').forEach(th => { 
+                th.addEventListener('click', () => { 
+                    const col = th.dataset.sort; 
+                    if (currentSortCol === col) sortAsc = !sortAsc; 
+                    else { sortAsc = false; currentSortCol = col; } 
+                    
+                    globalData.sort((a, b) => { 
+                        let vA = a[col] || a.szansa || 0, vB = b[col] || b.szansa || 0; 
+                        if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { 
+                            vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                            vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                        } else if (['linia', 'projekcja', 'ev', 'true_prob', 'szansa'].includes(col)) { 
+                            vA = parseFloat(vA)||0; vB = parseFloat(vB)||0; 
+                        } else if (col === 'matchup_rank') { 
+                            vA = parseInt((vA.toString()||"0").replace(/\D/g, ''))||0; 
+                            vB = parseInt((vB.toString()||"0").replace(/\D/g, ''))||0; 
+                        } else { 
+                            vA = vA.toString().toLowerCase(); vB = vB.toString().toLowerCase(); 
+                        } 
+                        return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); 
+                    }); 
+                    renderTable(globalData); 
+                    applyFilters();  
+                }); 
+            });
+        }
+
+        function loadTeamStats() {
+            let fileName = currentSport === 'nba' ? 'nba_teams.json' : 'mlb_teams.json';
+            fetch(`${fileName}?v=` + new Date().getTime())
+                .then(r => { if(!r.ok) throw new Error("Brak pliku statystyk"); return r.json(); })
+                .then(data => { teamData = data; renderTeamStatsTable(teamData); })
+                .catch(e => { document.getElementById('teamStatsBody').innerHTML = `<tr><td colspan="15" style="color:var(--muted-text); text-align:center; padding: 2rem;">Brak danych drużynowych.</td></tr>`; });
+        }
+
+        function renderTeamStatsTable(data) {
+            const tbody = document.getElementById('teamStatsBody');
+            const thead = document.querySelector('#teamStatsTable thead');
+            tbody.innerHTML = '';
+            
+            if (currentSport === 'nba') {
+                thead.innerHTML = `
+                    <tr>
+                        <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
+                        <th rowspan="2" class="sortable-team" data-sort="Pace" style="vertical-align: bottom;"><span class="tooltip-abbr" title="Tempo gry: Szacunkowa liczba posiadań w meczu. Szybkie tempo = więcej punktów.">TEMPO (PACE)</span></th>
+                        <th colspan="3" class="stats-group-header">OFENSYWA (ZDOBYWANE)</th>
+                        <th colspan="6" class="stats-group-header">DEFENSYWA (NA CO POZWALAJĄ RYWALE)</th>
+                    </tr>
+                    <tr>
+                        <th class="sortable-team" data-sort="Zdobyte_PTS"><span class="tooltip-abbr" title="Średnia liczba zdobytych punktów na mecz.">PTS</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_REB"><span class="tooltip-abbr" title="Średnia liczba zbiórek na mecz.">REB</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_3PM"><span class="tooltip-abbr" title="Średnia liczba trafionych rzutów za 3 punkty.">3PM</span></th>
+                        
+                        <th class="sortable-team" data-sort="Tracone_PTS"><span class="tooltip-abbr" title="Punkty tracone: Ile punktów obrona pozwala rzucić rywalom.">Opp PTS</span></th>
+                        <th class="sortable-team" data-sort="Tracone_REB"><span class="tooltip-abbr" title="Zbiórki oddane rywalom: Słaba obrona pod koszem to dużo oddanych zbiórek.">Opp REB</span></th>
+                        <th class="sortable-team" data-sort="Tracone_AST"><span class="tooltip-abbr" title="Asysty przeciwników: Ile asyst notują przeciwnicy przeciwko tej obronie.">Opp AST</span></th>
+                        <th class="sortable-team" data-sort="Tracone_3PM"><span class="tooltip-abbr" title="Trafione trójki przeciwników: Ważne przy typowaniu strzelców dystansowych rywala.">Opp 3PM</span></th>
+                        <th class="sortable-team" data-sort="Tracone_3PA"><span class="tooltip-abbr" title="Oddane rzuty za 3 przez rywala: Pokazuje, czy obrona zostawia wolne miejsce na obwodzie.">Opp 3PA</span></th>
+                        <th class="sortable-team" data-sort="Wymuszone_Faule"><span class="tooltip-abbr" title="Faule popełniane przez tę drużynę: Daje darmowe rzuty osobiste dla zawodników przeciwnej drużyny.">Faule Rywala</span></th>
+                    </tr>
+                `;
+                
+                let maxPace = Math.max(...data.map(d => parseFloat(d.Pace)||0)), minPace = Math.min(...data.map(d => parseFloat(d.Pace)||100));
+                let maxOpp3PM = Math.max(...data.map(d => parseFloat(d.Tracone_3PM)||0)), minOpp3PM = Math.min(...data.map(d => parseFloat(d.Tracone_3PM)||100));
+                let maxOppReb = Math.max(...data.map(d => parseFloat(d.Tracone_REB)||0)), minOppReb = Math.min(...data.map(d => parseFloat(d.Tracone_REB)||100));
+                
+                data.forEach(team => {
+                    let tr = document.createElement('tr');
+                    let pVal = parseFloat(team.Pace)||0; let o3Val = parseFloat(team.Tracone_3PM)||0; let orVal = parseFloat(team.Tracone_REB)||0;
+                    let paceClass = pVal >= maxPace * 0.98 ? 'cell-good' : (pVal <= minPace * 1.02 ? 'cell-bad' : '');
+                    let opp3PMClass = o3Val >= maxOpp3PM * 0.95 ? 'cell-good' : (o3Val <= minOpp3PM * 1.05 ? 'cell-bad' : '');
+                    let oppRebClass = orVal >= maxOppReb * 0.96 ? 'cell-good' : (orVal <= minOppReb * 1.04 ? 'cell-bad' : '');
+                    
+                    tr.innerHTML = `
+                        <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
+                        <td class="${paceClass}">${team.Pace}</td>
+                        <td>${team.Zdobyte_PTS}</td><td>${team.Zdobyte_REB}</td><td>${team.Zdobyte_3PM}</td>
+                        <td style="border-left: 2px solid var(--border-color);">${team.Tracone_PTS}</td>
+                        <td class="${oppRebClass}">${team.Tracone_REB}</td><td>${team.Tracone_AST}</td>
+                        <td class="${opp3PMClass}">${team.Tracone_3PM}</td><td>${team.Tracone_3PA}</td><td>${team.Wymuszone_Faule}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } else if (currentSport === 'mlb') {
+                thead.innerHTML = `
+                    <tr>
+                        <th rowspan="2" class="sortable-team col-left" data-sort="Zespol" style="vertical-align: bottom;">ZESPÓŁ</th>
+                        <th colspan="6" class="stats-group-header">OFENSYWA (PAŁKARZE)</th>
+                        <th colspan="7" class="stats-group-header">DEFENSYWA (MIOTACZE I OBRONA)</th>
+                    </tr>
+                    <tr>
+                        <th class="sortable-team" data-sort="Zdobyte_Runs"><span class="tooltip-abbr" title="Zdobyte obiegi bazy (punkty).">Runs</span></th>
+                        <th class="sortable-team" data-sort="Zdobyte_HR"><span class="tooltip-abbr" title="Wybite Home Runy.">HR</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_AVG"><span class="tooltip-abbr" title="Batting Average: Skuteczność uderzeń pałkarzy w procentach.">AVG</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_OPS"><span class="tooltip-abbr" title="On-Base Plus Slugging: Ogólna, najbardziej kompletna ocena siły ataku. Powyżej .750 to elita.">OPS</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_K"><span class="tooltip-abbr" title="Strikeouty Pałkarzy: Im więcej razy dają się wyautować, tym łatwiejszy OVER dla miotacza rywali!">Ofensywa K</span></th>
+                        <th class="sortable-team" data-sort="Ofensywa_BB"><span class="tooltip-abbr" title="Wymuszone Walks: Jak często pałkarze tej drużyny dostają darmową bazę po błędach miotacza.">Ofensywa BB</span></th>
+                        
+                        <th class="sortable-team" data-sort="Obrona_ERA" style="border-left: 2px solid var(--border-color);"><span class="tooltip-abbr" title="Earned Run Average: Średnia liczba punktów traconych przez miotaczy na 9 inningów. Mniej = lepiej.">ERA</span></th>
+                        <th class="sortable-team" data-sort="Obrona_WHIP"><span class="tooltip-abbr" title="Walks & Hits per Inning Pitched: Ile darmowych baz i odbić oddają w każdym inningu. Mniej = lepsza obrona.">WHIP</span></th>
+                        <th class="sortable-team" data-sort="Obrona_BAA"><span class="tooltip-abbr" title="Batting Average Against: Z jaką skutecznością przeciwnicy uderzają piłki tych miotaczy.">BAA</span></th>
+                        <th class="sortable-team" data-sort="Blown_Saves"><span class="tooltip-abbr" title="Zmarnowane Przewagi w Końcówce: Im więcej, tym gorszy i bardziej dziurawy Bullpen (zmiennicy).">Blown Saves</span></th>
+                        <th class="sortable-team" data-sort="Udane_Saves"><span class="tooltip-abbr" title="Udane Obrony w Końcówce: Im więcej, tym pewniej potrafią 'zamknąć' mecz bez starty punktów.">Saves</span></th>
+                        <th class="sortable-team" data-sort="Oddane_Walks"><span class="tooltip-abbr" title="Oddane bazy za darmo (BB): Dużo walków oznacza, że rywale łatwiej punktują (dobrze dla OVERów rywali).">Oddane Walks</span></th>
+                        <th class="sortable-team" data-sort="Miotacze_K"><span class="tooltip-abbr" title="Strikeouty Obrony: Ile razy miotacze tej drużyny wyautowali rywala bez uderzenia piłki.">K's</span></th>
+                    </tr>
+                `;
+
+                let maxWhip = Math.max(...data.map(d => parseFloat(d.Obrona_WHIP)||0)), minWhip = Math.min(...data.map(d => parseFloat(d.Obrona_WHIP)||10));
+                let maxBaa = Math.max(...data.map(d => parseFloat(d.Obrona_BAA)||0)), minBaa = Math.min(...data.map(d => parseFloat(d.Obrona_BAA)||10));
+                let maxWalks = Math.max(...data.map(d => parseFloat(d.Oddane_Walks)||0)), minWalks = Math.min(...data.map(d => parseFloat(d.Oddane_Walks)||1000));
+                let maxK = Math.max(...data.map(d => parseFloat(d.Miotacze_K)||0)), minK = Math.min(...data.map(d => parseFloat(d.Miotacze_K)||1000));
+                let maxBS = Math.max(...data.map(d => parseFloat(d.Blown_Saves)||0)), minBS = Math.min(...data.map(d => parseFloat(d.Blown_Saves)||100));
+                let maxOffK = Math.max(...data.map(d => parseFloat(d.Ofensywa_K)||0)), minOffK = Math.min(...data.map(d => parseFloat(d.Ofensywa_K)||1000));
+                let maxOffBB = Math.max(...data.map(d => parseFloat(d.Ofensywa_BB)||0)), minOffBB = Math.min(...data.map(d => parseFloat(d.Ofensywa_BB)||1000));
+                let maxSaves = Math.max(...data.map(d => parseFloat(d.Udane_Saves)||0)), minSaves = Math.min(...data.map(d => parseFloat(d.Udane_Saves)||100));
+                
+                data.forEach(team => {
+                    let tr = document.createElement('tr');
+                    let wVal = parseFloat(team.Obrona_WHIP)||0; let bVal = parseFloat(team.Obrona_BAA)||0;
+                    let walkVal = parseFloat(team.Oddane_Walks)||0; let kVal = parseFloat(team.Miotacze_K)||0;
+                    let bsVal = parseFloat(team.Blown_Saves)||0; let offKVal = parseFloat(team.Ofensywa_K)||0;
+                    let offBBVal = parseFloat(team.Ofensywa_BB)||0; let savesVal = parseFloat(team.Udane_Saves)||0;
+                    
+                    let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
+                    let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
+                    let walkClass = walkVal >= maxWalks * 0.90 ? 'cell-good' : (walkVal <= minWalks * 1.10 ? 'cell-bad' : '');
+                    let kClass = kVal <= minK * 1.05 ? 'cell-good' : (kVal >= maxK * 0.95 ? 'cell-bad' : '');
+                    let bsClass = bsVal >= maxBS * 0.85 ? 'cell-good' : (bsVal <= minBS * 1.15 ? 'cell-bad' : '');
+                    let offKClass = offKVal >= maxOffK * 0.90 ? 'cell-good' : (offKVal <= minOffK * 1.10 ? 'cell-bad' : '');
+                    let offBBClass = offBBVal >= maxOffBB * 0.90 ? 'cell-good' : (offBBVal <= minOffBB * 1.10 ? 'cell-bad' : '');
+                    let savesClass = savesVal >= maxSaves * 0.85 ? 'cell-bad' : (savesVal <= minSaves * 1.15 ? 'cell-good' : '');
+                    
+                    tr.innerHTML = `
+                        <td style="font-weight: 900; color: var(--text-color);">${team.Zespol}</td>
+                        <td>${team.Zdobyte_Runs}</td><td>${team.Zdobyte_HR}</td><td>${team.Ofensywa_AVG}</td><td>${team.Ofensywa_OPS}</td>
+                        <td class="${offKClass}">${team.Ofensywa_K}</td><td class="${offBBClass}">${team.Ofensywa_BB}</td>
+                        <td style="border-left: 2px solid var(--border-color);">${team.Obrona_ERA}</td>
+                        <td class="${whipClass}">${team.Obrona_WHIP}</td><td class="${baaClass}">${team.Obrona_BAA}</td>
+                        <td class="${bsClass}">${team.Blown_Saves}</td><td class="${savesClass}">${team.Udane_Saves}</td>
+                        <td class="${walkClass}">${team.Oddane_Walks}</td><td class="${kClass}">${team.Miotacze_K}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
             }
             
-    if stats_p and stats_p[0].get('splits'):
-        for t in stats_p[0]['splits']:
-            t_name = t['team']['name']
-            st = t['stat']
-            if t_name not in druzyny_dane: continue
-            
-            era_str = st.get('era', '0.00'); era_str = '0.00' if era_str == '-.--' else era_str
-            whip_str = st.get('whip', '0.00'); whip_str = '0.00' if whip_str == '-.--' else whip_str
-            baa_str = st.get('avg', '.000'); baa_str = '.000' if baa_str == '.---' else baa_str
-            
-            druzyny_dane[t_name].update({
-                "Obrona_ERA": era_str, "Obrona_WHIP": whip_str, "Obrona_BAA": baa_str,
-                "Tracone_HR": st.get('homeRuns', 0), "Oddane_Walks": st.get('baseOnBalls', 0),
-                "Miotacze_K": st.get('strikeOuts', 0), "Blown_Saves": st.get('blownSaves', 0), "Udane_Saves": st.get('saves', 0)
-            })
+            document.querySelectorAll('th.sortable-team').forEach(th => {
+                th.addEventListener('click', () => {
+                    const col = th.dataset.sort;
+                    if (currentTeamSortCol === col) teamSortAsc = !teamSortAsc; else { teamSortAsc = false; currentTeamSortCol = col; }
+                    teamData.sort((a, b) => {
+                        let vA = a[col], vB = b[col];
+                        if (typeof vA === 'string' && isNaN(parseFloat(vA))) { vA = vA.toLowerCase(); vB = vB.toLowerCase(); } 
+                        else { vA = parseFloat(vA) || 0; vB = parseFloat(vB) || 0; }
+                        return vA < vB ? (teamSortAsc ? -1 : 1) : (vA > vB ? (teamSortAsc ? 1 : -1) : 0);
+                    });
+                    renderTeamStatsTable(teamData);
+                });
+            });
+        }
 
-    raport_finalny = list(druzyny_dane.values())
-    if raport_finalny:
-        raport_finalny = sorted(raport_finalny, key=lambda x: x['Zespol'])
-        with open(plik_raportu, 'w', encoding='utf-8') as f: json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
-        wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych MLB")
+        window.sortAudytorTable = function(colIndex, type) {
+            const tbody = document.getElementById('audytorDetailsBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            audytorSortAsc = !audytorSortAsc;
+            rows.sort((a, b) => {
+                let valA = type === 'number' ? parseFloat(a.dataset.kurs) || 0 : a.cells[colIndex].innerText;
+                let valB = type === 'number' ? parseFloat(b.dataset.kurs) || 0 : b.cells[colIndex].innerText;
+                if (valA < valB) return audytorSortAsc ? -1 : 1;
+                if (valA > valB) return audytorSortAsc ? 1 : -1;
+                return 0;
+            });
+            rows.forEach(row => tbody.appendChild(row));
+        };
 
-# ==========================================
-# 📊 AUDYTOR MLB (AUTO-ROZLICZANIE)
-# ==========================================
-def rozlicz_wczorajsze_typy_mlb():
-    try:
-        with open(MLB_GAMES_FILE, 'r', encoding='utf-8') as f: stare_games = json.load(f)
-    except: stare_games = []
-    
-    try:
-        with open(MLB_JSON_FILE, 'r', encoding='utf-8') as f: stare_props = json.load(f)
-    except: stare_props = []
+        function toggleAuditorDetails() {
+            const panel = document.getElementById('audytorDetailsPanel');
+            const btn = document.getElementById('toggleDetailsBtn');
+            panel.classList.toggle('open');
+            btn.innerText = panel.classList.contains('open') ? "Zwiń szczegóły wczorajszych typów ▲" : "Rozwiń szczegóły wczorajszych typów ▼";
+        }
 
-    stare_typy = stare_games + stare_props
-    if not stare_typy: return
-    data_typow = stare_typy[0].get('data', '2000-01-01')
-    
-    if data_typow > DATA_DZIS: 
-        return
-        
-    print(f"\n🕵️ Uruchamiam Głównego Audytora MLB: Rozliczam typy z daty {data_typow}...")
-    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    
-    rzeczywiste_staty = {}
-    try:
-        res = requests.get(url, headers=headers, timeout=10).json()
-        if 'dates' not in res or not res['dates']: 
-            print("❌ MLB API: Brak rozegranych meczów w tym dniu.")
-            return
+        function filterAuditorDetails() {
+            let nameFilter = document.getElementById('audytorSearch').value.toLowerCase();
+            let marketFilter = document.getElementById('audytorMarket').value;
+            let statusFilter = document.getElementById('audytorStatus').value;
+            let categoryFilter = document.getElementById('audytorCategory').value;
+            let minOdds = parseFloat(document.getElementById('audytorMinOdds').value) || 0;
             
-        mecze = res['dates'][0]['games']
-        print(f"🔍 Audytor: Znalazłem {len(mecze)} meczów w terminarzu. Skanuję twarde Boxscore'y...")
-        
-        ukonczone_mecze = 0
-        for m in mecze:
-            away_t = m['teams']['away']['team']['name']
-            home_t = m['teams']['home']['team']['name']
-            status_code = m['status']['statusCode']
-            game_id = m['gamePk']
+            let rows = document.querySelectorAll('#audytorDetailsBody tr');
             
-            if status_code in ['F', 'O', 'C'] or m['status']['abstractGameState'] == 'Final': 
-                ukonczone_mecze += 1
-                try:
-                    # 1. Pobieranie boxscore dla Player Props
-                    box_url = f"https://statsapi.mlb.com/api/v1/game/{game_id}/boxscore"
-                    box_res = requests.get(box_url, headers=headers, timeout=5).json()
-                    teams = box_res.get('teams', {})
+            let w = 0, l = 0, p = 0, profit = 0.0;
+            let cGraalW=0, cGraalT=0, cValueW=0, cValueT=0, cSafeW=0, cSafeT=0, cStableW=0, cStableT=0;
+
+            rows.forEach(row => {
+                let playerName = row.cells[0].innerText.toLowerCase();
+                let marketName = row.cells[1].innerText; 
+                let oddsVal = parseFloat(row.dataset.kurs) || 0;
+                let statusText = row.cells[5].innerText;
+                let categoryText = row.dataset.cat || "";
+                
+                let nameMatch = playerName.includes(nameFilter);
+                let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
+                let statusMatch = (statusFilter === 'all') || statusText.includes(statusFilter);
+                let isCatMatch = (categoryFilter === 'all') || row.cells[6].innerText.includes(categoryFilter.replace(/[^\w\sąćęłńóśźżĄĆĘŁŃÓŚŹŻ:]/g, '').trim());
+                let oddsMatch = minOdds === 0 || oddsVal >= minOdds;
+                
+                if (nameMatch && marketMatch && statusMatch && isCatMatch && oddsMatch) {
+                    row.style.display = '';
                     
-                    for team_side in ['away', 'home']:
-                        players = teams.get(team_side, {}).get('players', {})
-                        for p_key, p_data in players.items():
-                            name = p_data.get('person', {}).get('fullName', '').lower().replace(".", "").replace("'", "").strip()
-                            if not name: continue
-                            b_stats = p_data.get('stats', {}).get('batting', {})
-                            p_stats = p_data.get('stats', {}).get('pitching', {})
-                            rzeczywiste_staty[name] = {
-                                "K's": p_stats.get('strikeOuts', 0), 'Hits': b_stats.get('hits', 0), 
-                                'Home Runs': b_stats.get('homeRuns', 0), 'Total Bases': b_stats.get('totalBases', 0), 
-                                'Runs': b_stats.get('runs', 0), 'RBIs': b_stats.get('rbi', 0)
-                            }
-                            
-                    # 2. Pobieranie danych dla Game Lines i F5
-                    linescore = requests.get(f"https://statsapi.mlb.com/api/v1/game/{game_id}/linescore", headers=headers).json()
-                    innings = linescore.get('innings', [])
-                    away_f5 = sum(i.get('away', {}).get('runs', 0) for i in innings[:5])
-                    home_f5 = sum(i.get('home', {}).get('runs', 0) for i in innings[:5])
+                    let sClass = row.dataset.status;
+                    let k = parseFloat(row.dataset.kurs) || 1.0;
                     
-                    away_fg = m['teams']['away'].get('score', 0)
-                    home_fg = m['teams']['home'].get('score', 0)
-                    
-                    m_key = f"{away_t} @ {home_t}".lower()
-                    rzeczywiste_staty[m_key] = {
-                        'Mecz: Suma Runs': away_fg + home_fg,
-                        'Mecz: Zwycięzca (ML)': home_t if home_fg > away_fg else away_t,
-                        'F5 Inningów: Suma Runs': away_f5 + home_f5,
-                        'F5 Inningów: ML': home_t if home_f5 > away_f5 else (away_t if away_f5 > home_f5 else "REMIS")
+                    let isGraal = categoryText.includes('Graal');
+                    let isValue = categoryText.includes('Value');
+                    let isSafe = categoryText.includes('Pewniak');
+                    let isStable = categoryText.includes('Stabilny');
+
+                    if (sClass === 'status-win') {
+                        w++; profit += (k - 1.0);
+                        if(isGraal) { cGraalW++; cGraalT++; }
+                        if(isValue) { cValueW++; cValueT++; }
+                        if(isSafe) { cSafeW++; cSafeT++; }
+                        if(isStable) { cStableW++; cStableT++; }
+                    } else if (sClass === 'status-loss') {
+                        l++; profit -= 1.0;
+                        if(isGraal) cGraalT++;
+                        if(isValue) cValueT++;
+                        if(isSafe) cSafeT++;
+                        if(isStable) cStableT++;
+                    } else if (sClass === 'status-push') {
+                        p++;
                     }
-                except Exception as box_err: pass
-                
-        if ukonczone_mecze == 0:
-            print("⚠️ Żaden mecz z tego dnia nie jest jeszcze w pełni zakończony.")
-            return
-    except Exception as e: return
-            
-    wygrane = przegrane = zwroty = profit = 0
-    historia = []
-    
-    print("\n📝 ROZLICZANIE ZAKŁADÓW:")
-    for typ in stare_typy:
-        rynek = typ['rynek']
-        linia = typ.get('linia', 0)
-        zaw = typ.get('zawodnik', typ.get('zaklad', '')).lower().replace(".", "").replace("'", "").strip()
-        mecz_key = typ.get('mecz', '').lower()
-        
-        is_game_line = "Mecz:" in rynek or "F5" in rynek
-        search_key = mecz_key if is_game_line else zaw
-        
-        znaleziony_zaw = next((k for k in rzeczywiste_staty.keys() if search_key in k or k in search_key), None)
-        if not znaleziony_zaw:
-            historia.append({"zawodnik": typ.get('zawodnik', typ.get('zaklad', 'Mecz')), "rynek": rynek, "status": "ZWROT", "kategoria": "Zwykły Typ"})
-            zwroty += 1; continue
-            
-        wynik = rzeczywiste_staty[znaleziony_zaw].get(rynek, 0)
-        zaklad = str(typ.get('zaklad', typ.get('typ', '')))
-        
-        if "Zwycięzca" in rynek or "ML" in rynek:
-            if wynik == "REMIS": czy_weszlo = None
-            else: czy_weszlo = (zaklad.lower() == wynik.lower())
-        else:
-            if wynik == linia: czy_weszlo = None
-            else: czy_weszlo = (zaklad == "OVER" and wynik > float(linia)) or (zaklad == "UNDER" and wynik < float(linia))
-        
-        if czy_weszlo is None:
-            zwroty += 1; status = "➖ ZWROT"
-        elif czy_weszlo: 
-            wygrane += 1; profit += (typ.get('kurs', 1.0) - 1.0); status = "✅ WYGRANA"
-        else: 
-            przegrane += 1; profit -= 1.0; status = "❌ PRZEGRANA"
-            
-        is_value = typ.get('is_value', False); is_safe = typ.get('is_safe', False)
-        is_stable = typ.get('is_stable', False); is_graal = typ.get('is_graal', False)
-            
-        etykiety = []
-        if is_game_line: etykiety.append("📊 Typ Meczowy")
-        else:
-            if is_graal: etykiety.append("🏆 Graal")
-            else:
-                if is_value: etykiety.append("💰 Value")
-                if is_safe: etykiety.append("🎯 Pewniak")
-                if is_stable: etykiety.append("🛡️ Stabilny")
-            
-        historia.append({
-            "zawodnik": typ.get('zawodnik', typ.get('zaklad', 'Mecz')), "rynek": rynek, 
-            "typ": zaklad, "linia": linia, "kurs": typ.get('kurs', 0.0), "wynik_realny": wynik, "status": status, "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"
-        })
-            
-    suma = wygrane + przegrane
-    if suma > 0:
-        hit_rate = round((wygrane / suma) * 100, 1); roi = round((profit / suma) * 100, 1)
-        try:
-            with open(STATS_MLB_FILE, 'r', encoding='utf-8') as f: baza_stat = json.load(f)
-        except: baza_stat = []
-        baza_stat = [r for r in baza_stat if r['data_meczow'] != data_typow]
-        baza_stat.insert(0, {"data_meczow": data_typow, "wygrane": wygrane, "przegrane": przegrane, "zwroty": zwroty, "hit_rate": f"{hit_rate}%", "profit_jednostki": round(profit, 2), "roi": f"{roi}%", "detale": historia})
-        with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump(baza_stat, f, ensure_ascii=False, indent=4)
-        wyslij_plik_na_githuba(STATS_MLB_FILE, f"Auto-Raport MLB ({data_typow})")
-
-# ==========================================
-# 1. POBIERANIE DANYCH MLB
-# ==========================================
-def pobierz_oficjalny_terminarz_mlb(data_str):
-    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_str}&hydrate=probablePitcher,lineups"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    baza_mlb = {}
-    try:
-        res = requests.get(url, headers=headers, timeout=10).json()
-        if 'dates' in res and len(res['dates']) > 0:
-            for m in res['dates'][0]['games']:
-                home_team = m['teams']['home']['team']['name']; away_team = m['teams']['away']['team']['name']
-                home_team_id = m['teams']['home']['team']['id']; away_team_id = m['teams']['away']['team']['id']
-                home_p = m['teams']['home'].get('probablePitcher', {}); away_p = m['teams']['away'].get('probablePitcher', {})
-                
-                lineups_home = {p['id']: i+1 for i, p in enumerate(m['teams']['home'].get('lineups', {}).get('homePlayers', []))}
-                lineups_away = {p['id']: i+1 for i, p in enumerate(m['teams']['away'].get('lineups', {}).get('awayPlayers', []))}
-                
-                klucz_meczu = f"{away_team} @ {home_team}".lower().replace("st. ", "st ")
-                baza_mlb[klucz_meczu] = {
-                    'home_team': home_team, 'home_team_id': home_team_id, 'away_team': away_team, 'away_team_id': away_team_id,
-                    'home_pitcher': home_p.get('fullName', 'TBD'), 'home_pitcher_id': home_p.get('id', None), 'home_pitcher_hand': home_p.get('pitchHand', {}).get('code', 'R'),
-                    'away_pitcher': away_p.get('fullName', 'TBD'), 'away_pitcher_id': away_p.get('id', None), 'away_pitcher_hand': away_p.get('pitchHand', {}).get('code', 'R'),
-                    'lineups_home': lineups_home, 'lineups_away': lineups_away
+                } else {
+                    row.style.display = 'none';
                 }
-    except: pass
-    return baza_mlb
+            });
 
-def pobierz_statystyki_druzyn_mlb():
-    global LEAGUE_AVG_K_RATE, LEAGUE_AVG_ERA
-    print("📊 Pobieram statystyki zespołowe po ID (K-Rate i Team ERA)...")
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    
-    url_hit = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R"
-    try:
-        res_h = requests.get(url_hit, headers=headers, timeout=10).json()
-        stats_h = res_h.get('stats', [])
-        if stats_h and stats_h[0].get('splits'):
-            total_k, total_pa = 0, 0
-            for team in stats_h[0]['splits']:
-                k = team['stat'].get('strikeOuts', 0); pa = team['stat'].get('plateAppearances', 1)
-                team_id = team['team']['id'] 
-                CACHE_TEAM_K_RATE[team_id] = k / pa if pa > 0 else 0
-                total_k += k; total_pa += pa
-            if total_pa > 0: LEAGUE_AVG_K_RATE = total_k / total_pa
-    except: pass
+            // Aktywna aktualizacja statystyk!
+            let suma = w + l;
+            let hitRate = suma > 0 ? (w / suma * 100).toFixed(1) + '%' : "0.0%";
+            let roi = suma > 0 ? (profit / suma * 100).toFixed(1) + '%' : "0.0%";
 
-    url_pitch = f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R"
-    try:
-        res_p = requests.get(url_pitch, headers=headers, timeout=10).json()
-        stats_p = res_p.get('stats', [])
-        if stats_p and stats_p[0].get('splits'):
-            total_era = 0; count = 0
-            for team in stats_p[0]['splits']:
-                era_str = team['stat'].get('era', str(LEAGUE_AVG_ERA))
-                era = float(era_str) if era_str != '-.--' else LEAGUE_AVG_ERA
-                team_id = team['team']['id']
-                CACHE_TEAM_ERA[team_id] = era
-                total_era += era; count += 1
-            if count > 0: LEAGUE_AVG_ERA = total_era / count
-    except: pass
-
-def pobierz_staty_miotacza_startowego(pitcher_id):
-    if not pitcher_id: return {'era': LEAGUE_AVG_ERA, 'baa': LEAGUE_AVG_BAA}
-    if pitcher_id in CACHE_PITCHER_STATS: return CACHE_PITCHER_STATS[pitcher_id]
-    era, baa = LEAGUE_AVG_ERA, LEAGUE_AVG_BAA
-    for s in [SEZON_MLB, SEZON_MLB - 1]:
-        try:
-            url = f"https://statsapi.mlb.com/api/v1/people/{pitcher_id}/stats?stats=season&group=pitching&season={s}"
-            res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
-            stats = res.get('stats', [])
-            if stats and stats[0].get('splits'):
-                stat_obj = stats[0]['splits'][0]['stat']
-                era = float(stat_obj.get('era', str(LEAGUE_AVG_ERA))) if stat_obj.get('era', '-.--') != '-.--' else LEAGUE_AVG_ERA
-                baa = float(stat_obj.get('avg', '.240')) if stat_obj.get('avg', '.---') != '.---' else LEAGUE_AVG_BAA
-                break 
-        except: pass
-    CACHE_PITCHER_STATS[pitcher_id] = {'era': era, 'baa': baa}
-    return CACHE_PITCHER_STATS[pitcher_id]
-
-def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
-    if team_id in CACHE_BULLPEN_FATIGUE: return CACHE_BULLPEN_FATIGUE[team_id]
-    dzis = datetime.strptime(data_dzis_str, '%Y-%m-%d')
-    start_date = (dzis - timedelta(days=3)).strftime('%Y-%m-%d')
-    end_date = (dzis - timedelta(days=1)).strftime('%Y-%m-%d')
-    
-    url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId={team_id}&startDate={start_date}&endDate={end_date}"
-    rozegrane_mecze = 0
-    try:
-        res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
-        for d in res.get('dates', []):
-            for g in d.get('games', []):
-                if g['status']['statusCode'] in ['F', 'O', 'C']: rozegrane_mecze += 1
-    except: pass
-
-    if rozegrane_mecze >= 4: bonus = 1.08; msg = "🥵 BP Zajechany (+8%)"
-    elif rozegrane_mecze == 3: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"
-    elif rozegrane_mecze <= 1: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
-    else: bonus = 1.0; msg = "BP Gotowy"
-        
-    CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
-    return CACHE_BULLPEN_FATIGUE[team_id]
-
-def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
-    if not player_id: return []
-    cache_key = f"{player_id}_{stat_key}"
-    if cache_key in CACHE_PLAYER_LOGS: return CACHE_PLAYER_LOGS[cache_key]
-    
-    time.sleep(0.05) 
-    group = "pitching" if typ_gracza == "pitcher" else "hitting"
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    historia_pelna = []
-    
-    for s in [SEZON_MLB, SEZON_MLB - 1]:
-        try:
-            url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats?stats=gameLog&group={group}&season={s}"
-            res = requests.get(url, headers=headers, timeout=10).json()
-            if 'stats' in res and len(res['stats']) > 0:
-                splits = res['stats'][0].get('splits', [])
-                for game in reversed(splits):
-                    st = game.get('stat', {})
-                    if typ_gracza == "pitcher" and float(st.get('inningsPitched', '0')) < 3.0: continue
-                    if typ_gracza == "batter" and st.get('atBats', 0) < 2: continue
-                    
-                    historia_pelna.append({
-                        'val': st.get(stat_key if typ_gracza == "batter" else 'strikeOuts', 0),
-                        'isHome': game.get('isHome', False)
-                    })
-                    if len(historia_pelna) >= 15: break
-        except: pass
-        if len(historia_pelna) >= 15: break
-
-    historia_pelna.reverse() 
-    CACHE_PLAYER_LOGS[cache_key] = historia_pelna
-    return historia_pelna
-
-# ==========================================
-# 3. GŁÓWNA PĘTLA BOTA (GAME LINES & PROPS)
-# ==========================================
-def uruchom_mlb_pro():
-    print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.0 (Full Engine)")
-    print("==================================================")
-    
-    if not os.path.exists(STATS_MLB_FILE):
-        with open(STATS_MLB_FILE, 'w', encoding='utf-8') as f: json.dump([], f)
-        wyslij_plik_na_githuba(STATS_MLB_FILE, "Inicjalizacja pustego pliku")
-    
-    rozlicz_wczorajsze_typy_mlb()
-    pobierz_statystyki_druzyn_mlb()
-    generuj_pelny_raport_druzynowy_mlb() 
-    pobierz_pogode_covers()
-    baza_mlb = pobierz_oficjalny_terminarz_mlb(DATA_DZIS)
-    
-    try:
-        print("📡 Pobieram kursy (The Odds API - Props & Games)...")
-        events = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS},{MARKETS_GAMES}&oddsFormat=decimal").json()
-        if isinstance(events, dict) and 'message' in events: 
-            print(f"❌ ODRZUCONO ZAPYTANIE: {events['message']}")
-            return []
-    except Exception as e: 
-        print(f"❌ BŁĄD POŁĄCZENIA Z API: {e}")
-        return []
-
-    if not isinstance(events, list): return []
-    mecze_dzis = [e for e in events if (datetime.strptime(e['commence_time'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(hours=5)).strftime('%Y-%m-%d') == DATA_DZIS]
-    
-    wyniki_props = []
-    wyniki_games = []
-    przetworzeni_zawodnicy = set()
-
-    rynek_map = {
-        'pitcher_strikeouts': ('K\'s', 'pitcher', 'strikeOuts'),
-        'batter_hits': ('Hits', 'batter', 'hits'),
-        'batter_home_runs': ('Home Runs', 'batter', 'homeRuns'),
-        'batter_total_bases': ('Total Bases', 'batter', 'totalBases'),
-        'batter_runs_scored': ('Runs', 'batter', 'runs'),
-        'batter_rbis': ('RBIs', 'batter', 'rbi')
-    }
-
-    for ev in mecze_dzis:
-        m_str = f"{ev['away_team']} @ {ev['home_team']}"
-        dane_oficjalne = baza_mlb.get(m_str.lower().replace("st. ", "st "), {})
-        if not dane_oficjalne: continue
-        
-        print(f"\n🏟️ ------------------------------------------------")
-        print(f"⚾ ANALIZA MECZU: {m_str}")
-        
-        home_t_id = dane_oficjalne['home_team_id']
-        away_t_id = dane_oficjalne['away_team_id']
-        w_data = CACHE_WEATHER.get(ev['home_team'], {'mod': 1.0, 'msg': 'Neutralnie/Dach'})
-        p_factor = PARK_FACTORS.get(ev['home_team'], 1.0)
-        
-        # --- 🧮 KALKULATOR GAME LINES (Model Ważony + F5) ---
-        away_ops_splits = pobierz_ops_splits(away_t_id)
-        home_ops_splits = pobierz_ops_splits(home_t_id)
-        home_p_hand = dane_oficjalne.get('home_pitcher_hand', 'R')
-        away_p_hand = dane_oficjalne.get('away_pitcher_hand', 'R')
-        home_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne.get('home_pitcher_id'))
-        away_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne.get('away_pitcher_id'))
-        home_bp = oblicz_zmeczenie_bullpenu(home_t_id, DATA_DZIS)
-        away_bp = oblicz_zmeczenie_bullpenu(away_t_id, DATA_DZIS)
-
-        # FULL GAME (65% SP / 35% BP)
-        away_ops_vs_sp = away_ops_splits['vs_LHP'] if home_p_hand == 'L' else away_ops_splits['vs_RHP']
-        away_ops_vs_bp = (away_ops_splits['vs_LHP'] + away_ops_splits['vs_RHP']) / 2.0
-        away_true_ops_full = (away_ops_vs_sp * 0.65) + (away_ops_vs_bp * 0.35)
-        away_base_runs_fg = (away_true_ops_full / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS
-        away_proj_runs_fg = away_base_runs_fg * (home_p_stats['era'] / LEAGUE_AVG_ERA) * home_bp['korekta'] * p_factor * w_data['mod']
-        
-        home_ops_vs_sp = home_ops_splits['vs_LHP'] if away_p_hand == 'L' else home_ops_splits['vs_RHP']
-        home_ops_vs_bp = (home_ops_splits['vs_LHP'] + home_ops_splits['vs_RHP']) / 2.0
-        home_true_ops_full = (home_ops_vs_sp * 0.65) + (home_ops_vs_bp * 0.35)
-        home_base_runs_fg = (home_true_ops_full / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS
-        home_proj_runs_fg = home_base_runs_fg * (away_p_stats['era'] / LEAGUE_AVG_ERA) * away_bp['korekta'] * p_factor * w_data['mod'] * 1.04 
-        
-        total_proj_runs_fg = round(away_proj_runs_fg + home_proj_runs_fg, 2)
-        try: home_win_prob_fg = (home_proj_runs_fg**1.83) / (home_proj_runs_fg**1.83 + away_proj_runs_fg**1.83)
-        except: home_win_prob_fg = 0.5
-
-        # F5 INNINGS (100% SP)
-        away_base_runs_f5 = (away_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
-        away_proj_runs_f5 = away_base_runs_f5 * (home_p_stats['era'] / LEAGUE_AVG_ERA) * p_factor * w_data['mod']
-        home_base_runs_f5 = (home_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
-        home_proj_runs_f5 = home_base_runs_f5 * (away_p_stats['era'] / LEAGUE_AVG_ERA) * p_factor * w_data['mod'] * 1.04
-        
-        total_proj_runs_f5 = round(away_proj_runs_f5 + home_proj_runs_f5, 2)
-        try: home_win_prob_f5 = (home_proj_runs_f5**1.83) / (home_proj_runs_f5**1.83 + away_proj_runs_f5**1.83)
-        except: home_win_prob_f5 = 0.5
-
-        print(f"  📈 Kalkulator Mecz: {ev['away_team']} {round(away_proj_runs_fg, 1)} - {round(home_proj_runs_fg, 1)} {ev['home_team']} (Suma: {total_proj_runs_fg})")
-        print(f"  ⏱️ Kalkulator F5: Suma {total_proj_runs_f5} runs po 5 inningach.")
-
-        g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
-        g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
-        g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
-
-        # Ekstrakcja Kursów
-        game_lines = {'h2h': {}, 'totals': {}, 'h2h_f5': {}, 'totals_f5': {}}
-        for bm in ev.get('bookmakers', []):
-            for mkt in bm.get('markets', []):
-                if mkt['key'] == 'h2h':
-                    for oc in mkt['outcomes']: game_lines['h2h'][oc['name']] = oc['price']
-                elif mkt['key'] == 'totals':
-                    for oc in mkt['outcomes']: 
-                        game_lines['totals']['point'] = oc['point']
-                        game_lines['totals'][oc['name']] = oc['price']
-                elif mkt['key'] == 'h2h_1st_half':
-                    for oc in mkt['outcomes']: game_lines['h2h_f5'][oc['name']] = oc['price']
-                elif mkt['key'] == 'totals_1st_half':
-                    for oc in mkt['outcomes']: 
-                        game_lines['totals_f5']['point'] = oc['point']
-                        game_lines['totals_f5'][oc['name']] = oc['price']
-
-        # --- 🎯 EWALUACJA ZAKŁADÓW (Z wizualizacją w konsoli) ---
-        if game_lines['totals'] and 'Over' in game_lines['totals']:
-            t_line = game_lines['totals']['point']
-            t_over = game_lines['totals']['Over']
-            t_under = game_lines['totals']['Under']
-            over_prob = 1.0 - poisson_prob_over(total_proj_runs_fg, t_line)
-            ev_o = (over_prob * t_over) - 1; ev_u = ((1-over_prob) * t_under) - 1
+            document.getElementById('audytor-hitrate').textContent = hitRate;
+            const roiEl = document.getElementById('audytor-roi');
+            roiEl.textContent = (profit > 0 ? "+" : "") + roi + ` (${profit.toFixed(2)}u)`;
+            roiEl.className = profit > 0 ? "audytor-value text-green" : (profit < 0 ? "audytor-value text-red" : "audytor-value text-orange");
             
-            if ev_o > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(over_prob * 100, 1), "ev": round(ev_o, 3), "uwagi": g_insights})
-            elif ev_u > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round((1-over_prob) * 100, 1), "ev": round(ev_u, 3), "uwagi": g_insights})
+            document.getElementById('audytor-w').textContent = w;
+            document.getElementById('audytor-l').textContent = l;
+            document.getElementById('audytor-p').textContent = p;
 
-        if game_lines['h2h'] and ev['home_team'] in game_lines['h2h']:
-            h_kurs = game_lines['h2h'][ev['home_team']]
-            a_kurs = game_lines['h2h'][ev['away_team']]
-            ev_h = (home_win_prob_fg * h_kurs) - 1; ev_a = ((1-home_win_prob_fg) * a_kurs) - 1
+            const formatCat = (win, tot) => tot > 0 ? `${win}/${tot} (${(win/tot*100).toFixed(0)}%)` : "0/0 (Brak)";
+            document.getElementById('cat-graal-val').textContent = formatCat(cGraalW, cGraalT);
+            document.getElementById('cat-value-val').textContent = formatCat(cValueW, cValueT);
+            document.getElementById('cat-safe-val').textContent = formatCat(cSafeW, cSafeT);
+            document.getElementById('cat-stable-val').textContent = formatCat(cStableW, cStableT);
+        }
+
+        document.getElementById('audytorSearch').addEventListener('input', filterAuditorDetails);
+        document.getElementById('audytorMinOdds').addEventListener('input', filterAuditorDetails);
+        document.getElementById('audytorMarket').addEventListener('change', filterAuditorDetails);
+        document.getElementById('audytorStatus').addEventListener('change', filterAuditorDetails);
+        document.getElementById('audytorCategory').addEventListener('change', filterAuditorDetails);
+
+        async function wczytajAudytora() {
+            document.getElementById('audytor-hitrate').textContent = '--';
+            document.getElementById('audytor-roi').textContent = '--';
+            document.getElementById('audytor-roi').className = 'audytor-value text-orange';
+            document.getElementById('audytor-w').textContent = '0';
+            document.getElementById('audytor-l').textContent = '0';
+            document.getElementById('audytor-p').textContent = '0';
             
-            if ev_h > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
-            elif ev_a > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
+            document.getElementById('toggleDetailsBtn').style.display = 'none';
+            document.getElementById('audytorDetailsPanel').classList.remove('open');
+            document.getElementById('toggleDetailsBtn').innerText = "Rozwiń szczegóły wczorajszych typów ▼";
+            document.getElementById('audytorDetailsBody').innerHTML = '';
 
-        if game_lines['totals_f5'] and 'Over' in game_lines['totals_f5']:
-            t_line_f5 = game_lines['totals_f5']['point']
-            t_over_f5 = game_lines['totals_f5']['Over']
-            t_under_f5 = game_lines['totals_f5']['Under']
-            over_prob_f5 = 1.0 - poisson_prob_over(total_proj_runs_f5, t_line_f5)
-            ev_o_f5 = (over_prob_f5 * t_over_f5) - 1; ev_u_f5 = ((1-over_prob_f5) * t_under_f5) - 1
-            
-            if ev_o_f5 > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "OVER", "linia": t_line_f5, "kurs": t_over_f5, "projekcja": total_proj_runs_f5, "szansa": round(over_prob_f5 * 100, 1), "ev": round(ev_o_f5, 3), "uwagi": g_insights})
-            elif ev_u_f5 > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "UNDER", "linia": t_line_f5, "kurs": t_under_f5, "projekcja": total_proj_runs_f5, "szansa": round((1-over_prob_f5) * 100, 1), "ev": round(ev_u_f5, 3), "uwagi": g_insights})
-
-        if game_lines['h2h_f5'] and ev['home_team'] in game_lines['h2h_f5']:
-            h_kurs_f5 = game_lines['h2h_f5'][ev['home_team']]
-            a_kurs_f5 = game_lines['h2h_f5'][ev['away_team']]
-            ev_h_f5 = (home_win_prob_f5 * h_kurs_f5) - 1; ev_a_f5 = ((1-home_win_prob_f5) * a_kurs_f5) - 1
-            
-            if ev_h_f5 > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs_f5, "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", "szansa": round(home_win_prob_f5 * 100, 1), "ev": round(ev_h_f5, 3), "uwagi": g_insights})
-            elif ev_a_f5 > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs_f5, "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": round(ev_a_f5, 3), "uwagi": g_insights})
-
-        # --- 🏏 ANALIZA ZAWODNIKÓW (PROPS) ---
-        h_roster = {}
-        a_roster = {}
-        try:
-            res_h = requests.get(f"https://statsapi.mlb.com/api/v1/teams/{dane_oficjalne['home_team_id']}/roster?hydrate=person", timeout=10).json()
-            h_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_h.get('roster', [])}
-            
-            res_a = requests.get(f"https://statsapi.mlb.com/api/v1/teams/{dane_oficjalne['away_team_id']}/roster?hydrate=person", timeout=10).json()
-            a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
-        except: pass
-
-        for bm in ev.get('bookmakers', []):
-            for mkt in bm.get('markets', []):
-                if mkt['key'] not in rynek_map: continue
-                nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[mkt['key']]
+            try {
+                let fileName = currentSport === 'nba' ? 'statystyki_bota.json' : (currentSport === 'mlb' ? 'statystyki_mlb.json' : 'statystyki_nhl.json');
+                const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Brak pliku");
+                statystykiBota = await response.json();
                 
-                player_odds = {}
-                for oc in mkt['outcomes']:
-                    p_name = oc['description']
-                    if p_name not in player_odds: 
-                        player_odds[p_name] = {'Over': 1.85, 'Under': 1.85, 'point': oc.get('point', 0.5)}
-                    player_odds[p_name][oc['name']] = oc['price']
+                if (statystykiBota && statystykiBota.length > 0) {
+                    renderAuditorView('wczoraj'); 
+                } else {
+                    document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Oczekuje na rozliczenie...)`;
+                    statystykiBota = []; 
+                }
+            } catch (error) {
+                document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) (Brak Danych)`;
+                statystykiBota = [];
+            }
+        }
+        
+        window.renderAuditorView = function(typWidoku) {
+            if(!statystykiBota || statystykiBota.length === 0) return;
+            
+            document.getElementById('btn-audytor-wczoraj').classList.toggle('active', typWidoku === 'wczoraj');
+            document.getElementById('btn-audytor-alltime').classList.toggle('active', typWidoku === 'alltime');
+            
+            let dataTytul = "";
+            let itemsToRender = [];
+
+            if(typWidoku === 'wczoraj') {
+                const wczoraj = statystykiBota[0];
+                dataTytul = `Ostatnia Noc (${wczoraj.data_meczow})`;
+                if(wczoraj.detale) itemsToRender = wczoraj.detale;
+                document.getElementById('toggleDetailsBtn').style.display = 'block';
+            } else {
+                dataTytul = `Cała Historia (Ostatnie ${statystykiBota.length} dni)`;
+                statystykiBota.forEach(d => { if(d.detale) itemsToRender = itemsToRender.concat(d.detale); });
+                document.getElementById('toggleDetailsBtn').style.display = 'block';
+            }
+
+            document.getElementById('audytor-title').innerText = `📊 Raport Skuteczności (${currentSport.toUpperCase()}) - ${dataTytul}`;
+            const detailsBody = document.getElementById('audytorDetailsBody');
+            detailsBody.innerHTML = '';
+            
+            // Resetujemy filtry UI
+            document.getElementById('audytorSearch').value = '';
+            document.getElementById('audytorMinOdds').value = '';
+            document.getElementById('audytorMarket').value = 'all';
+            document.getElementById('audytorStatus').value = 'all';
+            document.getElementById('audytorCategory').value = 'all';
+
+            itemsToRender.forEach(d => {
+                let statusClass = 'status-push';
+                if(d.status.includes('WYGRANA')) statusClass = 'status-win';
+                else if(d.status.includes('PRZEGRANA')) statusClass = 'status-loss';
+
+                let badgesHtml = '';
+                if(d.kategoria) {
+                    d.kategoria.split('|').forEach(cat => {
+                        let c = cat.trim();
+                        if(c && c !== 'Zwykły Typ') badgesHtml += `<span class="cat-badge">${c}</span>`;
+                    });
+                }
+                if(badgesHtml === '') badgesHtml = '<span style="color:var(--muted-text); font-size:0.8rem;">Brak</span>';
+
+                const pickTyp = d.typ || '-';
+                const pickKursStr = d.kurs ? parseFloat(d.kurs).toFixed(2) : '0.00';
+
+                const tr = document.createElement('tr');
+                tr.dataset.kurs = pickKursStr;
+                tr.dataset.status = statusClass;
+                tr.dataset.cat = d.kategoria || '';
+                tr.innerHTML = `
+                    <td style="font-weight:bold;">${d.zawodnik || d.zaklad}</td>
+                    <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp}</span></td>
+                    <td>${d.linia}</td>
+                    <td style="font-weight:bold; color:var(--accent-color);">@${pickKursStr}</td>
+                    <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny ?? d.wynik ?? '-'}</td>
+                    <td class="${statusClass}">${d.status}</td>
+                    <td>${badgesHtml}</td>
+                `;
+                detailsBody.appendChild(tr);
+            });
+
+            // Wymuś przeliczenie statystyk na podstawie wierszy w tabeli
+            filterAuditorDetails();
+        }
+
+        function loadSportData(sport) {
+            teamStatsPanel.classList.remove('active');
+            mainPicksContainer.style.display = 'block';
+            toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
+            
+            document.getElementById('mlbSubNav').style.display = (sport === 'mlb') ? 'flex' : 'none';
+            document.getElementById('roleFilterGroup').style.display = (sport === 'mlb' && currentSubTab === 'props') ? 'flex' : 'none';
+            if (sport !== 'mlb') { currentSubTab = 'props'; }
+            
+            wczytajAudytora();
+            document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych...</td></tr>`;
+
+            let fileName = `${sport}.json`;
+            if (sport === 'mlb' && currentSubTab === 'games') {
+                fileName = 'mlb_games.json';
+                document.getElementById('mainLegendBox').style.display = 'none';
+            } else {
+                document.getElementById('mainLegendBox').style.display = 'flex';
+            }
+
+            renderTableHeaders();
+
+            fetch(`${fileName}?v=` + new Date().getTime())
+            .then(r => { if(!r.ok) throw new Error("Brak pliku"); return r.json(); })
+            .then(data => { globalData = data; renderTable(globalData); populateDropdowns(data); updateTotalOdds(); })
+            .catch(e => { document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza jest pusta. Odpal skrypt bota!</td></tr>`; globalData = []; });
+        }
+
+        document.querySelectorAll('.sport-tab[data-sport]').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                if(tab.dataset.sport === 'nfl') return alert("Moduł NFL zostanie aktywowany we wrześniu!");
+                document.querySelectorAll('.sport-tab[data-sport]').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentSport = tab.dataset.sport;
                 
-                for p_name, d_odds in player_odds.items():
-                    linia = d_odds['point']
-                    kurs_over = d_odds['Over']
-                    kurs_under = d_odds['Under']
-                    
-                    if mlb_stat_key == 'totalBases': linia = 1.5
-                    elif mlb_stat_key == 'hits': linia = 0.5
-                    
-                    if f"{p_name}_{mkt['key']}" in przetworzeni_zawodnicy: continue
-                    przetworzeni_zawodnicy.add(f"{p_name}_{mkt['key']}")
-                    
-                    player_id = None; is_today_home = False; opp_team_id = None; opp_name = ""; bat_side = 'R'; b_order = 0
-                    h_clean = dane_oficjalne['home_pitcher'].lower().replace(".", "").strip()
-                    a_clean = dane_oficjalne['away_pitcher'].lower().replace(".", "").strip()
-                    p_clean = p_name.lower().replace(".", "").strip()
-                    
-                    if rola == 'pitcher':
-                        if p_clean in h_clean or h_clean in p_clean: 
-                            player_id = dane_oficjalne['home_pitcher_id']
-                            is_today_home = True
-                            opp_team_id = dane_oficjalne['away_team_id']
-                            opp_name = ev['away_team']
-                        elif p_clean in a_clean or a_clean in p_clean: 
-                            player_id = dane_oficjalne['away_pitcher_id']
-                            is_today_home = False
-                            opp_team_id = dane_oficjalne['home_team_id']
-                            opp_name = ev['home_team']
-                    else:
-                        if p_clean in h_roster:
-                            player_id = h_roster[p_clean]['id']
-                            bat_side = h_roster[p_clean].get('batSide', {}).get('code', 'R')
-                            is_today_home = True
-                            opp_team_id = dane_oficjalne['away_team_id']
-                            opp_name = ev['away_team']
-                            b_order = dane_oficjalne.get('lineups_home', {}).get(player_id, 0)
-                        elif p_clean in a_roster:
-                            player_id = a_roster[p_clean]['id']
-                            bat_side = a_roster[p_clean].get('batSide', {}).get('code', 'R')
-                            is_today_home = False
-                            opp_team_id = dane_oficjalne['home_team_id']
-                            opp_name = ev['home_team']
-                            b_order = dane_oficjalne.get('lineups_away', {}).get(player_id, 0)
-                    
-                    if not player_id: continue
-                    hist_data = pobierz_historie_gracza(player_id, rola, mlb_stat_key)
-                    if len(hist_data) < 5: continue
-                    
-                    vals = [h['val'] for h in hist_data[-15:]]
-                    weights = [3 if i >= len(vals)-5 else (2 if i >= len(vals)-10 else 1) for i in range(len(vals))]
-                    baza_proj = sum(v * w for v, w in zip(vals, weights)) / sum(weights)
-                    
-                    split_bonus = 1.0
-                    h_vals = [h['val'] for h in hist_data if h['isHome']]
-                    a_vals = [h['val'] for h in hist_data if not h['isHome']]
-                    if is_today_home and h_vals and a_vals:
-                        if sum(h_vals)/len(h_vals) > (sum(a_vals)/len(a_vals)) * 1.1: split_bonus = 1.07
-                    elif not is_today_home and a_vals and h_vals:
-                        if sum(a_vals)/len(a_vals) > (sum(h_vals)/len(h_vals)) * 1.1: split_bonus = 1.07
-                    
-                    korekta = split_bonus
-                    uwagi = f"🔥 WMA: {round(baza_proj,2)}."
-                    m_color = "rank-yellow"; m_rank = "Neutral"
-                    
-                    if rola == 'pitcher':
-                        opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
-                        korekta *= max(0.85, min(1.15, opp_k_rate / LEAGUE_AVG_K_RATE))
-                        m_color = "rank-green" if korekta > 1.05 else "rank-red"
-                        m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
-                    else:
-                        opp_pitcher_id = dane_oficjalne['away_pitcher_id'] if is_today_home else dane_oficjalne['home_pitcher_id']
-                        opp_pitcher_name = dane_oficjalne['away_pitcher'] if is_today_home else dane_oficjalne['home_pitcher']
-                        
-                        p_stats = pobierz_staty_miotacza_startowego(opp_pitcher_id)
-                        baa_korekta = max(0.85, min(1.15, p_stats['baa'] / LEAGUE_AVG_BAA))
-                        
-                        if baa_korekta >= 1.05: m_color = "rank-green"; m_rank = "Słaby Miotacz"
-                        elif baa_korekta <= 0.95: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
-                        
-                        opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
-                        era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
-                        
-                        bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
-                        
-                        korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
-                        
-                        uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
-                        uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
-                        if bullpen['uwaga']: uwagi += f" {bullpen['uwaga']}"
-                        
-                        pf = PARK_FACTORS.get(ev['home_team'], 1.0)
-                        if mlb_stat_key == 'homeRuns': pf = ((pf - 1.0) * 1.5) + 1.0 
-                        if pf != 1.0: 
-                            korekta *= pf
-                            uwagi += f" 🏟️ Stadion PF: {round(pf, 2)}x."
-                        
-                        # Aplikowanie modyfikatora pogody dla pałkarzy!
-                        if w_data['mod'] != 1.0:
-                            korekta *= w_data['mod']
-                            uwagi += f" 🌦️ Pogoda: {w_data['msg']}."
-                        
-                        p_hand = dane_oficjalne['away_pitcher_hand'] if is_today_home else dane_oficjalne['home_pitcher_hand']
-                        if p_hand and bat_side:
-                            if bat_side == 'S': 
-                                korekta *= 1.04; uwagi += " ⚔️ Switch Hitter (+4%)."
-                            elif bat_side != p_hand: 
-                                korekta *= 1.08; uwagi += f" ⚔️ Platoon Adv ({bat_side} vs {p_hand}) (+8%)."
-                            else: 
-                                korekta *= 0.95; uwagi += f" ⚔️ Hard Split ({bat_side} vs {p_hand}) (-5%)."
-                            
-                        if b_order > 0:
-                            if b_order <= 3: korekta *= 1.05
-                            elif b_order >= 8: korekta *= 0.90
-                    
-                    projekcja_finalna = baza_proj * korekta
-                    prob_over = poisson_prob_over(projekcja_finalna, linia)
-                    
-                    typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
-                    true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
-                    kurs_final = kurs_over if typ == "OVER" else kurs_under
-                    
-                    is_hr = (mlb_stat_key == 'homeRuns')
-                    min_prob = 0.15 if is_hr else 0.55
-                    
-                    if true_prob <= min_prob: 
-                        continue
-                    
-                    ev_val = (true_prob * kurs_final) - 1.0 
-                    
-                    if is_hr and ev_val < 0.05:
-                        continue
-                    
-                    if typ == "OVER":
-                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
-                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
-                        pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100)
-                    else:
-                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
-                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
-                        pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
-                        m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
-                    
-                    if is_hr:
-                        is_value_bet = ev_val >= 0.15 
-                        is_safe_bet = true_prob >= 0.25 and pokrycie_l10 >= 20 
-                    else:
-                        is_value_bet = ev_val >= 0.04
-                        is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
-                        
-                    is_stable_bet = (m_color == "rank-green")
-                    is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
-                    
-                    znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
-                    print(f"    {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
-                    
-                    wyniki_props.append({
-                        "zawodnik": p_name, "mecz": m_str, "data": DATA_DZIS, "rynek": nazwa_rynku_pl,
-                        "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
-                        "ev": round(ev_val, 3), "typ": typ, "kurs": kurs_final,
-                        "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%",
-                        "sezon": f"{pokrycie_sezon}%", "history": vals[-10:],
-                        "uwagi": uwagi, "lokacja": "DOM" if is_today_home else "WYJ", "matchup_rank": m_rank,
-                        "matchup_color": m_color, "opp_name": opp_name,
-                        "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
-                    })
+                if (currentSport === 'mlb') {
+                    currentSubTab = 'props';
+                    document.querySelectorAll('#mlbSubNav .sport-tab').forEach(t => {
+                        t.classList.remove('active'); t.style.backgroundColor = 'transparent';
+                        if(t.dataset.sub === 'props') t.classList.add('active');
+                    });
+                }
+                loadSportData(currentSport);
+            });
+        });
 
-    # Sortowanie i Zapis
-    wyniki_games = sorted(wyniki_games, key=lambda x: x['ev'], reverse=True)
-    with open('mlb_games.json', 'w', encoding='utf-8') as f: json.dump(wyniki_games, f, ensure_ascii=False, indent=4)
-    wyslij_plik_na_githuba('mlb_games.json', "Update MLB Game Lines & F5")
-    print(f"\n✅ Zapisano {len(wyniki_games)} zyskownych typów na Linie Meczowe i F5.")
+        loadSportData('nba');
 
-    wyniki_props = sorted(wyniki_props, key=lambda x: x['ev'], reverse=True)
-    with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki_props, f, ensure_ascii=False, indent=4)
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props")
-    print(f"✅ Zapisano {len(wyniki_props)} typów na zawodników.")
+        document.getElementById('exportCsvBtn').addEventListener('click', () => {
+            if(globalData.length === 0) return alert("Brak danych do eksportu.");
+            let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+            let headers = isGames ? ["Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja", "Szansa (%)", "EV (%)", "Uwagi"] : ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
+            let csvRows = [headers.join(",")];
+            
+            globalData.forEach(d => {
+                let true_prob = isGames ? d.szansa.toFixed(1) : (d.true_prob * 100).toFixed(1);
+                let ev = isGames ? (d.ev * 100).toFixed(1) : (d.ev * 100).toFixed(1);
+                if (isGames) {
+                    csvRows.push([`"${d.mecz}"`, `"${d.rynek}"`, `"${d.zaklad}"`, d.linia, d.kurs, d.projekcja, true_prob, ev, `"${d.uwagi.replace(/<br>/g, " ")}"`].join(","));
+                } else {
+                    csvRows.push([`"${d.zawodnik}"`, `"${d.mecz}"`, `"${d.rynek}"`, `"${d.typ}"`, d.linia, d.kurs, d.projekcja, true_prob, ev, `"${d.l5}"`, `"${d.l10}"`, `"${d.sezon}"`, `"${d.matchup_rank}"`].join(","));
+                }
+            });
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `quant_pro_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
 
-if __name__ == "__main__":
-    uruchom_mlb_pro()
+        function createStatPill(str) { if (!str || str === "-") return '<span class="stat-pill stat-yellow">-</span>'; let v = parseInt((str.match(/(\d+)%/) || [0,0])[1]); return `<span class="stat-pill ${v>=70?'stat-green':(v>=40?'stat-yellow':'stat-red')}">${str}</span>`; }
+        function generateChartHTML(hist, linia) { if (!hist || hist.length === 0) return "<div style='padding: 2rem;'>Brak historii.</div>"; let max = Math.max(...hist, linia) * 1.2 || 10; let bars = hist.map((v, i) => `<div class="chart-bar-wrap"><div class="chart-val">${v}</div><div class="chart-bar ${v>linia?'bar-over':'bar-under'}" style="height: ${(v/max)*100}%;"></div><div class="chart-label">L${hist.length-i}</div></div>`).join(''); return `<div class="chart-container"><div class="chart-line" style="bottom: ${(linia/max)*100}%;"></div>${bars}</div>`; }
+        function generateH2HHtml(item) {
+            if (!item.h2h_history || item.h2h_history === "Brak" || item.h2h_history === "Brak danych") return `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak najnowszych wyników vs ${item.opp_name}.</div>`;
+            let vals = item.h2h_history.split(','); let pillsHtml = vals.map(v => { let num = parseFloat(v); let isGreen = item.typ === "OVER" ? num > item.linia : num < item.linia; return `<span class="h2h-pill ${isGreen ? 'green' : 'red'}">${num}</span>`; }).join('');
+            return `<div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.8rem;">Wyniki przeciwko ${item.opp_name} (od najnowszego):</div><div style="font-size: 1.6rem; font-weight: 900; color: var(--text-color); margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 10px;">${item.h2h_avg.toFixed(1)} <span style="font-size: 0.8rem; font-weight: bold; color: var(--muted-text); text-transform: uppercase;">Średnia z H2H</span></div><div style="display: flex; gap: 8px; flex-wrap: wrap;">${pillsHtml}</div>`;
+        }
+
+        function generateSGPHtml(currentItem) {
+            let goldenHtml = "";
+            let matchText = currentItem.uwagi ? currentItem.uwagi.match(/🔗 ZŁOTA PARA SGP: (.*)/) : null;
+            if (matchText) {
+                let fullText = matchText[1].trim();
+                let targetPlayer = "", targetMarket = "", displayMsg = "";
+                if (fullText.includes("Łącz z OVER")) {
+                    let bezPrefiksu = fullText.replace("Łącz z OVER ", ""); 
+                    let lastParenIndex = bezPrefiksu.lastIndexOf("(");
+                    if(lastParenIndex !== -1) { targetPlayer = bezPrefiksu.substring(0, lastParenIndex).trim(); targetMarket = bezPrefiksu.substring(lastParenIndex + 1, bezPrefiksu.length - 1).trim(); } 
+                    else { targetPlayer = bezPrefiksu; }
+                    displayMsg = `Skoro grasz ${currentItem.zawodnik}, model zdecydowanie zaleca uderzyć w kolegę: <br><b>OVER ${targetPlayer} (${targetMarket})</b>`;
+                } else if (fullText.includes("Asystuje")) {
+                    let bezPrefiksu = fullText.replace("Asystuje ", ""); 
+                    let lastParenIndex = bezPrefiksu.lastIndexOf("(");
+                    if(lastParenIndex !== -1) { targetPlayer = bezPrefiksu.substring(0, lastParenIndex).trim(); } else { targetPlayer = bezPrefiksu; }
+                    targetMarket = "Asysty (AST)"; displayMsg = `Głównym rozgrywającym asystującym temu graczowi jest: <br><b>OVER ${targetPlayer} (${targetMarket})</b>`;
+                }
+                goldenHtml = `
+                <div class="sgp-golden">
+                    <div class="sgp-golden-title">🏆 Wykryto Złotą Parę Korelacyjną</div>
+                    <div class="sgp-golden-text">${displayMsg}</div>
+                    ${targetPlayer ? `<button class="sgp-add-btn" style="background: #f59e0b; width: fit-content; margin-top: 5px; font-size: 0.9rem;" onclick="forceAddToCoupon('${targetPlayer}', '${targetMarket}')">+ Dodaj Złotą Parę na Kupon</button>` : ''}
+                </div>`;
+            }
+            let currentLoc = currentItem.lokacja.split(':')[0]; 
+            let teammates = globalData.filter(d => d.mecz === currentItem.mecz && d.lokacja.split(':')[0] === currentLoc && d.zawodnik !== currentItem.zawodnik);
+            let suggestions = teammates.filter(t => t.ev > 0.02).sort((a,b) => b.ev - a.ev).slice(0, 2);
+            let html = suggestions.length === 0 ? `<div style="padding: 1rem; color: var(--muted-text); font-size: 0.85rem;">Brak innych opłacalnych typów (EV > 0) z tej drużyny.</div>` : suggestions.map(s => `<div class="sgp-item"><div class="sgp-info"><span class="sgp-player">${s.zawodnik}</span><span class="sgp-market">${s.rynek} <b>${s.typ} ${s.linia}</b></span></div><div style="display:flex; align-items:center; gap: 10px;"><span class="sgp-odds">@${s.kurs}</span><button class="sgp-add-btn" onclick="forceAddToCoupon('${s.zawodnik}', '${s.rynek}')">+ Dodaj</button></div></div>`).join('');
+            return goldenHtml + `<div><div style="font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem; text-transform: uppercase; font-weight: bold;">Najlepsze opcje z tej samej drużyny:</div>${html}</div>`;
+        }
+
+        window.forceAddToCoupon = function(player, market) { 
+            let pLower = player.toLowerCase().trim();
+            let alreadyInCoupon = false;
+            document.querySelectorAll('#favoritesBody tr.data-row').forEach(fRow => {
+                if (fRow.dataset.player === pLower && (fRow.dataset.market === market || fRow.dataset.market.includes(market.split('(')[0].trim()))) alreadyInCoupon = true;
+            });
+            if (alreadyInCoupon) return alert(`Zdarzenie na gracza ${player} znajduje się już na Twoim kuponie!`);
+
+            let added = false;
+            for (let row of document.querySelectorAll('#mainBody tr.data-row')) { 
+                if (row.dataset.player === pLower && (row.dataset.market === market || row.dataset.market.includes(market.split('(')[0].trim()))) { 
+                    row.querySelector('.add-btn').click(); 
+                    alert(`✅ Dodano do Kuponu!`); added = true; break; 
+                } 
+            } 
+            if(!added) alert(`Nie udało się znaleźć wybranego zakładu w głównej tabeli.`);
+        };
+
+        function runSimulation(idx, isFav = false) {
+            let suffix = isFav ? '-fav' : ''; let item = globalData[idx];
+            let projEl = document.getElementById(`sim-proj-${idx}${suffix}`), lineEl = document.getElementById(`sim-line-${idx}${suffix}`), oddsEl = document.getElementById(`sim-odds-${idx}${suffix}`);
+            if (!projEl || !lineEl || !oddsEl) return;
+            let proj = parseFloat(projEl.value), line = parseFloat(lineEl.value), odds = parseFloat(oddsEl.value);
+            if (isNaN(proj) || isNaN(line) || isNaN(odds)) return;
+            
+            let mean = item.history.reduce((a, b) => a + b, 0) / item.history.length;
+            let stdDev = Math.sqrt(item.history.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / item.history.length) || 0.5;
+            let probU = normalCDF(line, proj, stdDev), probO = 1 - probU, evO = (probO * odds) - 1, evU = (probU * odds) - 1;
+            
+            document.getElementById(`sim-prob-over-${idx}${suffix}`).innerText = (probO * 100).toFixed(1) + '%'; 
+            let eOEl = document.getElementById(`sim-ev-over-${idx}${suffix}`); eOEl.innerText = (evO>0?'+':'')+(evO*100).toFixed(1)+'%'; eOEl.style.color = evO>0?'#10b981':'#ef4444'; 
+            document.getElementById(`sim-prob-under-${idx}${suffix}`).innerText = (probU * 100).toFixed(1) + '%'; 
+            let eUEl = document.getElementById(`sim-ev-under-${idx}${suffix}`); eUEl.innerText = (evU>0?'+':'')+(evU*100).toFixed(1)+'%'; eUEl.style.color = evU>0?'#10b981':'#ef4444'; 
+        }
+
+        document.addEventListener('input', e => { if (e.target.classList.contains('sim-input')) runSimulation(e.target.dataset.index, e.target.id.includes('-fav')); });
+
+        function renderTable(data) {
+            const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
+            const isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+            
+            data.forEach((item, index) => {
+                let true_prob = isGames ? (item.szansa / 100) : item.true_prob;
+                let evVal = item.ev;
+                
+                let rowClass = "", badges = [];
+                if (isGames) {
+                    rowClass = evVal >= 0.10 ? "super-pick" : "super-stable";
+                    badges.push(`<span title="Typ Meczowy" style="font-size:1.1rem">🏟️</span>`);
+                    if (evVal >= 0.10) badges.push(`<span title="Value Bet (EV > 10%)" style="font-size:1.1rem">💰</span>`);
+                } else {
+                    let isGraal = item.is_graal === true;
+                    rowClass = isGraal ? "super-pick" : (item.is_value ? "super-pick" : (item.is_safe ? "super-safe" : (item.is_stable ? "super-stable" : "")));
+                    if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
+                    else {
+                        if(item.is_value) badges.push(`<span title="Value Bet (EV > 40%)" style="font-size:1.1rem">💰</span>`); 
+                        if(item.is_safe) badges.push(`<span title="Pewniak (>75% Szans)" style="font-size:1.1rem">🎯</span>`); 
+                        if(item.is_stable) badges.push(`<span title="Stabilny (Zielony Matchup)" style="font-size:1.1rem">🛡️</span>`);
+                    }
+                    if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
+                }
+
+                let szansaProcent = (true_prob * 100).toFixed(1), szansaKolor = true_prob > 0.55 ? "color: #10b981; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
+                let evProcent = (evVal * 100).toFixed(1), evKolor = evVal > 0.05 ? "color: #f59e0b; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
+
+                let tr = document.createElement('tr'); 
+                tr.className = `data-row ${rowClass}`; 
+                tr.dataset.player = isGames ? item.mecz.toLowerCase() : item.zawodnik.toLowerCase(); 
+                tr.dataset.game = item.mecz; 
+                tr.dataset.market = item.rynek; 
+                tr.dataset.pick = isGames ? item.zaklad : item.typ; 
+                tr.dataset.index = index; 
+                tr.dataset.odds = item.kurs; 
+                tr.dataset.prob = true_prob;
+                
+                let cleanUwagi = item.uwagi || "-";
+                if (!isGames && cleanUwagi !== "-") cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, "");
+                let uwagi_html = cleanUwagi && cleanUwagi !== "-" ? `<div class="uwagi-text" style="${isGames ? 'font-weight:normal; color:var(--muted-text); margin-top:5px; line-height:1.6;' : ''}">${cleanUwagi}</div>` : "";
+
+                let pickLabel = isGames ? item.zaklad : item.typ;
+                let pickBadgeClass = pickLabel === "UNDER" ? "pick-under" : "pick-over";
+                
+                if (isGames) {
+                    tr.innerHTML = `
+                        <td class="col-left"><div class="player-name">${item.mecz} ${badges.join("")}</div>${uwagi_html}</td>
+                        <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
+                        <td class="line">${item.linia}</td>
+                        <td class="projection" style="font-size:0.95rem;">${item.projekcja}</td>
+                        <td style="${szansaKolor}">${szansaProcent}%</td>
+                        <td style="${evKolor}">${evVal > 0 ? '+' : ''}${evProcent}%</td>
+                        <td><div class="pick-badge ${pickBadgeClass}">${pickLabel} @ ${item.kurs||'-'}</div></td>
+                        <td>-</td><td>-</td><td>-</td><td>-</td>
+                        <td><button class="action-btn add-btn">⭐</button></td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td>
+                        <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
+                        <td class="line">${item.linia}</td>
+                        <td class="projection">${item.projekcja}</td>
+                        <td style="${szansaKolor}">${szansaProcent}%</td>
+                        <td style="${evKolor}">${evVal > 0 ? '+' : ''}${evProcent}%</td>
+                        <td><div class="pick-badge ${pickBadgeClass}">${pickLabel} @ ${item.kurs||'-'}</div></td>
+                        <td>${createStatPill(item.l5)}</td>
+                        <td>${createStatPill(item.l10)}</td>
+                        <td>${createStatPill(item.sezon)}</td>
+                        <td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td>
+                        <td><button class="action-btn add-btn">⭐</button></td>
+                    `;
+                }
+                tbody.appendChild(tr);
+
+                if (!isGames) {
+                    let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
+                    chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Panel Korelacji SGP</div>${generateSGPHtml(item)}</div></div></td>`;
+                    tbody.appendChild(chartTr);
+                    tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
+                } else {
+                    tr.style.cursor = 'default';
+                }
+            });
+        }
+
+        function updateTotalOdds() {
+            let rows = document.querySelectorAll('#favoritesBody tr.data-row'), tAko = 1.0, tProb = 1.0;
+            rows.forEach(r => { let k = parseFloat(r.dataset.odds), p = parseFloat(r.dataset.prob); if(!isNaN(k)) tAko *= k; if(!isNaN(p)) tProb *= p; });
+            
+            let oDisp = document.getElementById('totalOddsDisplay'), pDisp = document.getElementById('akoProbDisplay');
+            let ewkDisp = document.getElementById('akoEwkDisplay');
+            let customStake = parseFloat(document.getElementById('customStakeInput').value) || 0;
+
+            if (rows.length > 0) {
+                oDisp.innerText = tAko.toFixed(2); oDisp.className = "ako-value highlight"; 
+                pDisp.innerText = (tProb*100).toFixed(1)+"%"; pDisp.className = "ako-value";
+                let ewk = (tAko * customStake).toFixed(2);
+                ewkDisp.innerText = ewk + " PLN";
+                document.getElementById('saveJournalBtn').dataset.odds = tAko;
+            } else { 
+                oDisp.innerText = "1.00"; oDisp.className = "ako-value"; 
+                pDisp.innerText = "-"; pDisp.className = "ako-value"; 
+                ewkDisp.innerText = "0.00 PLN";
+                document.getElementById('saveJournalBtn').dataset.odds = 1.0; 
+            }
+        }
+
+        document.getElementById('customStakeInput').addEventListener('input', updateTotalOdds);
+
+        document.getElementById('mainTable').addEventListener('click', e => { 
+            if (e.target.classList.contains('add-btn')) { 
+                let r = e.target.closest('tr.data-row');
+                let idx = r.dataset.index;
+                let chartR = document.getElementById(`chart-${idx}`);
+                
+                let c = r.cloneNode(true); 
+                c.classList.remove('hidden');
+                c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; 
+                document.getElementById('favoritesBody').appendChild(c);
+                
+                if (chartR) {
+                    let cChart = chartR.cloneNode(true);
+                    cChart.classList.remove('hidden');
+                    cChart.id = `chart-${idx}-fav`;
+                    cChart.querySelectorAll('[id]').forEach(el => { el.id = el.id + '-fav'; });
+                    c.addEventListener('click', ev => { 
+                        if(!ev.target.closest('button') && ev.target.tagName !== 'INPUT') { 
+                            let isExp = !cChart.classList.contains('expanded'); 
+                            cChart.classList.toggle('expanded'); 
+                            if(isExp) runSimulation(idx, true); 
+                        } 
+                    });
+                    document.getElementById('favoritesBody').appendChild(cChart);
+                    chartR.classList.remove('expanded');
+                    chartR.classList.add('hidden');
+                }
+
+                r.classList.add('hidden'); 
+                updateTotalOdds(); 
+            }
+        });
+
+        document.getElementById('favoritesTable').addEventListener('click', e => { 
+            if (e.target.classList.contains('remove-btn')) { 
+                let r = e.target.closest('tr.data-row');
+                let idx = r.dataset.index;
+                let cChart = document.getElementById(`chart-${idx}-fav`);
+                
+                r.remove(); 
+                if(cChart) cChart.remove();
+                
+                let mainR = document.querySelector(`#mainBody tr.data-row[data-index="${idx}"]`);
+                let mainChart = document.getElementById(`chart-${idx}`);
+                
+                if(mainR) {
+                    mainR.classList.remove('hidden'); 
+                    if(mainChart) mainChart.classList.remove('hidden');
+                    applyFilters(); 
+                }
+                updateTotalOdds(); 
+            }
+        });
+
+        const modal = document.getElementById('journalModal');
+        document.getElementById('openJournalBtn').onclick = () => { modal.style.display = "block"; renderJournal(); }
+        document.getElementById('closeJournalBtn').onclick = () => { modal.style.display = "none"; }
+        window.onclick = e => { if(e.target == modal) modal.style.display = "none"; }
+
+        document.getElementById('saveJournalBtn').addEventListener('click', () => {
+            let rows = document.querySelectorAll('#favoritesBody tr.data-row');
+            let odds = parseFloat(document.getElementById('saveJournalBtn').dataset.odds);
+            if (rows.length === 0) { alert("Dodaj typy na kupon przed zapisem!"); return; }
+            
+            let stake = parseFloat(document.getElementById('customStakeInput').value);
+            if (isNaN(stake) || stake <= 0) return alert("Wprowadź prawidłową stawkę na kuponie.");
+            
+            let matches = []; rows.forEach(r => { 
+                let label = r.dataset.player;
+                if (!label) { label = r.querySelector('.player-name') ? r.querySelector('.player-name').innerText.split(' ')[0] : "Typ"; } 
+                else { label = label.toUpperCase(); }
+                matches.push(`${label} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); 
+            });
+            let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0, sport: currentSport };
+            journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); 
+            alert("✅ Kupon zapisany w Dzienniku!"); 
+            renderJournal();
+        });
+
+        function renderJournal() {
+            let container = document.getElementById('historyContainer'); container.innerHTML = '';
+            let tInvested = 0, tProfit = 0, wCount = 0, resolvedCount = 0;
+            let chartLabels = ['Start']; let chartDataPoints = [0]; let runningTotal = 0;
+
+            journalData.forEach(entry => {
+                if(entry.status !== 'pending') { 
+                    tInvested += entry.stake; tProfit += entry.profit; resolvedCount++; if(entry.status === 'win') wCount++; 
+                    runningTotal += entry.profit; chartLabels.push(entry.date.split(' ')[0]); chartDataPoints.push(runningTotal);
+                }
+            });
+
+            [...journalData].reverse().forEach(entry => {
+                let statusBadge = entry.status === 'pending' ? `<span class="status-badge" style="background:#f59e0b;">⏳ Oczekuje</span>` : (entry.status === 'win' ? `<span class="status-badge" style="background:#10b981;">✅ Wygrany (+${entry.profit.toFixed(2)})</span>` : `<span class="status-badge" style="background:#ef4444;">❌ Przegrany (${entry.profit.toFixed(2)})</span>`);
+                let editBtn = `<button class="hist-btn btn-edit" onclick="editCoupon(${entry.id})" title="Edytuj kurs/stawkę">✏️ Edytuj</button>`;
+                let actions = entry.status === 'pending' ? `${editBtn} <button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `${editBtn} <button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
+                
+                let sportIcon = entry.sport === 'nhl' ? '🏒' : (entry.sport === 'mlb' ? '⚾' : '🏀');
+                
+                let div = document.createElement('div'); div.className = 'history-card';
+                div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">${sportIcon} Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
+                container.appendChild(div);
+            });
+
+            if(journalData.length === 0) container.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--muted-text);">Brak zapisanych kuponów.</div>';
+            document.getElementById('statInvested').innerText = tInvested.toFixed(2) + ' PLN'; let profitEl = document.getElementById('statProfit'); profitEl.innerText = tProfit.toFixed(2) + ' PLN'; profitEl.className = 'stat-box-value ' + (tProfit > 0 ? 'text-green' : (tProfit < 0 ? 'text-red' : '')); let yieldEl = document.getElementById('statYield'); let yieldVal = tInvested > 0 ? (tProfit / tInvested) * 100 : 0; yieldEl.innerText = yieldVal.toFixed(1) + '%'; yieldEl.className = 'stat-box-value ' + (yieldVal > 0 ? 'text-green' : (yieldVal < 0 ? 'text-red' : '')); document.getElementById('statHitRate').innerText = `${wCount}/${resolvedCount}`;
+            updateProfitChart(chartLabels, chartDataPoints);
+        }
+
+        window.editCoupon = function(id) {
+            let entry = journalData.find(e => e.id === id); if(!entry) return;
+            let newOdds = prompt("Wprowadź nowy kurs:", entry.odds.toFixed(2)); if(newOdds === null) return; newOdds = parseFloat(newOdds.replace(',', '.'));
+            let newStake = prompt("Wprowadź nową stawkę:", entry.stake.toFixed(2)); if(newStake === null) return; newStake = parseFloat(newStake.replace(',', '.'));
+            if(isNaN(newOdds) || isNaN(newStake) || newOdds <= 0 || newStake <= 0) return alert("Wprowadzono niepoprawne dane.");
+            entry.odds = newOdds; entry.stake = newStake;
+            if(entry.status === 'win') entry.profit = (entry.stake * entry.odds) - entry.stake; else if(entry.status === 'loss') entry.profit = -entry.stake;
+            localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal();
+        }
+
+        function updateProfitChart(labels, data) {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+            if (profitChartInstance) { profitChartInstance.destroy(); }
+            let isDark = document.body.classList.contains('dark-theme'); let textColor = isDark ? '#94a3b8' : '#64748b'; let gridColor = isDark ? '#334155' : '#e2e8f0';
+            profitChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [{ label: 'Zysk (PLN)', data: data, borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, pointBackgroundColor: '#10b981', pointBorderColor: '#fff', pointRadius: 4, fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } }, scales: { y: { ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor, maxTicksLimit: 8 }, grid: { display: false } } } } });
+        }
+
+        window.resolveCoupon = function(id, status) { let entry = journalData.find(e => e.id === id); if(entry) { entry.status = status; entry.profit = status === 'win' ? (entry.stake * entry.odds) - entry.stake : -entry.stake; localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
+        window.deleteCoupon = function(id) { if(confirm("Na pewno usunąć ten kupon z historii?")) { journalData = journalData.filter(e => e.id !== id); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); renderJournal(); } }
+
+        document.getElementById('generateBtn').addEventListener('click', () => { let t = parseFloat(document.getElementById('targetOddsInput').value); if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs."); document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters(); let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')); let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index)); let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev); let ako = 1.0, used = new Set(); for (let b of bets) { if (used.has(b.mecz)) continue; for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) { if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; } } if (ako >= t) break; } if (ako < t && bets.length > 0) { alert(`Maksymalne AKO z filtrów: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Brak typów dla wybranych filtrów!`); } });
+        
+        function populateDropdowns(d) { 
+            let games = new Set(); let markets = new Set();
+            d.forEach(i => { games.add(i.mecz); markets.add(i.rynek); }); 
+            
+            let gameFilter = document.getElementById('gameFilter');
+            gameFilter.innerHTML = '<option value="all">Wszystkie mecze</option>';
+            Array.from(games).sort().forEach(g => gameFilter.add(new Option(g, g))); 
+            
+            let marketFilter = document.getElementById('marketFilter');
+            marketFilter.innerHTML = '<option value="all">Wszystkie</option>';
+            Array.from(markets).sort().forEach(m => marketFilter.add(new Option(m, m)));
+        }
+        
+        function applyFilters() { 
+            let s = document.getElementById('searchFilter').value.toLowerCase(), 
+                g = document.getElementById('gameFilter').value, 
+                m = document.getElementById('marketFilter').value, 
+                p = document.getElementById('pickFilter').value, 
+                stat = document.getElementById('statusFilter').value,
+                role = document.getElementById('roleFilter').value; 
+            
+            let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+
+            document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
+                let matchStatus = true; 
+                if (!isGames) {
+                    if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
+                    if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
+                    if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
+                    if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                }
+
+                if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
+                    let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
+                    let itemRole = isPitcher ? 'pitcher' : 'batter';
+                    if (itemRole !== role) matchStatus = false;
+                }
+
+                let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; 
+                r.classList.toggle('hidden', !vis); 
+                let c = document.getElementById(`chart-${r.dataset.index}`); 
+                if(c) {
+                    if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
+                    else c.classList.remove('hidden'); 
+                }
+            }); 
+        }
+        document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
+    </script>
+</body>
+</html>
