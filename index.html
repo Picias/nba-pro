@@ -370,10 +370,10 @@
                 <label>Status (Kategoria)</label>
                 <select id="statusFilter">
                     <option value="all">Wszystkie Typy</option>
-                    <option value="value">💰 Value Bety (>40% EV)</option>
-                    <option value="safe">🎯 Pewniaki (>75% Szans)</option>
-                    <option value="stable">🛡️ Stabilni gracze</option>
-                    <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
+                    <option value="value">💰 Value Bety</option>
+                    <option value="safe">🎯 Pewniaki</option>
+                    <option value="stable">🛡️ Stabilni</option>
+                    <option value="graal">🏆 Graale</option>
                 </select>
             </div>
         </div>
@@ -480,12 +480,12 @@
             if (isShowing) {
                 teamStatsPanel.classList.remove('active');
                 mainPicksContainer.style.display = 'block';
-                document.querySelector('.filters').style.display = 'flex'; // ZABEZPIECZENIE
+                document.querySelector('.filters').style.display = 'flex';
                 toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
             } else {
                 teamStatsPanel.classList.add('active');
                 mainPicksContainer.style.display = 'none';
-                document.querySelector('.filters').style.display = 'none'; // ZABEZPIECZENIE
+                document.querySelector('.filters').style.display = 'none';
                 toggleTeamStatsBtn.innerText = '🔙 Wróć do Typów';
                 loadTeamStats();
             }
@@ -1121,7 +1121,6 @@
                 tr.dataset.odds = item.kurs; 
                 tr.dataset.prob = true_prob;
                 
-                // FIX: Bezpiecznie dodajemy znaczniki kategorii do wierszy, zeby filtr ich znalazl!
                 tr.dataset.isValue = item.is_value === true ? "true" : "false";
                 tr.dataset.isSafe = item.is_safe === true ? "true" : "false";
                 tr.dataset.isStable = item.is_stable === true ? "true" : "false";
@@ -1371,7 +1370,8 @@
                         if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
                         if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
                         if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
-                        if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                        if (stat === 'graal' && r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true") { matchStatus = true; }
+                        elif (stat === 'graal') { matchStatus = false; }
                     }
 
                     if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
