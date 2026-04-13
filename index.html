@@ -1370,8 +1370,7 @@
                         if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
                         if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
                         if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
-                        if (stat === 'graal' && r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true") { matchStatus = true; }
-                        elif (stat === 'graal') { matchStatus = false; }
+                        if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
                     }
 
                     if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
