@@ -430,13 +430,11 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
     CACHE_PLAYER_LOGS[cache_key] = historia_pelna
     return historia_pelna
 
-# 🎯 FIX v9.9: PRAWIDŁOWY ZAPIS STATYSTYK DRUŻYNOWYCH (K-RATE i ERA)
 def pobierz_statystyki_druzyn_mlb():
     global LEAGUE_AVG_K_RATE, LEAGUE_AVG_ERA, CACHE_TEAM_K_RATE, CACHE_TEAM_ERA
     print("📊 Pobieram uśrednione statystyki ligowe (K-Rate i Team ERA)...")
     headers = {'User-Agent': 'Mozilla/5.0'}
     try:
-        # ERA
         res_p = requests.get(f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R", headers=headers, timeout=10).json()
         stats_p = res_p.get('stats', [])
         if stats_p and stats_p[0].get('splits'):
@@ -449,7 +447,6 @@ def pobierz_statystyki_druzyn_mlb():
                 total_era += era; count += 1
             if count > 0: LEAGUE_AVG_ERA = total_era / count
 
-        # K-RATE
         res_h = requests.get(f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R", headers=headers, timeout=10).json()
         stats_h = res_h.get('stats', [])
         if stats_h and stats_h[0].get('splits'):
@@ -472,7 +469,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.9 (Elite Form Stability & Missing Cache Fix)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.0 (The Ultimate Grail Edition)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -888,8 +885,7 @@ def uruchom_mlb_pro():
                         true_prob = prob_under
                         kurs_final = kurs_under
                         ev_val = ev_u
-                        
-                # 🎯 FIX: TWARDE PROGI (ZWYKŁY BET: 55%, HOME RUN: 20%)
+                
                 min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
@@ -905,7 +901,6 @@ def uruchom_mlb_pro():
                     pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
                     m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
                 
-                # 🎯 FIX: PEWNIAKI (ZWYKŁY BET: >70%, HOME RUN: >30%)
                 if is_hr:
                     is_value_bet = ev_val >= 0.15 
                     is_safe_bet = true_prob >= 0.30 and pokrycie_l10 >= 20 
@@ -913,11 +908,11 @@ def uruchom_mlb_pro():
                     is_value_bet = ev_val >= 0.04 
                     is_safe_bet = true_prob >= 0.70 and pokrycie_l5 >= 60
                     
-                # 🎯 FIX: INTELIGENTNA STABILNOŚĆ (Forma nad Miotaczem)
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
                 is_stable_bet = (m_color == "rank-green") or (is_elite_form and m_color != "rank-red")
                 
-                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
+                # 🎯 FIX v10.0: GRAAL WYMAGA ABSOLUTNIE MINIMUM 15% EV!
+                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
