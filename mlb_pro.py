@@ -18,7 +18,7 @@ TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
-REGIONS = 'us'
+REGIONS = 'eu'
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
@@ -92,12 +92,6 @@ def wyslij_plik_na_githuba(file_path, wiadomosc_commit):
         if res.status_code == 200: sha = res.json().get("sha", "")
         data = {"message": wiadomosc_commit, "content": encoded_content, "sha": sha}
         requests.put(url, headers=headers, json=data)
-    except: pass
-
-def wyslij_powiadomienie_telegram(wiadomosc):
-    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": wiadomosc, "parse_mode": "HTML"}
-    try: requests.post(url, json=payload, timeout=10)
     except: pass
 
 def poisson_prob_over(lam, line):
@@ -393,10 +387,11 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
                 if g['status']['statusCode'] in ['F', 'O', 'C']: rozegrane_mecze += 1
     except: pass
 
-    if rozegrane_mecze >= 4: bonus = 1.08; msg = "🥵 BP Zajechany (+8%)"
-    elif rozegrane_mecze == 3: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"
-    elif rozegrane_mecze <= 1: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
-    else: bonus = 1.0; msg = "BP Gotowy"
+    # FIX: INTELIGENTNE ZMĘCZENIE BULLPENU (Doubleheadery i Dni Wolne)
+    if rozegrane_mecze >= 5: bonus = 1.08; msg = "🥵 BP Mega Zajechany (+8%)" # 5 meczy w 3 dni
+    elif rozegrane_mecze == 4: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"     # 4 mecze w 3 dni (np. doubleheader)
+    elif rozegrane_mecze <= 2: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"    # Mieli dzień wolny w ciągu ostatnich 3 dni
+    else: bonus = 1.0; msg = "BP Gotowy"                                      # Standardowe 3 mecze w 3 dni
         
     CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
     return CACHE_BULLPEN_FATIGUE[team_id]
@@ -449,7 +444,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.3 (Manual Weather Only)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.5 (Smart Bullpen Fatigue)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -499,7 +494,6 @@ def uruchom_mlb_pro():
         home_t_id = dane_oficjalne['home_team_id']
         away_t_id = dane_oficjalne['away_team_id']
         
-        # Pobieranie danych o pogodzie łącznie z kierunkiem i wiatrem!
         w_data = next((v for k, v in CACHE_WEATHER.items() if k.lower() in ev['home_team'].lower() or ev['home_team'].lower() in k.lower()), {'mod': 1.0, 'msg': 'Neutralnie/Dach', 'dir': 'NEUTRAL', 'mph': 0.0})
         p_factor = get_park_factor(ev['home_team'])
         
@@ -544,7 +538,7 @@ def uruchom_mlb_pro():
         print(f"  📈 Kalkulator Mecz: {ev['away_team']} {round(away_proj_runs_fg, 1)} - {round(home_proj_runs_fg, 1)} {ev['home_team']} (Suma: {total_proj_runs_fg})")
         print(f"  ⏱️ Kalkulator F5: {ev['away_team']} {round(away_proj_runs_f5, 1)} - {round(home_proj_runs_f5, 1)} {ev['home_team']} (Suma: {total_proj_runs_f5})")
 
-        g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
+        g_insights = f"{w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
@@ -737,7 +731,6 @@ def uruchom_mlb_pro():
                             korekta *= pf
                             uwagi += f" 🏟️ Stadion PF: {round(pf, 2)}x."
                         
-                        # --- DODAWANIE PRĘDKOŚCI I KIERUNKU WIATRU ---
                         w_mod_raw = w_data['mod']
                         w_dir = w_data.get('dir', 'NEUTRAL')
                         w_mph = w_data.get('mph', 0.0)
@@ -825,6 +818,7 @@ def uruchom_mlb_pro():
                         "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
                     })
 
+    # Sortowanie i Zapis
     wyniki_games = sorted(wyniki_games, key=lambda x: x['ev'], reverse=True)
     with open('mlb_games.json', 'w', encoding='utf-8') as f: json.dump(wyniki_games, f, ensure_ascii=False, indent=4)
     wyslij_plik_na_githuba('mlb_games.json', "Update MLB Game Lines & F5")
