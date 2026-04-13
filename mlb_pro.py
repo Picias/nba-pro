@@ -18,7 +18,7 @@ TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
-REGIONS = 'eu'
+REGIONS = 'eu' # Trzymamy się Europy!
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
@@ -387,11 +387,10 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
                 if g['status']['statusCode'] in ['F', 'O', 'C']: rozegrane_mecze += 1
     except: pass
 
-    # FIX: INTELIGENTNE ZMĘCZENIE BULLPENU (Doubleheadery i Dni Wolne)
-    if rozegrane_mecze >= 5: bonus = 1.08; msg = "🥵 BP Mega Zajechany (+8%)" # 5 meczy w 3 dni
-    elif rozegrane_mecze == 4: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"     # 4 mecze w 3 dni (np. doubleheader)
-    elif rozegrane_mecze <= 2: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"    # Mieli dzień wolny w ciągu ostatnich 3 dni
-    else: bonus = 1.0; msg = "BP Gotowy"                                      # Standardowe 3 mecze w 3 dni
+    if rozegrane_mecze >= 4: bonus = 1.08; msg = "🥵 BP Zajechany (+8%)"
+    elif rozegrane_mecze == 3: bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"
+    elif rozegrane_mecze <= 1: bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
+    else: bonus = 1.0; msg = "BP Gotowy"
         
     CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
     return CACHE_BULLPEN_FATIGUE[team_id]
@@ -444,7 +443,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.5 (Smart Bullpen Fatigue)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.6 (EU Odds Aggregator)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -538,31 +537,47 @@ def uruchom_mlb_pro():
         print(f"  📈 Kalkulator Mecz: {ev['away_team']} {round(away_proj_runs_fg, 1)} - {round(home_proj_runs_fg, 1)} {ev['home_team']} (Suma: {total_proj_runs_fg})")
         print(f"  ⏱️ Kalkulator F5: {ev['away_team']} {round(away_proj_runs_f5, 1)} - {round(home_proj_runs_f5, 1)} {ev['home_team']} (Suma: {total_proj_runs_f5})")
 
-        g_insights = f"{w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
+        g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
-        print(f"    📡 Odpytuję API o linie meczowe...")
-        game_lines = {'h2h': {}, 'totals': {}}
+        # ----------------------------------------------------
+        # KROK 2A: POBIERANIE TYLKO LINII MECZOWYCH (AGREGATOR!)
+        # ----------------------------------------------------
+        print(f"    📡 Odpytuję API o linie meczowe (Średnia z Europy)...")
+        
+        h2h_home_odds = []
+        h2h_away_odds = []
+        tot_over_odds = []
+        tot_under_odds = []
+        tot_lines = []
+        
         try:
             time.sleep(0.5) 
             res_games = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_GAMES}&oddsFormat=decimal").json()
             for bm in res_games.get('bookmakers', []):
                 for mkt in bm.get('markets', []):
                     if mkt['key'] == 'h2h':
-                        for oc in mkt['outcomes']: game_lines['h2h'][oc['name']] = oc['price']
+                        for oc in mkt['outcomes']: 
+                            if oc['name'] == ev['home_team']: h2h_home_odds.append(oc['price'])
+                            elif oc['name'] == ev['away_team']: h2h_away_odds.append(oc['price'])
                     elif mkt['key'] == 'totals':
                         for oc in mkt['outcomes']: 
                             if oc.get('description'): continue 
                             if oc.get('point', 0) < 5.0: continue 
-                            game_lines['totals']['point'] = oc['point']
-                            game_lines['totals'][oc['name']] = oc['price']
+                            
+                            if oc['name'] == 'Over':
+                                tot_over_odds.append(oc['price'])
+                                tot_lines.append(oc['point'])
+                            elif oc['name'] == 'Under':
+                                tot_under_odds.append(oc['price'])
         except Exception as e: pass
 
-        if game_lines['totals'] and 'Over' in game_lines['totals']:
-            t_line = game_lines['totals']['point']
-            t_over = game_lines['totals']['Over']
-            t_under = game_lines['totals']['Under']
+        if tot_over_odds and tot_under_odds and tot_lines:
+            # Bierzemy średnią (lub najczęstszą) linię i średni kurs rynkowy
+            t_line = max(set(tot_lines), key=tot_lines.count)
+            t_over = round(sum(tot_over_odds) / len(tot_over_odds), 2)
+            t_under = round(sum(tot_under_odds) / len(tot_under_odds), 2)
             
             prob_over = poisson_prob_over(total_proj_runs_fg, t_line)
             prob_under = 1.0 - prob_over
@@ -573,9 +588,9 @@ def uruchom_mlb_pro():
             if ev_o > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(prob_over * 100, 1), "ev": round(ev_o, 3), "uwagi": g_insights})
             elif ev_u > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round(prob_under * 100, 1), "ev": round(ev_u, 3), "uwagi": g_insights})
 
-        if game_lines['h2h'] and ev['home_team'] in game_lines['h2h']:
-            h_kurs = game_lines['h2h'][ev['home_team']]
-            a_kurs = game_lines['h2h'][ev['away_team']]
+        if h2h_home_odds and h2h_away_odds:
+            h_kurs = round(sum(h2h_home_odds) / len(h2h_home_odds), 2)
+            a_kurs = round(sum(h2h_away_odds) / len(h2h_away_odds), 2)
             ev_h = (home_win_prob_fg * h_kurs) - 1; ev_a = ((1-home_win_prob_fg) * a_kurs) - 1
             
             print(f"    ⚔️ Mecz ML Home: {round(home_win_prob_fg*100,1)}% (EV: {round(ev_h*100,1)}%) | ML Away: {round((1-home_win_prob_fg)*100,1)}% (EV: {round(ev_a*100,1)}%)")
@@ -584,28 +599,33 @@ def uruchom_mlb_pro():
 
         prob_away_f5_under_1_5 = (math.pow(away_proj_runs_f5, 0) * math.exp(-away_proj_runs_f5)) / math.factorial(0) + (math.pow(away_proj_runs_f5, 1) * math.exp(-away_proj_runs_f5)) / math.factorial(1)
         prob_away_f5_over_1_5 = 1.0 - prob_away_f5_under_1_5
+        
         prob_home_f5_under_1_5 = (math.pow(home_proj_runs_f5, 0) * math.exp(-home_proj_runs_f5)) / math.factorial(0) + (math.pow(home_proj_runs_f5, 1) * math.exp(-home_proj_runs_f5)) / math.factorial(1)
         prob_home_f5_over_1_5 = 1.0 - prob_home_f5_under_1_5
 
         if prob_away_f5_over_1_5 > 0.60:
             fair_odds_a = 1 / prob_away_f5_over_1_5
             print(f"    🎯 F5 Team Totals OVER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a,2)}")
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs!</b>"})
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
         elif prob_away_f5_under_1_5 > 0.60:
             fair_odds_a_u = 1 / prob_away_f5_under_1_5
             print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a_u,2)}")
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_a_u, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a_u + 0.05, 2)} na UNDER 1.5 Runs!</b>"})
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_a_u, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
             
         if prob_home_f5_over_1_5 > 0.60:
             fair_odds_h = 1 / prob_home_f5_over_1_5
             print(f"    🎯 F5 Team Totals OVER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h,2)}")
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs!</b>"})
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
         elif prob_home_f5_under_1_5 > 0.60:
             fair_odds_h_u = 1 / prob_home_f5_under_1_5
             print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h_u,2)}")
-            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs!</b>"})
+            wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
 
-        print(f"    🏃 Odpytuję API o zawodników...")
+
+        # ----------------------------------------------------
+        # KROK 2B: POBIERANIE TYLKO ZAWODNIKÓW (PROPS AGREGATOR)
+        # ----------------------------------------------------
+        print(f"    🏃 Odpytuję API o zawodników (Średnia z Europy)...")
         try:
             time.sleep(0.5) 
             res_props = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS}&oddsFormat=decimal").json()
@@ -620,205 +640,228 @@ def uruchom_mlb_pro():
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
 
+        aggregated_props = {}
+        
         for bm in res_props.get('bookmakers', []):
             for mkt in bm.get('markets', []):
-                if mkt['key'] not in rynek_map: continue
-                nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[mkt['key']]
+                m_key = mkt['key']
+                if m_key not in rynek_map: continue
                 
-                player_odds = {}
+                if m_key not in aggregated_props:
+                    aggregated_props[m_key] = {}
+                    
                 for oc in mkt['outcomes']:
-                    p_name = oc['description']
-                    if p_name not in player_odds: 
-                        player_odds[p_name] = {'Over': 1.85, 'Under': 1.85, 'point': oc.get('point', 0.5)}
-                    player_odds[p_name][oc['name']] = oc['price']
-                
-                for p_name, d_odds in player_odds.items():
-                    linia = d_odds['point']
-                    kurs_over = d_odds['Over']
-                    kurs_under = d_odds['Under']
+                    p_name = oc.get('description')
+                    if not p_name: continue
                     
-                    if mlb_stat_key == 'totalBases': linia = 1.5
-                    elif mlb_stat_key == 'hits': linia = 0.5
-                    
-                    if f"{p_name}_{mkt['key']}" in przetworzeni_zawodnicy: continue
-                    przetworzeni_zawodnicy.add(f"{p_name}_{mkt['key']}")
-                    
-                    player_id = None; is_today_home = False; opp_team_id = None; opp_name = ""; bat_side = 'R'; b_order = 0
-                    
-                    if rola == 'pitcher':
-                        h_clean = dane_oficjalne.get('home_pitcher', '').lower().replace(".", "").strip()
-                        a_clean = dane_oficjalne.get('away_pitcher', '').lower().replace(".", "").strip()
-                        p_clean = p_name.lower().replace(".", "").strip()
+                    if p_name not in aggregated_props[m_key]:
+                        aggregated_props[m_key][p_name] = {'Over': [], 'Under': [], 'point': []}
                         
-                        if p_clean in h_clean or h_clean in p_clean: 
-                            player_id = dane_oficjalne.get('home_pitcher_id')
-                            is_today_home = True
-                            opp_team_id = dane_oficjalne['away_team_id']
-                            opp_name = ev['away_team']
-                        elif p_clean in a_clean or a_clean in p_clean: 
-                            player_id = dane_oficjalne.get('away_pitcher_id')
-                            is_today_home = False
-                            opp_team_id = dane_oficjalne['home_team_id']
-                            opp_name = ev['home_team']
-                    else:
-                        p_clean = p_name.lower().replace(".", "").strip()
-                        if p_clean in h_roster:
-                            player_id = h_roster[p_clean]['id']
-                            bat_side = h_roster[p_clean].get('batSide', {}).get('code', 'R')
-                            is_today_home = True
-                            opp_team_id = dane_oficjalne['away_team_id']
-                            opp_name = ev['away_team']
-                            b_order = dane_oficjalne.get('lineups_home', {}).get(player_id, 0)
-                        elif p_clean in a_roster:
-                            player_id = a_roster[p_clean]['id']
-                            bat_side = a_roster[p_clean].get('batSide', {}).get('code', 'R')
-                            is_today_home = False
-                            opp_team_id = dane_oficjalne['home_team_id']
-                            opp_name = ev['home_team']
-                            b_order = dane_oficjalne.get('lineups_away', {}).get(player_id, 0)
-                    
-                    if not player_id: continue
-                    hist_data = pobierz_historie_gracza(player_id, rola, mlb_stat_key)
-                    if len(hist_data) < 5: continue
-                    
-                    vals = [h['val'] for h in hist_data[-15:]]
-                    weights = [3 if i >= len(vals)-5 else (2 if i >= len(vals)-10 else 1) for i in range(len(vals))]
-                    baza_proj = sum(v * w for v, w in zip(vals, weights)) / sum(weights)
-                    
-                    split_bonus = 1.0
-                    h_vals = [h['val'] for h in hist_data if h['isHome']]
-                    a_vals = [h['val'] for h in hist_data if not h['isHome']]
-                    if is_today_home and h_vals and a_vals:
-                        if sum(h_vals)/len(h_vals) > (sum(a_vals)/len(a_vals)) * 1.1: split_bonus = 1.07
-                    elif not is_today_home and a_vals and h_vals:
-                        if sum(a_vals)/len(a_vals) > (sum(h_vals)/len(h_vals)) * 1.1: split_bonus = 1.07
-                    
-                    korekta = split_bonus
-                    uwagi = f"🔥 WMA: {round(baza_proj,2)}."
-                    m_color = "rank-yellow"; m_rank = "Neutral"
-                    
-                    p_hand = away_p_hand if is_today_home else home_p_hand
-                    
-                    if rola == 'pitcher':
-                        opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
-                        korekta *= max(0.85, min(1.15, opp_k_rate / LEAGUE_AVG_K_RATE))
-                        m_color = "rank-green" if korekta > 1.05 else "rank-red"
-                        m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
-                    else:
-                        opp_pitcher_id = dane_oficjalne.get('away_pitcher_id') if is_today_home else dane_oficjalne.get('home_pitcher_id')
-                        opp_pitcher_name = dane_oficjalne.get('away_pitcher', 'TBD') if is_today_home else dane_oficjalne.get('home_pitcher', 'TBD')
+                    point = oc.get('point')
+                    if point is not None:
+                        aggregated_props[m_key][p_name]['point'].append(point)
                         
-                        p_stats = pobierz_staty_miotacza_startowego(opp_pitcher_id)
-                        baa_korekta = max(0.85, min(1.15, p_stats['baa'] / LEAGUE_AVG_BAA))
-                        
-                        if baa_korekta >= 1.05: m_color = "rank-green"; m_rank = "Słaby Miotacz"
-                        elif baa_korekta <= 0.95: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
-                        
-                        opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
-                        era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
-                        
-                        bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
-                        
-                        korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
-                        
-                        uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
-                        uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
-                        if bullpen['uwaga']: uwagi += f" {bullpen['uwaga']}"
-                        
-                        pf = get_park_factor(ev['home_team'])
-                        if mlb_stat_key == 'homeRuns': pf = ((pf - 1.0) * 1.5) + 1.0 
-                        if pf != 1.0: 
-                            korekta *= pf
-                            uwagi += f" 🏟️ Stadion PF: {round(pf, 2)}x."
-                        
-                        w_mod_raw = w_data['mod']
-                        w_dir = w_data.get('dir', 'NEUTRAL')
-                        w_mph = w_data.get('mph', 0.0)
-                        
-                        wind_str = f"({w_dir}, {w_mph}mph)" if w_mph > 0 else ""
-                        
-                        if w_mod_raw != 1.0:
-                            if rola == 'pitcher':
-                                p_weather_mod = 1.0 - (w_mod_raw - 1.0) * 0.5 
-                                korekta *= p_weather_mod
-                                uwagi += f" 🌦️ Wiatr {wind_str}: {'-4%' if w_mod_raw > 1.0 else '+4%'} K's."
-                            else:
-                                if mlb_stat_key == 'homeRuns':
-                                    hr_mod = 1.0 + (w_mod_raw - 1.0) * 2.0
-                                    korekta *= hr_mod
-                                    uwagi += f" 🌦️ Wiatr {wind_str}: {'+16%' if w_mod_raw > 1.0 else '-16%'} HR."
-                                elif mlb_stat_key == 'hits':
-                                    hit_mod = 1.0 + (w_mod_raw - 1.0) * 0.5
-                                    korekta *= hit_mod
-                                    uwagi += f" 🌦️ Wiatr {wind_str}: {'+4%' if w_mod_raw > 1.0 else '-4%'} Hits."
-                                else:
-                                    korekta *= w_mod_raw
-                                    uwagi += f" 🌦️ Wiatr {wind_str}: {'+8%' if w_mod_raw > 1.0 else '-8%'} szansy."
-                        elif "RĘCZNIE" in w_data['msg']:
-                            uwagi += f" 🌦️ Wiatr {wind_str}: Neutralny."
-                        
-                        if p_hand and bat_side:
-                            if bat_side == 'S': 
-                                korekta *= 1.04; uwagi += " ⚔️ Switch Hitter (+4%)."
-                            elif bat_side != p_hand: 
-                                korekta *= 1.08; uwagi += f" ⚔️ Platoon Adv ({bat_side} vs {p_hand}) (+8%)."
-                            else: 
-                                korekta *= 0.95; uwagi += f" ⚔️ Hard Split ({bat_side} vs {p_hand}) (-5%)."
-                            
-                        if b_order > 0:
-                            if b_order <= 3: korekta *= 1.05
-                            elif b_order >= 8: korekta *= 0.90
-                    
-                    projekcja_finalna = baza_proj * korekta
-                    prob_over = poisson_prob_over(projekcja_finalna, linia)
-                    
-                    typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
-                    true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
-                    kurs_final = kurs_over if typ == "OVER" else kurs_under
-                    
-                    is_hr = (mlb_stat_key == 'homeRuns')
-                    min_prob = 0.15 if is_hr else 0.55
-                    
-                    if true_prob <= min_prob: continue
-                    ev_val = (true_prob * kurs_final) - 1.0 
-                    if is_hr and ev_val < 0.05: continue
-                    
-                    if typ == "OVER":
-                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
-                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
-                        pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100)
-                    else:
-                        pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
-                        pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
-                        pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
-                        m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
-                    
-                    if is_hr:
-                        is_value_bet = ev_val >= 0.15 
-                        is_safe_bet = true_prob >= 0.25 and pokrycie_l10 >= 20 
-                    else:
-                        is_value_bet = ev_val >= 0.04 
-                        is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
-                        
-                    is_stable_bet = (m_color == "rank-green")
-                    is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
-                    
-                    if ev_val > 0.02:
-                        znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
-                        print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
-                    
-                    wyniki_props.append({
-                        "zawodnik": p_name, "mecz": m_str, "data": DATA_DZIS, "rynek": nazwa_rynku_pl,
-                        "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
-                        "ev": round(ev_val, 3), "typ": typ, "kurs": kurs_final,
-                        "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%",
-                        "sezon": f"{pokrycie_sezon}%", "history": vals[-10:],
-                        "uwagi": uwagi, "lokacja": "DOM" if is_today_home else "WYJ", "matchup_rank": m_rank,
-                        "matchup_color": m_color, "opp_name": opp_name,
-                        "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
-                    })
+                    if oc['name'] == 'Over':
+                        aggregated_props[m_key][p_name]['Over'].append(oc['price'])
+                    elif oc['name'] == 'Under':
+                        aggregated_props[m_key][p_name]['Under'].append(oc['price'])
 
-    # Sortowanie i Zapis
+        # Przetwarzanie wyliczonych, zagregowanych kursów (BEZ DUPLIKATÓW)
+        for m_key, players_data in aggregated_props.items():
+            nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[m_key]
+            
+            for p_name, odds_data in players_data.items():
+                if not odds_data['Over'] or not odds_data['Under']: continue
+                
+                avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
+                avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2)
+                
+                if mlb_stat_key == 'totalBases': linia = 1.5
+                elif mlb_stat_key == 'hits': linia = 0.5
+                else:
+                    if not odds_data['point']: continue
+                    linia = max(set(odds_data['point']), key=odds_data['point'].count)
+                
+                kurs_over = avg_over
+                kurs_under = avg_under
+                
+                if f"{p_name}_{m_key}" in przetworzeni_zawodnicy: continue
+                przetworzeni_zawodnicy.add(f"{p_name}_{m_key}")
+                
+                player_id = None; is_today_home = False; opp_team_id = None; opp_name = ""; bat_side = 'R'; b_order = 0
+                
+                if rola == 'pitcher':
+                    h_clean = dane_oficjalne.get('home_pitcher', '').lower().replace(".", "").strip()
+                    a_clean = dane_oficjalne.get('away_pitcher', '').lower().replace(".", "").strip()
+                    p_clean = p_name.lower().replace(".", "").strip()
+                    
+                    if p_clean in h_clean or h_clean in p_clean: 
+                        player_id = dane_oficjalne.get('home_pitcher_id')
+                        is_today_home = True
+                        opp_team_id = dane_oficjalne['away_team_id']
+                        opp_name = ev['away_team']
+                    elif p_clean in a_clean or a_clean in p_clean: 
+                        player_id = dane_oficjalne.get('away_pitcher_id')
+                        is_today_home = False
+                        opp_team_id = dane_oficjalne['home_team_id']
+                        opp_name = ev['home_team']
+                else:
+                    p_clean = p_name.lower().replace(".", "").strip()
+                    if p_clean in h_roster:
+                        player_id = h_roster[p_clean]['id']
+                        bat_side = h_roster[p_clean].get('batSide', {}).get('code', 'R')
+                        is_today_home = True
+                        opp_team_id = dane_oficjalne['away_team_id']
+                        opp_name = ev['away_team']
+                        b_order = dane_oficjalne.get('lineups_home', {}).get(player_id, 0)
+                    elif p_clean in a_roster:
+                        player_id = a_roster[p_clean]['id']
+                        bat_side = a_roster[p_clean].get('batSide', {}).get('code', 'R')
+                        is_today_home = False
+                        opp_team_id = dane_oficjalne['home_team_id']
+                        opp_name = ev['home_team']
+                        b_order = dane_oficjalne.get('lineups_away', {}).get(player_id, 0)
+                
+                if not player_id: continue
+                hist_data = pobierz_historie_gracza(player_id, rola, mlb_stat_key)
+                if len(hist_data) < 5: continue
+                
+                vals = [h['val'] for h in hist_data[-15:]]
+                weights = [3 if i >= len(vals)-5 else (2 if i >= len(vals)-10 else 1) for i in range(len(vals))]
+                baza_proj = sum(v * w for v, w in zip(vals, weights)) / sum(weights)
+                
+                split_bonus = 1.0
+                h_vals = [h['val'] for h in hist_data if h['isHome']]
+                a_vals = [h['val'] for h in hist_data if not h['isHome']]
+                if is_today_home and h_vals and a_vals:
+                    if sum(h_vals)/len(h_vals) > (sum(a_vals)/len(a_vals)) * 1.1: split_bonus = 1.07
+                elif not is_today_home and a_vals and h_vals:
+                    if sum(a_vals)/len(a_vals) > (sum(h_vals)/len(h_vals)) * 1.1: split_bonus = 1.07
+                
+                korekta = split_bonus
+                uwagi = f"🔥 WMA: {round(baza_proj,2)}."
+                m_color = "rank-yellow"; m_rank = "Neutral"
+                
+                p_hand = away_p_hand if is_today_home else home_p_hand
+                
+                if rola == 'pitcher':
+                    opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
+                    korekta *= max(0.85, min(1.15, opp_k_rate / LEAGUE_AVG_K_RATE))
+                    m_color = "rank-green" if korekta > 1.05 else "rank-red"
+                    m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
+                else:
+                    opp_pitcher_id = dane_oficjalne.get('away_pitcher_id') if is_today_home else dane_oficjalne.get('home_pitcher_id')
+                    opp_pitcher_name = dane_oficjalne.get('away_pitcher', 'TBD') if is_today_home else dane_oficjalne.get('home_pitcher', 'TBD')
+                    
+                    p_stats = pobierz_staty_miotacza_startowego(opp_pitcher_id)
+                    baa_korekta = max(0.85, min(1.15, p_stats['baa'] / LEAGUE_AVG_BAA))
+                    
+                    if baa_korekta >= 1.05: m_color = "rank-green"; m_rank = "Słaby Miotacz"
+                    elif baa_korekta <= 0.95: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
+                    
+                    opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
+                    era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
+                    
+                    bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
+                    
+                    korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
+                    
+                    uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
+                    uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
+                    if bullpen['uwaga']: uwagi += f" {bullpen['uwaga']}"
+                    
+                    pf = get_park_factor(ev['home_team'])
+                    if mlb_stat_key == 'homeRuns': pf = ((pf - 1.0) * 1.5) + 1.0 
+                    if pf != 1.0: 
+                        korekta *= pf
+                        uwagi += f" 🏟️ Stadion PF: {round(pf, 2)}x."
+                    
+                    w_mod_raw = w_data['mod']
+                    w_dir = w_data.get('dir', 'NEUTRAL')
+                    w_mph = w_data.get('mph', 0.0)
+                    wind_str = f"({w_dir}, {w_mph}mph)" if w_mph > 0 else ""
+                    
+                    if w_mod_raw != 1.0:
+                        if rola == 'pitcher':
+                            p_weather_mod = 1.0 - (w_mod_raw - 1.0) * 0.5 
+                            korekta *= p_weather_mod
+                            uwagi += f" 🌦️ Wiatr {wind_str}: {'-4%' if w_mod_raw > 1.0 else '+4%'} K's."
+                        else:
+                            if mlb_stat_key == 'homeRuns':
+                                hr_mod = 1.0 + (w_mod_raw - 1.0) * 2.0
+                                korekta *= hr_mod
+                                uwagi += f" 🌦️ Wiatr {wind_str}: {'+16%' if w_mod_raw > 1.0 else '-16%'} HR."
+                            elif mlb_stat_key == 'hits':
+                                hit_mod = 1.0 + (w_mod_raw - 1.0) * 0.5
+                                korekta *= hit_mod
+                                uwagi += f" 🌦️ Wiatr {wind_str}: {'+4%' if w_mod_raw > 1.0 else '-4%'} Hits."
+                            else:
+                                korekta *= w_mod_raw
+                                uwagi += f" 🌦️ Wiatr {wind_str}: {'+8%' if w_mod_raw > 1.0 else '-8%'} szansy."
+                    elif "RĘCZNIE" in w_data['msg']:
+                        uwagi += f" 🌦️ Wiatr {wind_str}: Neutralny."
+                    
+                    if p_hand and bat_side:
+                        if bat_side == 'S': 
+                            korekta *= 1.04; uwagi += " ⚔️ Switch Hitter (+4%)."
+                        elif bat_side != p_hand: 
+                            korekta *= 1.08; uwagi += f" ⚔️ Platoon Adv ({bat_side} vs {p_hand}) (+8%)."
+                        else: 
+                            korekta *= 0.95; uwagi += f" ⚔️ Hard Split ({bat_side} vs {p_hand}) (-5%)."
+                        
+                    if b_order > 0:
+                        if b_order <= 3: korekta *= 1.05
+                        elif b_order >= 8: korekta *= 0.90
+                
+                projekcja_finalna = baza_proj * korekta
+                prob_over = poisson_prob_over(projekcja_finalna, linia)
+                
+                typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
+                true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
+                kurs_final = kurs_over if typ == "OVER" else kurs_under
+                
+                is_hr = (mlb_stat_key == 'homeRuns')
+                min_prob = 0.15 if is_hr else 0.55
+                
+                if true_prob <= min_prob: continue
+                ev_val = (true_prob * kurs_final) - 1.0 
+                if is_hr and ev_val < 0.05: continue
+                
+                if typ == "OVER":
+                    pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
+                    pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
+                    pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100)
+                else:
+                    pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
+                    pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
+                    pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
+                    m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
+                
+                if is_hr:
+                    is_value_bet = ev_val >= 0.15 
+                    is_safe_bet = true_prob >= 0.25 and pokrycie_l10 >= 20 
+                else:
+                    is_value_bet = ev_val >= 0.04 
+                    is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
+                    
+                is_stable_bet = (m_color == "rank-green")
+                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
+                
+                if ev_val > 0.02:
+                    znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
+                    print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
+                
+                wyniki_props.append({
+                    "zawodnik": p_name, "mecz": m_str, "data": DATA_DZIS, "rynek": nazwa_rynku_pl,
+                    "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
+                    "ev": round(ev_val, 3), "typ": typ, "kurs": kurs_final,
+                    "l5": f"{pokrycie_l5}%", "l10": f"{pokrycie_l10}%",
+                    "sezon": f"{pokrycie_sezon}%", "history": vals[-10:],
+                    "uwagi": uwagi, "lokacja": "DOM" if is_today_home else "WYJ", "matchup_rank": m_rank,
+                    "matchup_color": m_color, "opp_name": opp_name,
+                    "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
+                })
+
     wyniki_games = sorted(wyniki_games, key=lambda x: x['ev'], reverse=True)
     with open('mlb_games.json', 'w', encoding='utf-8') as f: json.dump(wyniki_games, f, ensure_ascii=False, indent=4)
     wyslij_plik_na_githuba('mlb_games.json', "Update MLB Game Lines & F5")
