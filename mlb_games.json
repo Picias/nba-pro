@@ -5,10 +5,10 @@
         "rynek": "Mecz: Zwycięzca (ML)",
         "zaklad": "Washington Nationals",
         "linia": "-",
-        "kurs": 2.8,
+        "kurs": 2.83,
         "projekcja": "6.7 - 3.1",
         "szansa": 79.8,
-        "ev": 1.235,
+        "ev": 1.259,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 14.0 mph | 🏟️ Park: 0.98x<br>⚾ <b>Pittsburgh Pirates</b> vs RHP: OPS 0.723 | SP ERA: 5.25 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Washington Nationals</b> vs RHP: OPS 0.728 | SP ERA: 2.51 | 🥱 BP Zmęczony (+4%)"
     },
     {
@@ -17,10 +17,10 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "OVER",
         "linia": 8.5,
-        "kurs": 1.98,
+        "kurs": 1.88,
         "projekcja": 14.76,
         "szansa": 95.8,
-        "ev": 0.896,
+        "ev": 0.8,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 13.0 mph | 🏟️ Park: 1.03x<br>⚾ <b>Los Angeles Dodgers</b> vs LHP: OPS 0.863 | SP ERA: 4.0 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>New York Mets</b> vs LHP: OPS 0.745 | SP ERA: 6.14 | 🥱 BP Zmęczony (+4%)"
     },
     {
@@ -29,11 +29,23 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "OVER",
         "linia": 8.5,
-        "kurs": 2.04,
+        "kurs": 1.89,
         "projekcja": 12.1,
         "szansa": 85.1,
-        "ev": 0.737,
+        "ev": 0.609,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Neutralnie (4.5 mph) | 🏟️ Park: 0.94x<br>⚾ <b>Athletics</b> vs RHP: OPS 0.709 | SP ERA: 5.4 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Texas Rangers</b> vs RHP: OPS 0.736 | SP ERA: 7.98 | 🥱 BP Zmęczony (+4%)"
+    },
+    {
+        "mecz": "Houston Astros @ Seattle Mariners",
+        "data": "2026-04-13",
+        "rynek": "Mecz: Suma Runs",
+        "zaklad": "OVER",
+        "linia": 7.5,
+        "kurs": 1.88,
+        "projekcja": 10.63,
+        "szansa": 83.1,
+        "ev": 0.563,
+        "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 8.0 mph | 🏟️ Park: 0.9x<br>⚾ <b>Seattle Mariners</b> vs RHP: OPS 0.691 | SP ERA: 3.6 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Houston Astros</b> vs RHP: OPS 0.834 | SP ERA: 5.63 | 🥱 BP Zmęczony (+4%)"
     },
     {
         "mecz": "Cleveland Guardians @ St. Louis Cardinals",
@@ -41,10 +53,10 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "UNDER",
         "linia": 8.0,
-        "kurs": 1.94,
+        "kurs": 1.93,
         "projekcja": 6.47,
         "szansa": 79.5,
-        "ev": 0.543,
+        "ev": 0.535,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 15.0 mph | 🏟️ Park: 0.95x<br>⚾ <b>St. Louis Cardinals</b> vs RHP: OPS 0.653 | SP ERA: 3.38 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Cleveland Guardians</b> vs LHP: OPS 0.673 | SP ERA: 2.04 | 🥱 BP Zmęczony (+4%)"
     },
     {
@@ -53,23 +65,11 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "OVER",
         "linia": 7.5,
-        "kurs": 1.97,
+        "kurs": 1.98,
         "projekcja": 9.81,
         "szansa": 76.2,
-        "ev": 0.501,
+        "ev": 0.509,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 14.0 mph | 🏟️ Park: 0.98x<br>⚾ <b>Pittsburgh Pirates</b> vs RHP: OPS 0.723 | SP ERA: 5.25 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Washington Nationals</b> vs RHP: OPS 0.728 | SP ERA: 2.51 | 🥱 BP Zmęczony (+4%)"
-    },
-    {
-        "mecz": "Houston Astros @ Seattle Mariners",
-        "data": "2026-04-13",
-        "rynek": "Mecz: Suma Runs",
-        "zaklad": "OVER",
-        "linia": 8.0,
-        "kurs": 1.9,
-        "projekcja": 10.63,
-        "szansa": 73.4,
-        "ev": 0.394,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 8.0 mph | 🏟️ Park: 0.9x<br>⚾ <b>Seattle Mariners</b> vs RHP: OPS 0.691 | SP ERA: 3.6 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Houston Astros</b> vs RHP: OPS 0.834 | SP ERA: 5.63 | 🥱 BP Zmęczony (+4%)"
     },
     {
         "mecz": "Miami Marlins @ Atlanta Braves",
@@ -77,10 +77,10 @@
         "rynek": "Mecz: Zwycięzca (ML)",
         "zaklad": "Atlanta Braves",
         "linia": "-",
-        "kurs": 1.67,
+        "kurs": 1.65,
         "projekcja": "6.5 - 3.0",
         "szansa": 80.4,
-        "ev": 0.343,
+        "ev": 0.327,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 8.0 mph | 🏟️ Park: 1.05x<br>⚾ <b>Atlanta Braves</b> vs RHP: OPS 0.801 | SP ERA: 2.55 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Miami Marlins</b> vs RHP: OPS 0.795 | SP ERA: 5.06 | 🥱 BP Zmęczony (+4%)"
     },
     {
@@ -89,23 +89,11 @@
         "rynek": "Mecz: Zwycięzca (ML)",
         "zaklad": "Los Angeles Dodgers",
         "linia": "-",
-        "kurs": 1.61,
+        "kurs": 1.59,
         "projekcja": "9.6 - 5.2",
         "szansa": 75.8,
-        "ev": 0.22,
+        "ev": 0.205,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 13.0 mph | 🏟️ Park: 1.03x<br>⚾ <b>Los Angeles Dodgers</b> vs LHP: OPS 0.863 | SP ERA: 4.0 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>New York Mets</b> vs LHP: OPS 0.745 | SP ERA: 6.14 | 🥱 BP Zmęczony (+4%)"
-    },
-    {
-        "mecz": "Miami Marlins @ Atlanta Braves",
-        "data": "2026-04-13",
-        "rynek": "Mecz: Suma Runs",
-        "zaklad": "OVER",
-        "linia": 8.5,
-        "kurs": 1.97,
-        "projekcja": 9.45,
-        "szansa": 60.2,
-        "ev": 0.186,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 8.0 mph | 🏟️ Park: 1.05x<br>⚾ <b>Atlanta Braves</b> vs RHP: OPS 0.801 | SP ERA: 2.55 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Miami Marlins</b> vs RHP: OPS 0.795 | SP ERA: 5.06 | 🥱 BP Zmęczony (+4%)"
     },
     {
         "mecz": "Cleveland Guardians @ St. Louis Cardinals",
@@ -113,11 +101,59 @@
         "rynek": "Mecz: Zwycięzca (ML)",
         "zaklad": "Cleveland Guardians",
         "linia": "-",
-        "kurs": 1.83,
+        "kurs": 1.84,
         "projekcja": "3.7 - 2.7",
         "szansa": 64.0,
-        "ev": 0.171,
+        "ev": 0.177,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 15.0 mph | 🏟️ Park: 0.95x<br>⚾ <b>St. Louis Cardinals</b> vs RHP: OPS 0.653 | SP ERA: 3.38 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Cleveland Guardians</b> vs LHP: OPS 0.673 | SP ERA: 2.04 | 🥱 BP Zmęczony (+4%)"
+    },
+    {
+        "mecz": "Boston Red Sox @ Minnesota Twins",
+        "data": "2026-04-13",
+        "rynek": "Mecz: Suma Runs",
+        "zaklad": "OVER",
+        "linia": 7.5,
+        "kurs": 1.99,
+        "projekcja": 8.3,
+        "szansa": 58.8,
+        "ev": 0.17,
+        "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 9.0 mph | 🏟️ Park: 0.98x<br>⚾ <b>Minnesota Twins</b> vs LHP: OPS 0.69 | SP ERA: 5.27 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Boston Red Sox</b> vs RHP: OPS 0.668 | SP ERA: 3.12 | 🥱 BP Zmęczony (+4%)"
+    },
+    {
+        "mecz": "Miami Marlins @ Atlanta Braves",
+        "data": "2026-04-13",
+        "rynek": "Mecz: Suma Runs",
+        "zaklad": "OVER",
+        "linia": 8.5,
+        "kurs": 1.94,
+        "projekcja": 9.45,
+        "szansa": 60.2,
+        "ev": 0.168,
+        "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 8.0 mph | 🏟️ Park: 1.05x<br>⚾ <b>Atlanta Braves</b> vs RHP: OPS 0.801 | SP ERA: 2.55 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Miami Marlins</b> vs RHP: OPS 0.795 | SP ERA: 5.06 | 🥱 BP Zmęczony (+4%)"
+    },
+    {
+        "mecz": "Texas Rangers @ Athletics",
+        "data": "2026-04-13",
+        "rynek": "Mecz: Zwycięzca (ML)",
+        "zaklad": "Athletics",
+        "linia": "-",
+        "kurs": 2.09,
+        "projekcja": "6.4 - 5.7",
+        "szansa": 55.4,
+        "ev": 0.159,
+        "uwagi": "🌦️ ⚙️ RĘCZNIE: Neutralnie (4.5 mph) | 🏟️ Park: 0.94x<br>⚾ <b>Athletics</b> vs RHP: OPS 0.709 | SP ERA: 5.4 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Texas Rangers</b> vs RHP: OPS 0.736 | SP ERA: 7.98 | 🥱 BP Zmęczony (+4%)"
+    },
+    {
+        "mecz": "Los Angeles Angels @ New York Yankees",
+        "data": "2026-04-13",
+        "rynek": "Mecz: Suma Runs",
+        "zaklad": "UNDER",
+        "linia": 9.5,
+        "kurs": 1.86,
+        "projekcja": 8.74,
+        "szansa": 62.2,
+        "ev": 0.156,
+        "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 16.0 mph | 🏟️ Park: 1.02x<br>⚾ <b>New York Yankees</b> vs LHP: OPS 0.405 | SP ERA: 3.07 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Los Angeles Angels</b> vs RHP: OPS 0.669 | SP ERA: 6.75 | 🥱 BP Zmęczony (+4%)"
     },
     {
         "mecz": "Chicago Cubs @ Philadelphia Phillies",
@@ -142,42 +178,6 @@
         "szansa": 62.4,
         "ev": 0.154,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 14.0 mph | 🏟️ Park: 0.96x<br>⚾ <b>Baltimore Orioles</b> vs RHP: OPS 0.71 | SP ERA: 4.19 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Arizona Diamondbacks</b> vs RHP: OPS 0.623 | SP ERA: 4.2 | 🥱 BP Zmęczony (+4%)"
-    },
-    {
-        "mecz": "Boston Red Sox @ Minnesota Twins",
-        "data": "2026-04-13",
-        "rynek": "Mecz: Suma Runs",
-        "zaklad": "OVER",
-        "linia": 7.5,
-        "kurs": 1.96,
-        "projekcja": 8.3,
-        "szansa": 58.8,
-        "ev": 0.153,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 9.0 mph | 🏟️ Park: 0.98x<br>⚾ <b>Minnesota Twins</b> vs LHP: OPS 0.69 | SP ERA: 5.27 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Boston Red Sox</b> vs RHP: OPS 0.668 | SP ERA: 3.12 | 🥱 BP Zmęczony (+4%)"
-    },
-    {
-        "mecz": "Los Angeles Angels @ New York Yankees",
-        "data": "2026-04-13",
-        "rynek": "Mecz: Suma Runs",
-        "zaklad": "UNDER",
-        "linia": 9.5,
-        "kurs": 1.85,
-        "projekcja": 8.74,
-        "szansa": 62.2,
-        "ev": 0.15,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 16.0 mph | 🏟️ Park: 1.02x<br>⚾ <b>New York Yankees</b> vs LHP: OPS 0.405 | SP ERA: 3.07 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Los Angeles Angels</b> vs RHP: OPS 0.669 | SP ERA: 6.75 | 🥱 BP Zmęczony (+4%)"
-    },
-    {
-        "mecz": "Texas Rangers @ Athletics",
-        "data": "2026-04-13",
-        "rynek": "Mecz: Zwycięzca (ML)",
-        "zaklad": "Athletics",
-        "linia": "-",
-        "kurs": 2.05,
-        "projekcja": "6.4 - 5.7",
-        "szansa": 55.4,
-        "ev": 0.136,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: Neutralnie (4.5 mph) | 🏟️ Park: 0.94x<br>⚾ <b>Athletics</b> vs RHP: OPS 0.709 | SP ERA: 5.4 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Texas Rangers</b> vs RHP: OPS 0.736 | SP ERA: 7.98 | 🥱 BP Zmęczony (+4%)"
     },
     {
         "mecz": "Boston Red Sox @ Minnesota Twins",
@@ -353,10 +353,10 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "UNDER",
         "linia": 8.5,
-        "kurs": 1.86,
+        "kurs": 1.85,
         "projekcja": 8.1,
         "szansa": 57.9,
-        "ev": 0.076,
+        "ev": 0.07,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 14.0 mph | 🏟️ Park: 1.05x<br>⚾ <b>Philadelphia Phillies</b> vs RHP: OPS 0.732 | SP ERA: 1.65 | 🥱 BP Zmęczony (+4%)<br>⚾ <b>Chicago Cubs</b> vs LHP: OPS 0.651 | SP ERA: 4.01 | 🥱 BP Zmęczony (+4%)"
     }
 ]
