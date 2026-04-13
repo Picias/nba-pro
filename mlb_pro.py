@@ -5,6 +5,7 @@ import math
 import os
 import base64
 from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
 
 # ==========================================
 # KONFIGURACJA GŁÓWNA
@@ -18,11 +19,14 @@ ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
 REGIONS = 'us'
-MARKETS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
-SEZON_MLB = 2026
+MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
+MARKETS_GAMES = 'h2h,totals,spreads,h2h_1st_half,totals_1st_half'
 
+SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
+
 MLB_JSON_FILE = 'mlb.json'
+MLB_GAMES_FILE = 'mlb_games.json'
 STATS_MLB_FILE = 'statystyki_mlb.json'
 
 CACHE_PLAYER_LOGS = {}
@@ -31,10 +35,15 @@ CACHE_TEAM_ERA = {}
 CACHE_ROSTERS = {}
 CACHE_PITCHER_STATS = {}
 CACHE_BULLPEN_FATIGUE = {}
+CACHE_TEAM_SPLITS = {}
+CACHE_WEATHER = {}
 
 LEAGUE_AVG_K_RATE = 0.225 
 LEAGUE_AVG_ERA = 4.20
 LEAGUE_AVG_BAA = 0.240 
+LEAGUE_AVG_OPS = 0.730
+LEAGUE_AVG_RUNS = 4.5
+LEAGUE_AVG_RUNS_F5 = 2.5
 
 PARK_FACTORS = {
     'Colorado Rockies': 1.15, 'Cincinnati Reds': 1.12, 'Boston Red Sox': 1.08,
@@ -76,6 +85,61 @@ def poisson_prob_over(lam, line):
     for k in range(k_max + 1):
         prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
     return 1.0 - prob_under 
+
+# ==========================================
+# 🌤️ MODUŁ POGODY & SPLITÓW
+# ==========================================
+def pobierz_pogode_covers():
+    print("🌤️ Pobieram dane pogodowe z Covers.com (Wiatr i Stadiony)...")
+    weather_data = {}
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+        res = requests.get("https://www.covers.com/sport/mlb/weather", headers=headers, timeout=10)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        
+        game_boxes = soup.find_all('div', class_='weather-event-box') 
+        if not game_boxes: 
+            game_boxes = soup.find_all('div', class_='covers-weather-details')
+            
+        for box in game_boxes:
+            text = box.text.lower()
+            w_mod = 1.0; msg = "Dach/Brak wiatru"
+            if "blowing out" in text or "out to" in text:
+                w_mod = 1.08; msg = "💨 Wiatr wywiewa (Blowing Out) +8% Runs"
+            elif "blowing in" in text or "in from" in text:
+                w_mod = 0.92; msg = "🛑 Wiatr w twarz (Blowing In) -8% Runs"
+            elif "dome" in text or "roof closed" in text:
+                w_mod = 1.0; msg = "🏟️ Zamknięty dach"
+                
+            for full_name in PARK_FACTORS.keys():
+                if full_name.lower() in text or full_name.split()[-1].lower() in text:
+                    weather_data[full_name] = {'mod': w_mod, 'msg': msg}
+    except Exception as e:
+        print(f"⚠️ Błąd pobierania pogody: {e}")
+    
+    global CACHE_WEATHER
+    CACHE_WEATHER = weather_data
+    return weather_data
+
+def pobierz_ops_splits(team_id):
+    if team_id in CACHE_TEAM_SPLITS: return CACHE_TEAM_SPLITS[team_id]
+    
+    ops_vs_lhp = LEAGUE_AVG_OPS
+    ops_vs_rhp = LEAGUE_AVG_OPS
+    try:
+        url = f"https://statsapi.mlb.com/api/v1/teams/{team_id}/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=statSplits&sitCodes=vl,vr"
+        res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5).json()
+        splits = res.get('stats', [{}])[0].get('splits', [])
+        
+        for s in splits:
+            desc = s.get('split', {}).get('description', '').lower()
+            ops = float(s.get('stat', {}).get('ops', str(LEAGUE_AVG_OPS)))
+            if 'left' in desc: ops_vs_lhp = ops
+            elif 'right' in desc: ops_vs_rhp = ops
+    except: pass
+    
+    CACHE_TEAM_SPLITS[team_id] = {'vs_LHP': ops_vs_lhp, 'vs_RHP': ops_vs_rhp}
+    return CACHE_TEAM_SPLITS[team_id]
 
 # ==========================================
 # 📊 MODUŁ STATYSTYK DRUŻYNOWYCH MLB
@@ -286,7 +350,16 @@ def rozlicz_wczorajsze_typy_mlb():
             if is_safe: etykiety.append("🎯 Pewniak")
             if is_stable: etykiety.append("🛡️ Stabilny")
             
-        historia.append({"zawodnik": typ['zawodnik'], "rynek": rynek, "linia": linia, "wynik_realny": wynik, "status": status, "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"})
+        historia.append({
+            "zawodnik": typ['zawodnik'], 
+            "rynek": rynek, 
+            "typ": typ.get('typ', '-'),
+            "linia": linia, 
+            "kurs": typ.get('kurs', 0.0),
+            "wynik_realny": wynik, 
+            "status": status, 
+            "kategoria": " | ".join(etykiety) if etykiety else "Zwykły Typ"
+        })
             
     suma = wygrane + przegrane
     if suma > 0:
@@ -350,13 +423,13 @@ def oblicz_zmeczenie_bullpenu(team_id, data_dzis_str):
     except: pass
 
     if rozegrane_mecze >= 4:
-        bonus = 1.08; msg = "🥵 Bullpen ZAJECHANY (4+ mecze w 72h) (+8%)."
+        bonus = 1.08; msg = "🥵 BP Zajechany (+8%)"
     elif rozegrane_mecze == 3:
-        bonus = 1.04; msg = "🥱 Bullpen zmęczony (3 mecze w 72h) (+4%)."
+        bonus = 1.04; msg = "🥱 BP Zmęczony (+4%)"
     elif rozegrane_mecze <= 1:
-        bonus = 0.97; msg = "🔋 Bullpen wypoczęty (0-1 mecz w 72h) (-3%)."
+        bonus = 0.97; msg = "🔋 BP Wypoczęty (-3%)"
     else:
-        bonus = 1.0; msg = ""
+        bonus = 1.0; msg = "BP Gotowy"
         
     CACHE_BULLPEN_FATIGUE[team_id] = {'korekta': bonus, 'uwaga': msg}
     return CACHE_BULLPEN_FATIGUE[team_id]
@@ -464,11 +537,11 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
     return historia_pelna
 
 # ==========================================
-# 2. GŁÓWNA PĘTLA
+# 3. GŁÓWNA PĘTLA BOTA (GAME LINES & PROPS)
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v5.0 (Team Stats)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.0 (F5 Innings & Splits)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -477,11 +550,13 @@ def uruchom_mlb_pro():
     
     rozlicz_wczorajsze_typy_mlb()
     pobierz_statystyki_druzyn_mlb()
-    generuj_pelny_raport_druzynowy_mlb() # 🚀 GENERATOR STATYSTYK ZESPOŁOWYCH
+    generuj_pelny_raport_druzynowy_mlb() 
+    pobierz_pogode_covers()
     baza_mlb = pobierz_oficjalny_terminarz_mlb(DATA_DZIS)
     
     try:
-        print("📡 Pobieram kursy (The Odds API)...")
+        print("📡 Pobieram kursy (The Odds API - Props & Games)...")
+        markets_all = f"{MARKETS_PROPS},{MARKETS_GAMES}"
         events = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events?apiKey={ODDS_API_KEY}").json()
         if isinstance(events, dict) and 'message' in events: 
             print(f"❌ ODRZUCONO ZAPYTANIE: {events['message']}")
@@ -492,7 +567,9 @@ def uruchom_mlb_pro():
 
     if not isinstance(events, list): return []
     mecze_dzis = [e for e in events if (datetime.strptime(e['commence_time'], '%Y-%m-%dT%H:%M:%SZ') - timedelta(hours=5)).strftime('%Y-%m-%d') == DATA_DZIS]
-    wyniki = []
+    
+    wyniki_props = []
+    wyniki_games = []
     przetworzeni_zawodnicy = set()
 
     rynek_map = {
@@ -511,8 +588,115 @@ def uruchom_mlb_pro():
         
         print(f"\n🏟️ ------------------------------------------------")
         print(f"⚾ ANALIZA MECZU: {m_str}")
-        print(f"🗂️ Pobieranie składów i precyzyjne dopasowywanie statystyk...")
         
+        home_t_id = dane_oficjalne['home_team_id']
+        away_t_id = dane_oficjalne['away_team_id']
+        
+        w_data = CACHE_WEATHER.get(ev['home_team'], {'mod': 1.0, 'msg': 'Neutralnie/Dach'})
+        p_factor = PARK_FACTORS.get(ev['home_team'], 1.0)
+        
+        # --- 🧮 KALKULATOR GAME LINES (Złożony Model Ważony) ---
+        away_ops_splits = pobierz_ops_splits(away_t_id)
+        home_ops_splits = pobierz_ops_splits(home_t_id)
+        home_p_hand = dane_oficjalne['home_pitcher_hand']
+        away_p_hand = dane_oficjalne['away_pitcher_hand']
+        home_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne['home_pitcher_id'])
+        away_p_stats = pobierz_staty_miotacza_startowego(dane_oficjalne['away_pitcher_id'])
+        home_bp = oblicz_zmeczenie_bullpenu(home_t_id, DATA_DZIS)
+        away_bp = oblicz_zmeczenie_bullpenu(away_t_id, DATA_DZIS)
+
+        # FULL GAME (65% SP / 35% BP)
+        away_ops_vs_sp = away_ops_splits['vs_LHP'] if home_p_hand == 'L' else away_ops_splits['vs_RHP']
+        away_ops_vs_bp = (away_ops_splits['vs_LHP'] + away_ops_splits['vs_RHP']) / 2.0
+        away_true_ops_full = (away_ops_vs_sp * 0.65) + (away_ops_vs_bp * 0.35)
+        away_base_runs_fg = (away_true_ops_full / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS
+        away_proj_runs_fg = away_base_runs_fg * (home_p_stats['era'] / LEAGUE_AVG_ERA) * home_bp['korekta'] * p_factor * w_data['mod']
+        
+        home_ops_vs_sp = home_ops_splits['vs_LHP'] if away_p_hand == 'L' else home_ops_splits['vs_RHP']
+        home_ops_vs_bp = (home_ops_splits['vs_LHP'] + home_ops_splits['vs_RHP']) / 2.0
+        home_true_ops_full = (home_ops_vs_sp * 0.65) + (home_ops_vs_bp * 0.35)
+        home_base_runs_fg = (home_true_ops_full / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS
+        home_proj_runs_fg = home_base_runs_fg * (away_p_stats['era'] / LEAGUE_AVG_ERA) * away_bp['korekta'] * p_factor * w_data['mod'] * 1.04 # Advantage boiska
+        
+        total_proj_runs_fg = round(away_proj_runs_fg + home_proj_runs_fg, 2)
+        home_win_prob_fg = home_proj_runs_fg / (home_proj_runs_fg + away_proj_runs_fg) if (home_proj_runs_fg + away_proj_runs_fg) > 0 else 0.5
+
+        # F5 INNINGS (100% SP)
+        away_base_runs_f5 = (away_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
+        away_proj_runs_f5 = away_base_runs_f5 * (home_p_stats['era'] / LEAGUE_AVG_ERA) * p_factor * w_data['mod']
+        
+        home_base_runs_f5 = (home_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
+        home_proj_runs_f5 = home_base_runs_f5 * (away_p_stats['era'] / LEAGUE_AVG_ERA) * p_factor * w_data['mod'] * 1.04
+        
+        total_proj_runs_f5 = round(away_proj_runs_f5 + home_proj_runs_f5, 2)
+        home_win_prob_f5 = home_proj_runs_f5 / (home_proj_runs_f5 + away_proj_runs_f5) if (home_proj_runs_f5 + away_proj_runs_f5) > 0 else 0.5
+
+        g_insights = f"🌦️ {w_data['msg']} | 🏟️ Park: {p_factor}x<br>"
+        g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
+        g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
+
+        # --- 📈 POBIERANIE KURSÓW (PROPS + GAMES) ---
+        try:
+            res_odds = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS},{MARKETS_GAMES}&oddsFormat=decimal").json()
+        except: continue
+        
+        game_lines = {'h2h': {}, 'totals': {}, 'h2h_f5': {}, 'totals_f5': {}}
+        for bm in res_odds.get('bookmakers', []):
+            for mkt in bm.get('markets', []):
+                if mkt['key'] == 'h2h':
+                    for oc in mkt['outcomes']: game_lines['h2h'][oc['name']] = oc['price']
+                elif mkt['key'] == 'totals':
+                    for oc in mkt['outcomes']: 
+                        game_lines['totals']['point'] = oc['point']
+                        game_lines['totals'][oc['name']] = oc['price']
+                elif mkt['key'] == 'h2h_1st_half':
+                    for oc in mkt['outcomes']: game_lines['h2h_f5'][oc['name']] = oc['price']
+                elif mkt['key'] == 'totals_1st_half':
+                    for oc in mkt['outcomes']: 
+                        game_lines['totals_f5']['point'] = oc['point']
+                        game_lines['totals_f5'][oc['name']] = oc['price']
+
+        # --- 🎯 EWALUACJA ZAKŁADÓW FULL GAME ---
+        if game_lines['totals'] and 'Over' in game_lines['totals']:
+            t_line = game_lines['totals']['point']
+            t_over = game_lines['totals']['Over']
+            t_under = game_lines['totals']['Under']
+            over_prob = 1.0 - poisson_prob_over(total_proj_runs_fg, t_line)
+            
+            if (over_prob * t_over) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(over_prob * 100, 1), "ev": round((over_prob * t_over) - 1, 3), "uwagi": g_insights})
+            elif ((1-over_prob) * t_under) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round((1-over_prob) * 100, 1), "ev": round(((1-over_prob) * t_under) - 1, 3), "uwagi": g_insights})
+
+        if game_lines['h2h'] and ev['home_team'] in game_lines['h2h']:
+            h_kurs = game_lines['h2h'][ev['home_team']]
+            a_kurs = game_lines['h2h'][ev['away_team']]
+            if (home_win_prob_fg * h_kurs) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round((home_win_prob_fg * h_kurs) - 1, 3), "uwagi": g_insights})
+            elif ((1-home_win_prob_fg) * a_kurs) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(((1-home_win_prob_fg) * a_kurs) - 1, 3), "uwagi": g_insights})
+
+        # --- 🎯 EWALUACJA ZAKŁADÓW F5 (FIRST 5 INNINGS) ---
+        if game_lines['totals_f5'] and 'Over' in game_lines['totals_f5']:
+            t_line_f5 = game_lines['totals_f5']['point']
+            t_over_f5 = game_lines['totals_f5']['Over']
+            t_under_f5 = game_lines['totals_f5']['Under']
+            over_prob_f5 = 1.0 - poisson_prob_over(total_proj_runs_f5, t_line_f5)
+            
+            if (over_prob_f5 * t_over_f5) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "OVER", "linia": t_line_f5, "kurs": t_over_f5, "projekcja": total_proj_runs_f5, "szansa": round(over_prob_f5 * 100, 1), "ev": round((over_prob_f5 * t_over_f5) - 1, 3), "uwagi": g_insights})
+            elif ((1-over_prob_f5) * t_under_f5) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: Suma Runs", "zaklad": "UNDER", "linia": t_line_f5, "kurs": t_under_f5, "projekcja": total_proj_runs_f5, "szansa": round((1-over_prob_f5) * 100, 1), "ev": round(((1-over_prob_f5) * t_under_f5) - 1, 3), "uwagi": g_insights})
+
+        if game_lines['h2h_f5'] and ev['home_team'] in game_lines['h2h_f5']:
+            h_kurs_f5 = game_lines['h2h_f5'][ev['home_team']]
+            a_kurs_f5 = game_lines['h2h_f5'][ev['away_team']]
+            if (home_win_prob_f5 * h_kurs_f5) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs_f5, "projekcja": f"{round(home_proj_runs_f5,1)} - {round(away_proj_runs_f5,1)}", "szansa": round(home_win_prob_f5 * 100, 1), "ev": round((home_win_prob_f5 * h_kurs_f5) - 1, 3), "uwagi": g_insights})
+            elif ((1-home_win_prob_f5) * a_kurs_f5) - 1 > 0.05:
+                wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5 Inningów: ML", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs_f5, "projekcja": f"{round(away_proj_runs_f5,1)} - {round(home_proj_runs_f5,1)}", "szansa": round((1-home_win_prob_f5) * 100, 1), "ev": round(((1-home_win_prob_f5) * a_kurs_f5) - 1, 3), "uwagi": g_insights})
+
+        # --- 🏏 ANALIZA ZAWODNIKÓW (PROPS) ---
         h_roster = {}
         a_roster = {}
         try:
@@ -522,11 +706,7 @@ def uruchom_mlb_pro():
             res_a = requests.get(f"https://statsapi.mlb.com/api/v1/teams/{dane_oficjalne['away_team_id']}/roster?hydrate=person", timeout=10).json()
             a_roster = {p['person']['fullName'].lower().replace(".", "").strip(): p['person'] for p in res_a.get('roster', [])}
         except: pass
-        
-        try:
-            res_odds = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS}&oddsFormat=decimal").json()
-        except: continue
-        
+
         for bm in res_odds.get('bookmakers', []):
             for mkt in bm.get('markets', []):
                 if mkt['key'] not in rynek_map: continue
@@ -658,13 +838,11 @@ def uruchom_mlb_pro():
                     min_prob = 0.15 if is_hr else 0.55
                     
                     if true_prob <= min_prob: 
-                        print(f"  ❌ Odrzucono (Szansa): {p_name:<20} | {nazwa_rynku_pl:<14} | Szansa: {round(true_prob*100,1)}%")
                         continue
                     
                     ev_val = (true_prob * kurs_final) - 1.0 
                     
                     if is_hr and ev_val < 0.05:
-                        print(f"  ❌ Odrzucono (Złe EV) : {p_name:<20} | {nazwa_rynku_pl:<14} | EV: {round(ev_val*100,1)}%")
                         continue
                     
                     if typ == "OVER":
@@ -690,7 +868,7 @@ def uruchom_mlb_pro():
                     znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                     print(f"  {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
                     
-                    wyniki.append({
+                    wyniki_props.append({
                         "zawodnik": p_name, "mecz": m_str, "data": DATA_DZIS, "rynek": nazwa_rynku_pl,
                         "linia": linia, "projekcja": round(projekcja_finalna, 2), "true_prob": true_prob,
                         "ev": round(ev_val, 3), "typ": typ, "kurs": kurs_final,
@@ -701,19 +879,17 @@ def uruchom_mlb_pro():
                         "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
                     })
 
-    wyniki = sorted(wyniki, key=lambda x: x['ev'], reverse=True)
-    with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki, f, ensure_ascii=False, indent=4)
+    # Sortowanie wyników Game Lines po najwyższym EV i zapis do pliku
+    wyniki_games = sorted(wyniki_games, key=lambda x: x['ev'], reverse=True)
+    with open('mlb_games.json', 'w', encoding='utf-8') as f: json.dump(wyniki_games, f, ensure_ascii=False, indent=4)
+    wyslij_plik_na_githuba('mlb_games.json', "Update MLB Game Lines & F5")
     
-    print(f"\n✅ Zakończono! Zapisano {len(wyniki)} typów.")
-    top = [t for t in wyniki if t['ev'] > 0.05 and t['true_prob'] > 0.50][:5]
-    if top:
-        msg = "🚨 <b>RAPORT QUANT AI: MLB (PRO ULTIMATE v5.0)</b> 🚨\n\n"
-        for t in top: 
-            msg += f"⚾ {t['zawodnik']} - {t['rynek']}\n👉 <b>{t['typ']} {t['linia']}</b> @ {t['kurs']} (EV: +{round(t['ev']*100,1)}%)\n🤖 ML: {t['projekcja']} | {t['matchup_rank']}\n📈 L10: {list(reversed(t['history']))}\n\n"
-        wyslij_powiadomienie_telegram(msg)
-        
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update v5.0 (Team Stats)")
-    return wyniki
+    print(f"\n✅ Zakończono! Zapisano {len(wyniki_games)} typów meczowych/F5.")
+
+    wyniki_props = sorted(wyniki_props, key=lambda x: x['ev'], reverse=True)
+    with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki_props, f, ensure_ascii=False, indent=4)
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props")
+    print(f"✅ Zakończono! Zapisano {len(wyniki_props)} typów na zawodników.")
 
 if __name__ == "__main__":
     uruchom_mlb_pro()
