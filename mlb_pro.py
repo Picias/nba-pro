@@ -18,9 +18,13 @@ TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
-REGIONS = 'eu' # Trzymamy się Europy!
+REGIONS = 'eu' # Europa
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
+
+# 🎯 FIX: TWARDA LISTA ELITARNYCH BUKMACHERÓW
+# Bot zignoruje giełdy zakładów (Betfair) i słabych buków z dziwnymi kursami.
+TOP_BOOKMAKERS = ['bet365', 'pinnacle', 'unibet', 'bwin', 'betclic', 'betsson', 'williamhill', '888sport']
 
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
@@ -443,7 +447,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.6 (EU Odds Aggregator)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.8 (Elite Bookmakers Only)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -541,10 +545,7 @@ def uruchom_mlb_pro():
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
-        # ----------------------------------------------------
-        # KROK 2A: POBIERANIE TYLKO LINII MECZOWYCH (AGREGATOR!)
-        # ----------------------------------------------------
-        print(f"    📡 Odpytuję API o linie meczowe (Średnia z Europy)...")
+        print(f"    📡 Odpytuję API o linie meczowe (Tylko ELITA: Bet365, Pinnacle itp.)...")
         
         h2h_home_odds = []
         h2h_away_odds = []
@@ -556,6 +557,9 @@ def uruchom_mlb_pro():
             time.sleep(0.5) 
             res_games = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_GAMES}&oddsFormat=decimal").json()
             for bm in res_games.get('bookmakers', []):
+                # FIX: Twardy filtr bukmacherów!
+                if bm['key'] not in TOP_BOOKMAKERS: continue
+                
                 for mkt in bm.get('markets', []):
                     if mkt['key'] == 'h2h':
                         for oc in mkt['outcomes']: 
@@ -574,7 +578,6 @@ def uruchom_mlb_pro():
         except Exception as e: pass
 
         if tot_over_odds and tot_under_odds and tot_lines:
-            # Bierzemy średnią (lub najczęstszą) linię i średni kurs rynkowy
             t_line = max(set(tot_lines), key=tot_lines.count)
             t_over = round(sum(tot_over_odds) / len(tot_over_odds), 2)
             t_under = round(sum(tot_under_odds) / len(tot_under_odds), 2)
@@ -621,11 +624,7 @@ def uruchom_mlb_pro():
             print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h_u,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
 
-
-        # ----------------------------------------------------
-        # KROK 2B: POBIERANIE TYLKO ZAWODNIKÓW (PROPS AGREGATOR)
-        # ----------------------------------------------------
-        print(f"    🏃 Odpytuję API o zawodników (Średnia z Europy)...")
+        print(f"    🏃 Odpytuję API o zawodników (Tylko ELITA: Bet365, Pinnacle itp.)...")
         try:
             time.sleep(0.5) 
             res_props = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS}&oddsFormat=decimal").json()
@@ -643,6 +642,9 @@ def uruchom_mlb_pro():
         aggregated_props = {}
         
         for bm in res_props.get('bookmakers', []):
+            # FIX: Twardy filtr bukmacherów!
+            if bm['key'] not in TOP_BOOKMAKERS: continue
+            
             for mkt in bm.get('markets', []):
                 m_key = mkt['key']
                 if m_key not in rynek_map: continue
@@ -666,7 +668,6 @@ def uruchom_mlb_pro():
                     elif oc['name'] == 'Under':
                         aggregated_props[m_key][p_name]['Under'].append(oc['price'])
 
-        # Przetwarzanie wyliczonych, zagregowanych kursów (BEZ DUPLIKATÓW)
         for m_key, players_data in aggregated_props.items():
             nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[m_key]
             
@@ -678,6 +679,7 @@ def uruchom_mlb_pro():
                 
                 if mlb_stat_key == 'totalBases': linia = 1.5
                 elif mlb_stat_key == 'hits': linia = 0.5
+                elif mlb_stat_key == 'runs' or mlb_stat_key == 'rbi': linia = 0.5
                 else:
                     if not odds_data['point']: continue
                     linia = max(set(odds_data['point']), key=odds_data['point'].count)
@@ -862,6 +864,7 @@ def uruchom_mlb_pro():
                     "is_value": is_value_bet, "is_safe": is_safe_bet, "is_stable": is_stable_bet, "is_graal": is_graal_bet
                 })
 
+    # Sortowanie i Zapis
     wyniki_games = sorted(wyniki_games, key=lambda x: x['ev'], reverse=True)
     with open('mlb_games.json', 'w', encoding='utf-8') as f: json.dump(wyniki_games, f, ensure_ascii=False, indent=4)
     wyslij_plik_na_githuba('mlb_games.json', "Update MLB Game Lines & F5")
