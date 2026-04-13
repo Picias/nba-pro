@@ -18,11 +18,12 @@ TELEGRAM_CHAT_ID = '5991219765'
 ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
-REGIONS = 'eu' # Europa
+REGIONS = 'us' # Wracamy do USA!
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases,batter_runs_scored,batter_rbis' 
 MARKETS_GAMES = 'h2h,totals'
 
-TOP_BOOKMAKERS = ['bet365', 'pinnacle', 'unibet', 'bwin', 'betclic', 'betsson', 'williamhill', '888sport']
+# 🎯 TOP AMERYKAŃSCY BUKMACHERZY (Czyste linie, bez giełd i śmieci)
+TOP_BOOKMAKERS = ['draftkings', 'fanduel', 'betmgm', 'caesars', 'betrivers', 'bovada']
 
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
@@ -445,7 +446,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v8.9 (Fixed Missing Props)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.1 (US Sharp Books & Smart EV Engine)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -475,7 +476,6 @@ def uruchom_mlb_pro():
     wyniki_games = []
     przetworzeni_zawodnicy = set()
 
-    # Słownik w pełni uzupełniony o Runs i RBIs!
     rynek_map = {
         'pitcher_strikeouts': ('K\'s', 'pitcher', 'strikeOuts'),
         'batter_hits': ('Hits', 'batter', 'hits'),
@@ -544,7 +544,7 @@ def uruchom_mlb_pro():
         g_insights += f"⚾ <b>{ev['home_team']}</b> vs {away_p_hand}HP: OPS {round(home_ops_vs_sp,3)} | SP ERA: {round(home_p_stats['era'],2)} | {home_bp['uwaga']}<br>"
         g_insights += f"⚾ <b>{ev['away_team']}</b> vs {home_p_hand}HP: OPS {round(away_ops_vs_sp,3)} | SP ERA: {round(away_p_stats['era'],2)} | {away_bp['uwaga']}"
 
-        print(f"    📡 Odpytuję API o linie meczowe (Tylko ELITA: Bet365, Pinnacle itp.)...")
+        print(f"    📡 Odpytuję API o linie meczowe (TOP US Books)...")
         
         h2h_home_odds = []
         h2h_away_odds = []
@@ -622,7 +622,7 @@ def uruchom_mlb_pro():
             print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h_u,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
 
-        print(f"    🏃 Odpytuję API o zawodników (Tylko ELITA: Bet365, Pinnacle itp.)...")
+        print(f"    🏃 Odpytuję API o zawodników (TOP US Books)...")
         try:
             time.sleep(0.5) 
             res_props = requests.get(f"https://api.the-odds-api.com/v4/sports/{SPORT}/events/{ev['id']}/odds?apiKey={ODDS_API_KEY}&regions={REGIONS}&markets={MARKETS_PROPS}&oddsFormat=decimal").json()
@@ -674,17 +674,13 @@ def uruchom_mlb_pro():
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
                 avg_under = round(sum(odds_data['Under']) / len(odds_data['Under']), 2)
                 
-                # FIX: Bezpieczne ustawianie linii na 0.5 i zapobieganie omijaniu pustych "points" przez API
                 if mlb_stat_key == 'totalBases': 
-                    linia = 1.5
+                    linia = 1.5 if not odds_data['point'] else max(set(odds_data['point']), key=odds_data['point'].count)
                 elif mlb_stat_key in ['hits', 'homeRuns', 'runs', 'rbi']: 
-                    linia = 0.5
+                    linia = 0.5 if not odds_data['point'] else max(set(odds_data['point']), key=odds_data['point'].count)
                 else:
                     if not odds_data['point']: continue
                     linia = max(set(odds_data['point']), key=odds_data['point'].count)
-                
-                kurs_over = avg_over
-                kurs_under = avg_under
                 
                 if f"{p_name}_{m_key}" in przetworzeni_zawodnicy: continue
                 przetworzeni_zawodnicy.add(f"{p_name}_{m_key}")
@@ -816,16 +812,29 @@ def uruchom_mlb_pro():
                 
                 projekcja_finalna = baza_proj * korekta
                 prob_over = poisson_prob_over(projekcja_finalna, linia)
+                prob_under = 1.0 - prob_over
                 
-                typ = "OVER" if mlb_stat_key == 'homeRuns' else ("OVER" if prob_over > 0.50 else "UNDER")
-                true_prob = prob_over if typ == "OVER" else (1.0 - prob_over)
-                kurs_final = kurs_over if typ == "OVER" else kurs_under
+                # 🎯 FIX: OBLICZAMY EV DLA OBU ZAKŁADÓW (OVER i UNDER) I WYBIERAMY TEN ZYSTKOWNY
+                ev_o = (prob_over * avg_over) - 1.0 if avg_over > 0 else -100
+                ev_u = (prob_under * avg_under) - 1.0 if avg_under > 0 else -100
+                
+                if ev_o >= ev_u:
+                    typ = "OVER"
+                    true_prob = prob_over
+                    kurs_final = avg_over
+                    ev_val = ev_o
+                else:
+                    typ = "UNDER"
+                    true_prob = prob_under
+                    kurs_final = avg_under
+                    ev_val = ev_u
                 
                 is_hr = (mlb_stat_key == 'homeRuns')
-                min_prob = 0.15 if is_hr else 0.55
                 
+                # Bezpieczne odcięcie dla bardzo skrajnych przypadków
+                min_prob = 0.15 if is_hr else 0.25 
                 if true_prob <= min_prob: continue
-                ev_val = (true_prob * kurs_final) - 1.0 
+                
                 if is_hr and ev_val < 0.05: continue
                 
                 if typ == "OVER":
@@ -843,7 +852,7 @@ def uruchom_mlb_pro():
                     is_safe_bet = true_prob >= 0.25 and pokrycie_l10 >= 20 
                 else:
                     is_value_bet = ev_val >= 0.04 
-                    is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
+                    is_safe_bet = true_prob >= 0.65 and pokrycie_l5 >= 60
                     
                 is_stable_bet = (m_color == "rank-green")
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
