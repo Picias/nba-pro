@@ -27,6 +27,9 @@ TOP_BOOKMAKERS = ['draftkings', 'fanduel', 'betmgm', 'caesars', 'betrivers', 'bo
 SEZON_MLB = 2026
 DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 
+# ==========================================
+# 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
+# ==========================================
 MANUAL_WEATHER = {
     "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
     "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
@@ -427,19 +430,41 @@ def pobierz_historie_gracza(player_id, typ_gracza, stat_key):
     CACHE_PLAYER_LOGS[cache_key] = historia_pelna
     return historia_pelna
 
+# 🎯 FIX v9.9: PRAWIDŁOWY ZAPIS STATYSTYK DRUŻYNOWYCH (K-RATE i ERA)
 def pobierz_statystyki_druzyn_mlb():
-    global LEAGUE_AVG_K_RATE, LEAGUE_AVG_ERA
+    global LEAGUE_AVG_K_RATE, LEAGUE_AVG_ERA, CACHE_TEAM_K_RATE, CACHE_TEAM_ERA
     print("📊 Pobieram uśrednione statystyki ligowe (K-Rate i Team ERA)...")
+    headers = {'User-Agent': 'Mozilla/5.0'}
     try:
-        res_p = requests.get(f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R", headers={'User-Agent': 'Mozilla/5.0'}, timeout=10).json()
+        # ERA
+        res_p = requests.get(f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=pitching&stats=season&gameType=R", headers=headers, timeout=10).json()
         stats_p = res_p.get('stats', [])
         if stats_p and stats_p[0].get('splits'):
             total_era = 0; count = 0
             for team in stats_p[0]['splits']:
+                t_id = team['team']['id']
                 era_str = team['stat'].get('era', str(LEAGUE_AVG_ERA))
                 era = float(era_str) if era_str != '-.--' else LEAGUE_AVG_ERA
+                CACHE_TEAM_ERA[t_id] = era
                 total_era += era; count += 1
             if count > 0: LEAGUE_AVG_ERA = total_era / count
+
+        # K-RATE
+        res_h = requests.get(f"https://statsapi.mlb.com/api/v1/teams/stats?season={SEZON_MLB}&sportId=1&group=hitting&stats=season&gameType=R", headers=headers, timeout=10).json()
+        stats_h = res_h.get('stats', [])
+        if stats_h and stats_h[0].get('splits'):
+            total_k = 0; total_pa = 0
+            for team in stats_h[0]['splits']:
+                t_id = team['team']['id']
+                st = team['stat']
+                pa = st.get('plateAppearances', st.get('atBats', 0) + st.get('baseOnBalls', 0))
+                so = st.get('strikeOuts', 0)
+                if pa > 0:
+                    k_rate = so / pa
+                    CACHE_TEAM_K_RATE[t_id] = k_rate
+                    total_k += so
+                    total_pa += pa
+            if total_pa > 0: LEAGUE_AVG_K_RATE = total_k / total_pa
     except: pass
 
 # ==========================================
@@ -447,7 +472,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.8 (Strict Badge Thresholds)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.9 (Elite Form Stability & Missing Cache Fix)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -655,7 +680,7 @@ def uruchom_mlb_pro():
                     if not p_name: continue
                     
                     if p_name not in aggregated_props[m_key]:
-                        aggregated_props[m_key][p_name] = {}
+                        aggregated_props[m_key][p_name] = {} 
                         
                     mlb_stat_key = rynek_map[m_key][2]
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
@@ -770,25 +795,28 @@ def uruchom_mlb_pro():
                 
                 if rola == 'pitcher':
                     opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
-                    korekta *= max(0.85, min(1.15, opp_k_rate / LEAGUE_AVG_K_RATE))
-                    m_color = "rank-green" if korekta > 1.05 else "rank-red"
-                    m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
+                    k_rate_mod = opp_k_rate / LEAGUE_AVG_K_RATE
+                    korekta *= max(0.85, min(1.15, k_rate_mod))
+                    if k_rate_mod >= 1.04: m_color = "rank-green"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
+                    elif k_rate_mod <= 0.96: m_color = "rank-red"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
+                    else: m_color = "rank-yellow"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
                 else:
                     opp_pitcher_id = dane_oficjalne.get('away_pitcher_id') if is_today_home else dane_oficjalne.get('home_pitcher_id')
                     opp_pitcher_name = dane_oficjalne.get('away_pitcher', 'TBD') if is_today_home else dane_oficjalne.get('home_pitcher', 'TBD')
                     
                     p_stats = pobierz_staty_miotacza_startowego(opp_pitcher_id)
-                    baa_korekta = max(0.85, min(1.15, p_stats['baa'] / LEAGUE_AVG_BAA))
+                    baa_korekta = p_stats['baa'] / LEAGUE_AVG_BAA
                     
-                    if baa_korekta >= 1.05: m_color = "rank-green"; m_rank = "Słaby Miotacz"
-                    elif baa_korekta <= 0.95: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
+                    if baa_korekta >= 1.04: m_color = "rank-green"; m_rank = "Słaby Miotacz"
+                    elif baa_korekta <= 0.96: m_color = "rank-red"; m_rank = "Elitarny Miotacz"
+                    else: m_color = "rank-yellow"; m_rank = "Neutralny"
                     
                     opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
                     era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
                     
                     bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
                     
-                    korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
+                    korekta *= (max(0.85, min(1.15, baa_korekta)) * era_korekta * bullpen['korekta'])
                     
                     uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
                     uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
@@ -860,8 +888,9 @@ def uruchom_mlb_pro():
                         true_prob = prob_under
                         kurs_final = kurs_under
                         ev_val = ev_u
-                
-                min_prob = 0.20 if is_hr else 0.55 
+                        
+                # 🎯 FIX: TWARDE PROGI (ZWYKŁY BET: 55%, HOME RUN: 20%)
+                min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
                 if ev_val < 0.02: continue 
@@ -876,6 +905,7 @@ def uruchom_mlb_pro():
                     pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
                     m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
                 
+                # 🎯 FIX: PEWNIAKI (ZWYKŁY BET: >70%, HOME RUN: >30%)
                 if is_hr:
                     is_value_bet = ev_val >= 0.15 
                     is_safe_bet = true_prob >= 0.30 and pokrycie_l10 >= 20 
@@ -883,7 +913,10 @@ def uruchom_mlb_pro():
                     is_value_bet = ev_val >= 0.04 
                     is_safe_bet = true_prob >= 0.70 and pokrycie_l5 >= 60
                     
-                is_stable_bet = (m_color == "rank-green")
+                # 🎯 FIX: INTELIGENTNA STABILNOŚĆ (Forma nad Miotaczem)
+                is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
+                is_stable_bet = (m_color == "rank-green") or (is_elite_form and m_color != "rank-red")
+                
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
