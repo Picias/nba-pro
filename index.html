@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pewniaczki</title>
+    <title>Quant PRO Syndicate</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -58,7 +58,7 @@
         
         .audytor-filters-bar { display: flex; gap: 10px; padding: 12px; background: var(--card-bg); border-bottom: 2px solid var(--border-color); position: sticky; top: 0; z-index: 5; flex-wrap: wrap;}
         .audytor-filters-bar input, .audytor-filters-bar select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-color); font-size: 0.85rem; font-weight: 600; outline: none;}
-        .audytor-filters-bar input { flex: 1; min-width: 150px; }
+        .audytor-filters-bar input[type="text"] { flex: 1; min-width: 150px; }
         
         .details-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
         .details-table th, .details-table td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); }
@@ -205,8 +205,6 @@
         
         .cell-bad { color: #ef4444; font-weight: 900;}
         .cell-good { color: #10b981; font-weight: 900;}
-
-        /* NOWOŚĆ: Tooltipy do skrótów */
         .tooltip-abbr { cursor: help; border-bottom: 1px dotted var(--muted-text); display: inline-block; padding-bottom: 2px;}
 
         @media (max-width: 768px) {
@@ -231,7 +229,7 @@
     <div class="dashboard-header">
         <div>
             <h1>Pewniaczki</h1>
-            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">ANALizator typów</p>
+            <p style="color: var(--muted-text); font-size: 0.9rem; margin-top: 0.3rem;">Quant PRO Syndicate</p>
         </div>
         <div class="top-actions">
             <button class="stats-btn" id="toggleTeamStatsBtn" style="background-color: #3b82f6;">📈 Statystyki Drużyn</button>
@@ -248,22 +246,23 @@
         <button class="sport-tab" data-sport="nfl" style="opacity: 0.5;" title="Wkrótce">🏈 NFL (Wkrótce)</button>
     </div>
     
+    <div id="mlbSubNav" style="display: none; margin-bottom: 1.5rem; gap: 10px; overflow-x: auto;">
+        <button class="sport-tab active" data-sub="props">🏃 Typy na Zawodników</button>
+        <button class="sport-tab" data-sub="games" style="background-color: #8b5cf6; color: white; border-color: #8b5cf6;">🏟️ Linie Meczowe & F5</button>
+    </div>
+
     <div id="teamStatsPanel" class="team-stats-panel">
         <h2 style="margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem;">📊 Statystyki Drużynowe (Sezon Zasadniczy)</h2>
         <p style="color: var(--muted-text); font-size: 0.85rem; margin-bottom: 1rem;">Dane za cały sezon. Kolor <span class="cell-good">Zielony</span> oznacza statystykę wybitnie dobrą dla typu OVER na gracza (słaba obrona). Kolor <span class="cell-bad">Czerwony</span> to elitarna obrona (raj dla UNDERów).</p>
-        
         <div class="table-container">
             <table id="teamStatsTable">
-                <thead>
-                    </thead>
-                <tbody id="teamStatsBody">
-                    </tbody>
+                <thead></thead>
+                <tbody id="teamStatsBody"></tbody>
             </table>
         </div>
     </div>
 
     <div id="mainPicksContainer">
-        
         <div id="audytor-panel" class="audytor-card">
             <div class="audytor-top-bar">
                 <div class="audytor-header" id="audytor-title">📊 Raport Skuteczności Modelu (Ładowanie...)</div>
@@ -272,13 +271,11 @@
                     <button class="audytor-btn" id="btn-audytor-alltime" onclick="renderAuditorView('alltime')">Cała Historia</button>
                 </div>
             </div>
-            
             <div class="audytor-stats">
                 <div class="audytor-box"><span class="audytor-label">Skuteczność (Hit Rate)</span><span class="audytor-value" id="audytor-hitrate">--</span></div>
                 <div class="audytor-box"><span class="audytor-label">Czysty Zysk (ROI)</span><span class="audytor-value text-orange" id="audytor-roi">--</span></div>
                 <div class="audytor-box"><span class="audytor-label">Bilans (Win - Loss - Zwrot)</span><span class="audytor-value"><span id="audytor-w" class="text-green">0</span> - <span id="audytor-l" class="text-red">0</span> - <span id="audytor-p">0</span></span></div>
             </div>
-            
             <div class="audytor-categories">
                 <div class="cat-stat cat-graal"><div class="cat-title">🏆 Graale</div><div class="cat-val" id="cat-graal-val">--</div></div>
                 <div class="cat-stat cat-value"><div class="cat-title">💰 Value Bety</div><div class="cat-val" id="cat-value-val">--</div></div>
@@ -288,20 +285,18 @@
 
             <button class="audytor-details-btn" id="toggleDetailsBtn" onclick="toggleAuditorDetails()" style="display: none;">Rozwiń szczegóły wczorajszych typów ▼</button>
             <div class="audytor-details-panel" id="audytorDetailsPanel">
-                
                 <div class="audytor-filters-bar">
-                    <input type="text" id="audytorSearch" placeholder="Szukaj zawodnika...">
+                    <input type="text" id="audytorSearch" placeholder="Szukaj...">
+                    <input type="number" id="audytorMinOdds" placeholder="Min. Kurs (np. 1.6)" step="0.01" min="1.0" style="max-width: 150px;">
                     <select id="audytorMarket">
                         <option value="all">Wszystkie rynki</option>
                         <option value="Hits">Hits</option>
                         <option value="Home Runs">Home Runs</option>
                         <option value="Total Bases">Total Bases</option>
-                        <option value="Runs">Runs</option>
-                        <option value="RBIs">RBIs</option>
-                        <option value="K's">Strikeouty (K's)</option>
+                        <option value="Mecz:">Typy Meczowe (MLB)</option>
+                        <option value="F5">F5 Inningów (MLB)</option>
                         <option value="PTS">Punkty (NBA)</option>
                         <option value="REB">Zbiórki (NBA)</option>
-                        <option value="AST">Asysty (NBA)</option>
                     </select>
                     <select id="audytorStatus">
                         <option value="all">Każdy status</option>
@@ -315,34 +310,33 @@
                         <option value="💰 Value">💰 Value Bety</option>
                         <option value="🎯 Pewniak">🎯 Pewniaki</option>
                         <option value="🛡️ Stabilny">🛡️ Stabilni</option>
-                        <option value="Zwykły Typ">Zwykły Typ</option>
+                        <option value="📊 Typ Meczowy">📊 Typy Meczowe</option>
                     </select>
                 </div>
-
                 <table class="details-table">
                     <thead>
                         <tr>
-                            <th>Zawodnik</th>
+                            <th>Zawodnik / Mecz</th>
                             <th>Rynek & Typ</th>
                             <th>Linia</th>
+                            <th onclick="sortAudytorTable(3, 'number')" style="cursor:pointer; color: var(--accent-color);" title="Kliknij, aby posortować">Kurs ↕</th>
                             <th>Wynik Realny</th>
                             <th>Status</th>
                             <th>Kategorie</th>
                         </tr>
                     </thead>
-                    <tbody id="audytorDetailsBody">
-                        </tbody>
+                    <tbody id="audytorDetailsBody"></tbody>
                 </table>
             </div>
         </div>
 
         <div class="filters">
             <div class="filter-group">
-                <label>Szukaj gracza</label>
-                <input type="text" id="searchFilter" placeholder="np. Curry...">
+                <label>Wyszukiwarka</label>
+                <input type="text" id="searchFilter" placeholder="Gracz / Drużyna...">
             </div>
             <div class="filter-group">
-                <label>Mecz / Drużyna</label>
+                <label>Mecz</label>
                 <select id="gameFilter"><option value="all">Wszystkie mecze</option></select>
             </div>
             <div class="filter-group">
@@ -351,7 +345,7 @@
             </div>
             
             <div class="filter-group" id="roleFilterGroup" style="display: none;">
-                <label>Pozycja (Tylko MLB)</label>
+                <label>Pozycja</label>
                 <select id="roleFilter">
                     <option value="all">Wszyscy</option>
                     <option value="pitcher">Miotacze (Pitchers)</option>
@@ -363,44 +357,20 @@
                 <label>Typ</label>
                 <select id="pickFilter"><option value="all">Wszystkie</option><option value="OVER">OVER</option><option value="UNDER">UNDER</option></select>
             </div>
-            <div class="filter-group">
-                <label>Status (Rating)</label>
-                <select id="statusFilter">
-                    <option value="all">Wszystkie Typy</option>
-                    <option value="value">💰 Value Bety (>40% EV)</option>
-                    <option value="safe">🎯 Pewniaki (>75% Szans)</option>
-                    <option value="stable">🛡️ Stabilni gracze</option>
-                    <option value="graal">🏆 Święte Graale (Wszystkie 3)</option>
-                </select>
-            </div>
         </div>
 
         <h2 class="section-title">
             Baza Danych PRO
-            <div class="legend-box">
-                <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet (>40% EV)</div>
-                <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak (>75% Szans)</div>
+            <div class="legend-box" id="mainLegendBox">
+                <div class="legend-item"><span class="legend-dot" style="background: var(--gold-border);"></span> 💰 Value Bet</div>
+                <div class="legend-item"><span class="legend-dot" style="background: var(--safe-border);"></span> 🎯 Pewniak</div>
                 <div class="legend-item"><span class="legend-dot" style="background: var(--stable-border);"></span> 🛡️ Stabilny</div>
             </div>
         </h2>
         <div class="table-container">
             <table id="mainTable">
-                <thead>
-                    <tr>
-                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
-                        <th class="sortable" data-sort="rynek">Rynek</th>
-                        <th class="sortable" data-sort="linia">Linia</th>
-                        <th class="sortable" data-sort="projekcja">Projekcja</th>
-                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
-                        <th class="sortable" data-sort="ev">Edge (EV)</th>
-                        <th>Typ</th>
-                        <th class="sortable" data-sort="l5">L5</th>
-                        <th class="sortable" data-sort="l10">L10</th>
-                        <th class="sortable" data-sort="sezon">Sezon</th>
-                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
-                        <th>Akcja</th>
-                    </tr>
-                </thead>
+                <thead id="mainTableHead">
+                    </thead>
                 <tbody id="mainBody"></tbody>
             </table>
         </div>
@@ -427,28 +397,12 @@
         
         <div class="table-container" style="max-height: 70vh; margin-bottom: 3rem;">
             <table id="favoritesTable">
-                <thead>
-                    <tr>
-                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
-                        <th class="sortable" data-sort="rynek">Rynek</th>
-                        <th class="sortable" data-sort="linia">Linia</th>
-                        <th class="sortable" data-sort="projekcja">Projekcja</th>
-                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
-                        <th class="sortable" data-sort="ev">Edge (EV)</th>
-                        <th>Typ</th>
-                        <th class="sortable" data-sort="l5">L5</th>
-                        <th class="sortable" data-sort="l10">L10</th>
-                        <th class="sortable" data-sort="sezon">Sezon</th>
-                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
-                        <th>Akcja</th>
-                    </tr>
-                </thead>
+                <thead id="favTableHead">
+                    </thead>
                 <tbody id="favoritesBody"></tbody>
             </table>
         </div>
-    </div> 
-
-    <div id="journalModal" class="modal">
+    </div> <div id="journalModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" id="closeJournalBtn">&times;</span>
             <h2 style="margin-bottom: 1.5rem;">Moje Statystyki (Kupony)</h2>
@@ -481,10 +435,13 @@
         let sortAsc = false;
         let currentTeamSortCol = 'Zespol';
         let teamSortAsc = true;
+        let audytorSortAsc = false;
         
         let journalData = JSON.parse(localStorage.getItem('nba_journal_v2')) || [];
         let profitChartInstance = null; 
+        
         let currentSport = 'nba';
+        let currentSubTab = 'props'; 
         let statystykiBota = []; 
 
         function normalCDF(x, mean, stdDev) {
@@ -513,6 +470,97 @@
             }
         });
 
+        document.querySelectorAll('#mlbSubNav .sport-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('#mlbSubNav .sport-tab').forEach(t => {
+                    t.classList.remove('active');
+                    if(t.dataset.sub === 'games') t.style.backgroundColor = 'transparent';
+                });
+                tab.classList.add('active');
+                if(tab.dataset.sub === 'games') {
+                    tab.style.backgroundColor = '#8b5cf6';
+                    tab.style.color = 'white';
+                }
+                currentSubTab = tab.dataset.sub;
+                loadSportData(currentSport);
+            });
+        });
+
+        function renderTableHeaders() {
+            const mainTh = document.getElementById('mainTableHead');
+            const favTh = document.getElementById('favTableHead');
+            
+            const isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+            
+            let html = "";
+            if (isGames) {
+                html = `
+                    <tr>
+                        <th class="col-left sortable" data-sort="mecz">Mecz & Analiza</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="szansa">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Zakład</th>
+                        <th>-</th><th>-</th><th>-</th><th>-</th>
+                        <th>Akcja</th>
+                    </tr>
+                `;
+            } else {
+                html = `
+                    <tr>
+                        <th class="col-left sortable" data-sort="zawodnik">Zawodnik & Mecz</th>
+                        <th class="sortable" data-sort="rynek">Rynek</th>
+                        <th class="sortable" data-sort="linia">Linia</th>
+                        <th class="sortable" data-sort="projekcja">Projekcja</th>
+                        <th class="sortable" data-sort="true_prob">Szansa (%)</th>
+                        <th class="sortable" data-sort="ev">Edge (EV)</th>
+                        <th>Typ</th>
+                        <th class="sortable" data-sort="l5">L5</th>
+                        <th class="sortable" data-sort="l10">L10</th>
+                        <th class="sortable" data-sort="sezon">Sezon</th>
+                        <th class="sortable" data-sort="matchup_rank">Matchup</th>
+                        <th>Akcja</th>
+                    </tr>
+                `;
+            }
+            
+            mainTh.innerHTML = html;
+            favTh.innerHTML = html;
+            
+            // Re-bind sort
+            document.querySelectorAll('th.sortable').forEach(th => { 
+                th.addEventListener('click', () => { 
+                    const col = th.dataset.sort; 
+                    if (currentSortCol === col) sortAsc = !sortAsc; 
+                    else { sortAsc = false; currentSortCol = col; } 
+                    
+                    globalData.sort((a, b) => { 
+                        let vA = a[col] || a.szansa || 0, vB = b[col] || b.szansa || 0; 
+                        
+                        if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { 
+                            vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                            vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
+                        } else if (['linia', 'projekcja', 'ev', 'true_prob', 'szansa'].includes(col)) { 
+                            vA = parseFloat(vA)||0; 
+                            vB = parseFloat(vB)||0; 
+                        } else if (col === 'matchup_rank') { 
+                            vA = parseInt((vA.toString()||"0").replace(/\D/g, ''))||0; 
+                            vB = parseInt((vB.toString()||"0").replace(/\D/g, ''))||0; 
+                        } else { 
+                            vA = vA.toString().toLowerCase(); 
+                            vB = vB.toString().toLowerCase(); 
+                        } 
+                        return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); 
+                    }); 
+                    
+                    renderTable(globalData); 
+                    applyFilters();  
+                }); 
+            });
+        }
+
         function loadTeamStats() {
             let fileName = currentSport === 'nba' ? 'nba_teams.json' : 'mlb_teams.json';
             fetch(`${fileName}?v=` + new Date().getTime())
@@ -525,7 +573,7 @@
                     renderTeamStatsTable(teamData);
                 })
                 .catch(e => {
-                    document.getElementById('teamStatsBody').innerHTML = `<tr><td colspan="15" style="color:var(--muted-text); text-align:center; padding: 2rem;">Brak danych drużynowych dla tego sportu. Upewnij się, że bot wygenerował raport.</td></tr>`;
+                    document.getElementById('teamStatsBody').innerHTML = `<tr><td colspan="15" style="color:var(--muted-text); text-align:center; padding: 2rem;">Brak danych drużynowych dla tego sportu.</td></tr>`;
                 });
         }
 
@@ -643,7 +691,6 @@
                     let whipClass = wVal >= maxWhip * 0.95 ? 'cell-good' : (wVal <= minWhip * 1.05 ? 'cell-bad' : '');
                     let baaClass = bVal >= maxBaa * 0.95 ? 'cell-good' : (bVal <= minBaa * 1.05 ? 'cell-bad' : '');
                     
-                    // Logika kolorowania MLB
                     let walkClass = walkVal >= maxWalks * 0.90 ? 'cell-good' : (walkVal <= minWalks * 1.10 ? 'cell-bad' : '');
                     let kClass = kVal <= minK * 1.05 ? 'cell-good' : (kVal >= maxK * 0.95 ? 'cell-bad' : '');
                     let bsClass = bsVal >= maxBS * 0.85 ? 'cell-good' : (bsVal <= minBS * 1.15 ? 'cell-bad' : '');
@@ -687,11 +734,27 @@
                         }
                         return vA < vB ? (teamSortAsc ? -1 : 1) : (vA > vB ? (teamSortAsc ? 1 : -1) : 0);
                     });
-                    
                     renderTeamStatsTable(teamData);
                 });
             });
         }
+
+        window.sortAudytorTable = function(colIndex, type) {
+            const tbody = document.getElementById('audytorDetailsBody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            audytorSortAsc = !audytorSortAsc;
+
+            rows.sort((a, b) => {
+                let valA = type === 'number' ? parseFloat(a.dataset.kurs) || 0 : a.cells[colIndex].innerText;
+                let valB = type === 'number' ? parseFloat(b.dataset.kurs) || 0 : b.cells[colIndex].innerText;
+
+                if (valA < valB) return audytorSortAsc ? -1 : 1;
+                if (valA > valB) return audytorSortAsc ? 1 : -1;
+                return 0;
+            });
+
+            rows.forEach(row => tbody.appendChild(row));
+        };
 
         function toggleAuditorDetails() {
             const panel = document.getElementById('audytorDetailsPanel');
@@ -709,20 +772,23 @@
             let marketFilter = document.getElementById('audytorMarket').value;
             let statusFilter = document.getElementById('audytorStatus').value;
             let categoryFilter = document.getElementById('audytorCategory').value;
+            let minOdds = parseFloat(document.getElementById('audytorMinOdds').value) || 0;
             
             let rows = document.querySelectorAll('#audytorDetailsBody tr');
             rows.forEach(row => {
                 let playerName = row.cells[0].innerText.toLowerCase();
                 let marketName = row.cells[1].innerText; 
-                let statusText = row.cells[4].innerText;
-                let categoryText = row.cells[5].innerText;
+                let oddsVal = parseFloat(row.dataset.kurs) || 0;
+                let statusText = row.cells[5].innerText;
+                let categoryText = row.cells[6].innerText;
                 
                 let nameMatch = playerName.includes(nameFilter);
                 let marketMatch = (marketFilter === 'all') || marketName.includes(marketFilter);
                 let statusMatch = (statusFilter === 'all') || statusText.includes(statusFilter);
                 let categoryMatch = (categoryFilter === 'all') || categoryText.includes(categoryFilter);
+                let oddsMatch = minOdds === 0 || oddsVal >= minOdds;
                 
-                if (nameMatch && marketMatch && statusMatch && categoryMatch) {
+                if (nameMatch && marketMatch && statusMatch && categoryMatch && oddsMatch) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';
@@ -731,6 +797,7 @@
         }
 
         document.getElementById('audytorSearch').addEventListener('input', filterAuditorDetails);
+        document.getElementById('audytorMinOdds').addEventListener('input', filterAuditorDetails);
         document.getElementById('audytorMarket').addEventListener('change', filterAuditorDetails);
         document.getElementById('audytorStatus').addEventListener('change', filterAuditorDetails);
         document.getElementById('audytorCategory').addEventListener('change', filterAuditorDetails);
@@ -759,7 +826,6 @@
                 else if (currentSport === 'nhl') fileName = 'statystyki_nhl.json';
 
                 const response = await fetch(`${fileName}?v=${new Date().getTime()}`);
-                
                 if (!response.ok) throw new Error("Brak pliku");
                 statystykiBota = await response.json();
                 
@@ -803,6 +869,7 @@
                 detailsBody.innerHTML = '';
                 
                 document.getElementById('audytorSearch').value = '';
+                document.getElementById('audytorMinOdds').value = '';
                 document.getElementById('audytorMarket').value = 'all';
                 document.getElementById('audytorStatus').value = 'all';
                 document.getElementById('audytorCategory').value = 'all';
@@ -823,14 +890,16 @@
                         if(badgesHtml === '') badgesHtml = '<span style="color:var(--muted-text); font-size:0.8rem;">Brak</span>';
 
                         const pickTyp = d.typ || '-';
-                        const pickKurs = d.kurs ? `@${d.kurs}` : '';
+                        const pickKursStr = d.kurs ? parseFloat(d.kurs).toFixed(2) : '0.00';
 
                         const tr = document.createElement('tr');
+                        tr.dataset.kurs = pickKursStr;
                         tr.innerHTML = `
                             <td style="font-weight:bold;">${d.zawodnik || d.zaklad}</td>
-                            <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp} ${pickKurs}</span></td>
+                            <td>${d.rynek} <br><span style="font-size:0.75rem; font-weight:bold; color:var(--text-color);">${pickTyp}</span></td>
                             <td>${d.linia}</td>
-                            <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny || d.wynik}</td>
+                            <td style="font-weight:bold; color:var(--accent-color);">@${pickKursStr}</td>
+                            <td style="font-weight:900; font-size:1.1rem;">${d.wynik_realny ?? d.wynik ?? '-'}</td>
                             <td class="${statusClass}">${d.status}</td>
                             <td>${badgesHtml}</td>
                         `;
@@ -887,13 +956,25 @@
             mainPicksContainer.style.display = 'block';
             toggleTeamStatsBtn.innerText = '📈 Statystyki Drużyn';
             
-            wczytajAudytora();
-            document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych ${sport.toUpperCase()}...</td></tr>`;
+            document.getElementById('mlbSubNav').style.display = (sport === 'mlb') ? 'flex' : 'none';
+            document.getElementById('roleFilterGroup').style.display = (sport === 'mlb' && currentSubTab === 'props') ? 'flex' : 'none';
             
-            document.getElementById('roleFilterGroup').style.display = (sport === 'mlb') ? 'flex' : 'none';
-            document.getElementById('roleFilter').value = 'all';
+            if (sport !== 'mlb') { currentSubTab = 'props'; }
+            
+            wczytajAudytora();
+            document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="text-align:center; padding: 3rem; color: var(--muted-text);">⏳ Ładowanie bazy danych...</td></tr>`;
 
-            fetch(`${sport}.json?v=` + new Date().getTime())
+            let fileName = `${sport}.json`;
+            if (sport === 'mlb' && currentSubTab === 'games') {
+                fileName = 'mlb_games.json';
+                document.getElementById('mainLegendBox').style.display = 'none';
+            } else {
+                document.getElementById('mainLegendBox').style.display = 'flex';
+            }
+
+            renderTableHeaders();
+
+            fetch(`${fileName}?v=` + new Date().getTime())
             .then(r => {
                 if(!r.ok) throw new Error("Brak pliku");
                 return r.json();
@@ -905,17 +986,26 @@
                 updateTotalOdds(); 
             })
             .catch(e => { 
-                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza ${sport.toUpperCase()} jest pusta lub wciąż się buduje. Odpal skrypt bota!</td></tr>`; 
+                document.getElementById('mainBody').innerHTML = `<tr><td colspan="12" style="color:red; text-align:center; padding: 3rem;">Baza jest pusta. Odpal skrypt bota!</td></tr>`; 
                 globalData = [];
             });
         }
 
-        document.querySelectorAll('.sport-tab').forEach(tab => {
+        document.querySelectorAll('.sport-tab[data-sport]').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 if(tab.dataset.sport === 'nfl') return alert("Moduł NFL zostanie aktywowany we wrześniu!");
-                document.querySelectorAll('.sport-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.sport-tab[data-sport]').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentSport = tab.dataset.sport;
+                
+                if (currentSport === 'mlb') {
+                    currentSubTab = 'props';
+                    document.querySelectorAll('#mlbSubNav .sport-tab').forEach(t => {
+                        t.classList.remove('active');
+                        t.style.backgroundColor = 'transparent';
+                        if(t.dataset.sub === 'props') t.classList.add('active');
+                    });
+                }
                 loadSportData(currentSport);
             });
         });
@@ -923,18 +1013,20 @@
         loadSportData('nba');
 
         document.getElementById('exportCsvBtn').addEventListener('click', () => {
-            if(globalData.length === 0) return alert("Brak danych do eksportu. Baza jest pusta.");
-            let headers = ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
+            if(globalData.length === 0) return alert("Brak danych do eksportu.");
+            let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+            let headers = isGames ? ["Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja", "Szansa (%)", "EV (%)", "Uwagi"] : ["Zawodnik", "Mecz", "Rynek", "Typ", "Linia", "Kurs", "Projekcja ML", "Szansa (%)", "EV (%)", "L5", "L10", "Sezon", "Matchup"];
             let csvRows = [headers.join(",")];
+            
             globalData.forEach(d => {
-                let true_prob = (d.true_prob * 100).toFixed(1);
-                let ev = (d.ev * 100).toFixed(1);
-                let row = [
-                    `"${d.zawodnik}"`, `"${d.mecz}"`, `"${d.rynek}"`, `"${d.typ}"`, 
-                    d.linia, d.kurs, d.projekcja, true_prob, ev, 
-                    `"${d.l5}"`, `"${d.l10}"`, `"${d.sezon}"`, `"${d.matchup_rank}"`
-                ];
-                csvRows.push(row.join(","));
+                let true_prob = isGames ? d.szansa.toFixed(1) : (d.true_prob * 100).toFixed(1);
+                let ev = isGames ? (d.ev * 100).toFixed(1) : (d.ev * 100).toFixed(1);
+                
+                if (isGames) {
+                    csvRows.push([`"${d.mecz}"`, `"${d.rynek}"`, `"${d.zaklad}"`, d.linia, d.kurs, d.projekcja, true_prob, ev, `"${d.uwagi.replace(/<br>/g, " ")}"`].join(","));
+                } else {
+                    csvRows.push([`"${d.zawodnik}"`, `"${d.mecz}"`, `"${d.rynek}"`, `"${d.typ}"`, d.linia, d.kurs, d.projekcja, true_prob, ev, `"${d.l5}"`, `"${d.l10}"`, `"${d.sezon}"`, `"${d.matchup_rank}"`].join(","));
+                }
             });
             let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + csvRows.join("\n");
             let encodedUri = encodeURI(csvContent);
@@ -1022,7 +1114,7 @@
             });
             
             if (alreadyInCoupon) {
-                alert(`Gracz ${player} znajduje się już na Twoim kuponie!`);
+                alert(`Gracz/Typ ${player} znajduje się już na Twoim kuponie!`);
                 return;
             }
 
@@ -1034,12 +1126,12 @@
                 
                 if (pCheck && mCheck) { 
                     row.querySelector('.add-btn').click(); 
-                    alert(`✅ Dodano ${player} do Kuponu!`); 
+                    alert(`✅ Dodano do Kuponu!`); 
                     added = true;
                     break; 
                 } 
             } 
-            if(!added) alert(`Nie udało się znaleźć gracza ${player} z rynkiem ${market} w głównej tabeli.`);
+            if(!added) alert(`Nie udało się znaleźć typu w głównej tabeli.`);
         };
 
         function runSimulation(idx, isFav = false) {
@@ -1081,68 +1173,104 @@
 
         function renderTable(data) {
             const tbody = document.getElementById('mainBody'); tbody.innerHTML = '';
+            const isGames = (currentSport === 'mlb' && currentSubTab === 'games');
             
             data.forEach((item, index) => {
-                let true_prob = item.true_prob;
+                let true_prob = isGames ? (item.szansa / 100) : item.true_prob;
+                let evVal = item.ev;
                 
-                let isValueBet = item.is_value === true;
-                let isSafeBet = item.is_safe === true;
-                let isStable = item.is_stable === true;
-                let isGraal = item.is_graal === true;
+                let rowClass = "";
+                let badges = [];
                 
-                let rowClass = isGraal ? "super-pick" : (isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : "")));
-                
-                let badges = []; 
-                if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
-                else {
-                    if(isValueBet) badges.push(`<span title="Value Bet (EV > 40%)" style="font-size:1.1rem">💰</span>`); 
-                    if(isSafeBet) badges.push(`<span title="Pewniak (>75% Szans)" style="font-size:1.1rem">🎯</span>`); 
-                    if(isStable) badges.push(`<span title="Stabilny (Zielony Matchup)" style="font-size:1.1rem">🛡️</span>`);
+                if (isGames) {
+                    rowClass = evVal >= 0.10 ? "super-pick" : "super-stable";
+                    badges.push(`<span title="Typ Meczowy" style="font-size:1.1rem">🏟️</span>`);
+                    if (evVal >= 0.10) badges.push(`<span title="Value Bet (EV > 10%)" style="font-size:1.1rem">💰</span>`);
+                } else {
+                    let isValueBet = item.is_value === true;
+                    let isSafeBet = item.is_safe === true;
+                    let isStable = item.is_stable === true;
+                    let isGraal = item.is_graal === true;
+                    
+                    rowClass = isGraal ? "super-pick" : (isValueBet ? "super-pick" : (isSafeBet ? "super-safe" : (isStable ? "super-stable" : "")));
+                    
+                    if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
+                    else {
+                        if(isValueBet) badges.push(`<span title="Value Bet (EV > 40%)" style="font-size:1.1rem">💰</span>`); 
+                        if(isSafeBet) badges.push(`<span title="Pewniak (>75% Szans)" style="font-size:1.1rem">🎯</span>`); 
+                        if(isStable) badges.push(`<span title="Stabilny (Zielony Matchup)" style="font-size:1.1rem">🛡️</span>`);
+                    }
+                    if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
                 }
-                if(item.smart_money) badges.push(`<span title="SMART MONEY! (Nagły spadek kursów!)" style="font-size:1.1rem; margin-left: 4px;">🔥</span>`);
 
                 let szansaProcent = (true_prob * 100).toFixed(1);
                 let szansaKolor = true_prob > 0.55 ? "color: #10b981; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
-                let evProcent = (item.ev * 100).toFixed(1);
-                let evKolor = item.ev > 0.05 ? "color: #f59e0b; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
+                let evProcent = (evVal * 100).toFixed(1);
+                let evKolor = evVal > 0.05 ? "color: #f59e0b; font-weight: 900;" : "color: var(--text-color); font-weight: 600;";
 
                 let tr = document.createElement('tr'); 
                 tr.className = `data-row ${rowClass}`; 
-                tr.dataset.isValue = isValueBet ? "true" : "false"; 
-                tr.dataset.isSafe = isSafeBet ? "true" : "false"; 
-                tr.dataset.isStable = isStable ? "true" : "false"; 
-                tr.dataset.player = item.zawodnik.toLowerCase(); 
+                tr.dataset.player = isGames ? item.mecz.toLowerCase() : item.zawodnik.toLowerCase(); 
                 tr.dataset.game = item.mecz; 
                 tr.dataset.market = item.rynek; 
-                tr.dataset.pick = item.typ; 
+                tr.dataset.pick = isGames ? item.zaklad : item.typ; 
                 tr.dataset.index = index; 
                 tr.dataset.odds = item.kurs; 
                 tr.dataset.prob = true_prob;
                 
-                let cleanUwagi = item.uwagi;
-                if (cleanUwagi) { cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, ""); }
-                let uwagi_html = cleanUwagi && cleanUwagi !== "-" ? `<div class="uwagi-text">${cleanUwagi}</div>` : "";
+                let cleanUwagi = item.uwagi || "-";
+                if (!isGames && cleanUwagi !== "-") { cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, ""); }
+                let uwagi_html = cleanUwagi && cleanUwagi !== "-" ? `<div class="uwagi-text" style="${isGames ? 'font-weight:normal; color:var(--muted-text); margin-top:5px; line-height:1.6;' : ''}">${cleanUwagi}</div>` : "";
 
-                tr.innerHTML = `
-                    <td class="col-left"><div class="player-name">${item.zawodnik} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td>
-                    <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
-                    <td class="line">${item.linia}</td>
-                    <td class="projection">${item.projekcja}</td>
-                    <td style="${szansaKolor}">${szansaProcent}%</td>
-                    <td style="${evKolor}">${item.ev > 0 ? '+' : ''}${evProcent}%</td>
-                    <td><div class="pick-badge ${item.typ==='OVER'?'pick-over':'pick-under'}">${item.typ} @ ${item.kurs||'-'}</div></td>
-                    <td>${createStatPill(item.l5)}</td>
-                    <td>${createStatPill(item.l10)}</td>
-                    <td>${createStatPill(item.sezon)}</td>
-                    <td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td>
-                    <td><button class="action-btn add-btn">⭐</button></td>
-                `;
+                let pickBadgeClass = "pick-over";
+                let pickLabel = isGames ? item.zaklad : item.typ;
+                if (pickLabel === "UNDER") pickBadgeClass = "pick-under";
+                else if (pickLabel !== "OVER") pickBadgeClass = "pick-over";
+
+                let titleName = isGames ? item.mecz : item.zawodnik;
+                
+                if (isGames) {
+                    tr.innerHTML = `
+                        <td class="col-left"><div class="player-name">${titleName} ${badges.join("")}</div>${uwagi_html}</td>
+                        <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
+                        <td class="line">${item.linia}</td>
+                        <td class="projection" style="font-size:0.95rem;">${item.projekcja}</td>
+                        <td style="${szansaKolor}">${szansaProcent}%</td>
+                        <td style="${evKolor}">${evVal > 0 ? '+' : ''}${evProcent}%</td>
+                        <td><div class="pick-badge ${pickBadgeClass}">${pickLabel} @ ${item.kurs||'-'}</div></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="action-btn add-btn">⭐</button></td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td class="col-left"><div class="player-name">${titleName} ${badges.join("")}</div><div class="matchup-info">${item.mecz}</div>${uwagi_html}</td>
+                        <td><span style="font-weight:600; font-size:0.9rem;">${item.rynek}</span></td>
+                        <td class="line">${item.linia}</td>
+                        <td class="projection">${item.projekcja}</td>
+                        <td style="${szansaKolor}">${szansaProcent}%</td>
+                        <td style="${evKolor}">${evVal > 0 ? '+' : ''}${evProcent}%</td>
+                        <td><div class="pick-badge ${pickBadgeClass}">${pickLabel} @ ${item.kurs||'-'}</div></td>
+                        <td>${createStatPill(item.l5)}</td>
+                        <td>${createStatPill(item.l10)}</td>
+                        <td>${createStatPill(item.sezon)}</td>
+                        <td><span class="matchup-rank ${item.matchup_color}">${item.matchup_rank}</span></td>
+                        <td><button class="action-btn add-btn">⭐</button></td>
+                    `;
+                }
+                
                 tbody.appendChild(tr);
 
-                let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
-                chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Panel Korelacji SGP</div>${generateSGPHtml(item)}</div></div></td>`;
-                tbody.appendChild(chartTr);
-                tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
+                if (!isGames) {
+                    let chartTr = document.createElement('tr'); chartTr.className = 'chart-row'; chartTr.id = `chart-${index}`;
+                    chartTr.innerHTML = `<td colspan="12" class="chart-td"><div class="expanded-panel"><div class="chart-wrapper"><div class="panel-title">Historia L10</div>${generateChartHTML(item.history, item.linia)}</div><div class="h2h-box"><div class="panel-title" style="color: #3b82f6; border-color: #3b82f6;">⚔️ H2H vs ${item.opp_name || "Przeciwnik"}</div>${generateH2HHtml(item)}</div><div class="simulator-box"><div class="panel-title">Symulator (Korekty)</div><div class="sim-grid"><div class="sim-input-group"><label>Korekta Projekcji</label><input type="number" step="0.5" class="sim-input" id="sim-proj-${index}" data-index="${index}" value="${item.projekcja}"></div><div class="sim-input-group"><label>Linia</label><input type="number" step="0.5" class="sim-input" id="sim-line-${index}" data-index="${index}" value="${item.linia}"></div><div class="sim-input-group"><label>Kurs</label><input type="number" step="0.01" class="sim-input" id="sim-odds-${index}" data-index="${index}" value="${item.kurs}"></div></div><div class="sim-results"><div class="sim-res-card"><div class="res-title over">OVER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-over-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-over-${index}">-</span></div></div><div class="sim-res-card"><div class="res-title under">UNDER</div><div class="res-data">Szansa: <span class="res-val" id="sim-prob-under-${index}">-</span></div><div class="res-data">EV: <span class="res-val" id="sim-ev-under-${index}">-</span></div></div></div></div><div class="sgp-box"><div class="panel-title" style="color: #f59e0b; border-color: #f59e0b;">🔥 Panel Korelacji SGP</div>${generateSGPHtml(item)}</div></div></td>`;
+                    tbody.appendChild(chartTr);
+                    tr.addEventListener('click', e => { if(!e.target.closest('button') && e.target.tagName !== 'INPUT') { let isExp = !chartTr.classList.contains('expanded'); chartTr.classList.toggle('expanded'); if(isExp) runSimulation(index); } });
+                } else {
+                    tr.style.cursor = 'default';
+                }
             });
         }
 
@@ -1179,33 +1307,28 @@
                 let chartR = document.getElementById(`chart-${idx}`);
                 
                 let c = r.cloneNode(true); 
-                let cChart = chartR.cloneNode(true);
-                
                 c.classList.remove('hidden');
-                cChart.classList.remove('hidden');
-                
                 c.querySelector('td:last-child').innerHTML = '<button class="action-btn remove-btn">❌</button>'; 
-                
-                cChart.id = `chart-${idx}-fav`;
-                cChart.querySelectorAll('[id]').forEach(el => {
-                    el.id = el.id + '-fav';
-                });
-
-                c.addEventListener('click', ev => { 
-                    if(!ev.target.closest('button') && ev.target.tagName !== 'INPUT') { 
-                        let isExp = !cChart.classList.contains('expanded'); 
-                        cChart.classList.toggle('expanded'); 
-                        if(isExp) runSimulation(idx, true); 
-                    } 
-                });
-                
                 document.getElementById('favoritesBody').appendChild(c);
-                document.getElementById('favoritesBody').appendChild(cChart);
                 
+                if (chartR) {
+                    let cChart = chartR.cloneNode(true);
+                    cChart.classList.remove('hidden');
+                    cChart.id = `chart-${idx}-fav`;
+                    cChart.querySelectorAll('[id]').forEach(el => { el.id = el.id + '-fav'; });
+                    c.addEventListener('click', ev => { 
+                        if(!ev.target.closest('button') && ev.target.tagName !== 'INPUT') { 
+                            let isExp = !cChart.classList.contains('expanded'); 
+                            cChart.classList.toggle('expanded'); 
+                            if(isExp) runSimulation(idx, true); 
+                        } 
+                    });
+                    document.getElementById('favoritesBody').appendChild(cChart);
+                    chartR.classList.remove('expanded');
+                    chartR.classList.add('hidden');
+                }
+
                 r.classList.add('hidden'); 
-                chartR.classList.remove('expanded');
-                chartR.classList.add('hidden');
-                
                 updateTotalOdds(); 
             }
         });
@@ -1224,7 +1347,7 @@
                 
                 if(mainR) {
                     mainR.classList.remove('hidden'); 
-                    mainChart.classList.remove('hidden');
+                    if(mainChart) mainChart.classList.remove('hidden');
                     applyFilters(); 
                 }
                 updateTotalOdds(); 
@@ -1244,7 +1367,15 @@
             let stake = parseFloat(document.getElementById('customStakeInput').value);
             if (isNaN(stake) || stake <= 0) return alert("Wprowadź prawidłową stawkę na kuponie.");
             
-            let matches = []; rows.forEach(r => { matches.push(`${r.querySelector('.player-name').innerText.split(' ')[0]} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); });
+            let matches = []; rows.forEach(r => { 
+                let label = r.dataset.player;
+                if (!label) {
+                    label = r.querySelector('.player-name') ? r.querySelector('.player-name').innerText.split(' ')[0] : "Typ";
+                } else {
+                    label = label.toUpperCase(); // z dataset jest male litery
+                }
+                matches.push(`${label} - ${r.dataset.market} ${r.dataset.pick} ${r.querySelector('.line').innerText}`); 
+            });
             let entry = { id: Date.now(), date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), matches: matches, odds: odds, stake: stake, status: 'pending', profit: 0, sport: currentSport };
             journalData.push(entry); localStorage.setItem('nba_journal_v2', JSON.stringify(journalData)); 
             alert("✅ Kupon zapisany w Dzienniku!"); 
@@ -1268,7 +1399,7 @@
                 let editBtn = `<button class="hist-btn btn-edit" onclick="editCoupon(${entry.id})" title="Edytuj kurs/stawkę">✏️ Edytuj</button>`;
                 let actions = entry.status === 'pending' ? `${editBtn} <button class="hist-btn btn-win" onclick="resolveCoupon(${entry.id}, 'win')">✅ Wszedł</button> <button class="hist-btn btn-loss" onclick="resolveCoupon(${entry.id}, 'loss')">❌ Wtopa</button>` : `${editBtn} <button class="hist-btn btn-delete" onclick="deleteCoupon(${entry.id})">🗑️ Usuń</button>`;
                 
-                let sportIcon = entry.sport === 'nhl' ? '🏒' : '🏀';
+                let sportIcon = entry.sport === 'nhl' ? '🏒' : (entry.sport === 'mlb' ? '⚾' : '🏀');
                 
                 let div = document.createElement('div'); div.className = 'history-card';
                 div.innerHTML = `<div class="history-details"><div style="font-weight:bold; margin-bottom: 5px;">${sportIcon} Kupon z ${entry.date} ${statusBadge}</div><div style="font-size:0.9rem;">AKO: <b style="color:var(--accent-color)">${entry.odds.toFixed(2)}</b> | Stawka: <b>${entry.stake.toFixed(2)} PLN</b></div><div class="history-matches">${entry.matches.join(' <br> ')}</div></div><div class="history-actions">${actions}</div>`;
@@ -1302,33 +1433,6 @@
 
         document.getElementById('generateBtn').addEventListener('click', () => { let t = parseFloat(document.getElementById('targetOddsInput').value); if (isNaN(t) || t <= 1) return alert("Wpisz min. kurs."); document.getElementById('favoritesBody').innerHTML = ''; document.querySelectorAll('#mainBody tr.data-row').forEach(r => r.classList.remove('hidden')); applyFilters(); let visibleRows = Array.from(document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')); let filteredIndices = visibleRows.map(r => parseInt(r.dataset.index)); let bets = filteredIndices.map(i => globalData[i]).filter(b => b.ev > 0).sort((a,b) => b.ev - a.ev); let ako = 1.0, used = new Set(); for (let b of bets) { if (used.has(b.mecz)) continue; for (let r of document.querySelectorAll('#mainBody tr.data-row:not(.hidden)')) { if (r.dataset.player === b.zawodnik.toLowerCase() && r.dataset.market === b.rynek) { r.querySelector('.add-btn').click(); used.add(b.mecz); ako *= b.kurs; break; } } if (ako >= t) break; } if (ako < t && bets.length > 0) { alert(`Maksymalne AKO z filtrów: ${ako.toFixed(2)}`); } else if (bets.length === 0) { alert(`Brak typów dla wybranych filtrów!`); } });
         
-        document.querySelectorAll('th.sortable').forEach(th => { th.addEventListener('click', () => { 
-            const col = th.dataset.sort; 
-            if (currentSortCol === col) sortAsc = !sortAsc; 
-            else { sortAsc = false; currentSortCol = col; } 
-            
-            globalData.sort((a, b) => { 
-                let vA = a[col], vB = b[col]; 
-                if (['l5', 'l10', 'sezon', 'lokacja'].includes(col)) { 
-                    vA = parseFloat(vA.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
-                    vB = parseFloat(vB.toString().replace(/^(DOM|WYJ):\s*/, '').split('%')[0])||0; 
-                } else if (['linia', 'projekcja', 'ev', 'true_prob'].includes(col)) { 
-                    vA = parseFloat(vA)||0; 
-                    vB = parseFloat(vB)||0; 
-                } else if (col === 'matchup_rank') { 
-                    vA = parseInt(vA.toString().replace(/\D/g, ''))||0; 
-                    vB = parseInt(vB.toString().replace(/\D/g, ''))||0; 
-                } else { 
-                    vA = vA.toString().toLowerCase(); 
-                    vB = vB.toString().toLowerCase(); 
-                } 
-                return vA < vB ? (sortAsc?-1:1) : (vA > vB ? (sortAsc?1:-1) : 0); 
-            }); 
-            
-            renderTable(globalData); 
-            applyFilters();  
-        }); });
-        
         function populateDropdowns(d) { 
             let games = new Set(); let markets = new Set();
             d.forEach(i => { games.add(i.mecz); markets.add(i.rynek); }); 
@@ -1350,14 +1454,18 @@
                 stat = document.getElementById('statusFilter').value,
                 role = document.getElementById('roleFilter').value; 
             
+            let isGames = (currentSport === 'mlb' && currentSubTab === 'games');
+
             document.querySelectorAll('#mainBody tr.data-row').forEach(r => { 
                 let matchStatus = true; 
-                if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
-                if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
-                if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
-                if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
-                
-                if (currentSport === 'mlb' && role !== 'all') {
+                if (!isGames) {
+                    if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
+                    if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
+                    if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
+                    if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                }
+
+                if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
                     let isPitcher = r.dataset.market.toLowerCase().includes('strikeouty') || r.dataset.market.toLowerCase().includes("k's");
                     let itemRole = isPitcher ? 'pitcher' : 'batter';
                     if (itemRole !== role) matchStatus = false;
@@ -1366,8 +1474,10 @@
                 let vis = r.dataset.player.includes(s) && (g==='all'||r.dataset.game===g) && (m==='all'||r.dataset.market===m) && (p==='all'||r.dataset.pick===p) && matchStatus; 
                 r.classList.toggle('hidden', !vis); 
                 let c = document.getElementById(`chart-${r.dataset.index}`); 
-                if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
-                else c.classList.remove('hidden'); 
+                if(c) {
+                    if(!vis){c.classList.remove('expanded'); c.classList.add('hidden');} 
+                    else c.classList.remove('hidden'); 
+                }
             }); 
         }
         document.querySelectorAll('.filters input, .filters select').forEach(el => el.addEventListener('input', applyFilters));
