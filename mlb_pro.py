@@ -19,7 +19,6 @@ ODDS_API_KEY = os.environ.get('MY_ODDS_API_KEY')
 
 SPORT = 'baseball_mlb'
 REGIONS = 'us'
-# Rozdzielone rynki dla bezpieczeństwa API
 MARKETS_PROPS = 'pitcher_strikeouts,batter_hits,batter_home_runs,batter_total_bases' 
 MARKETS_GAMES = 'h2h,totals'
 
@@ -97,6 +96,9 @@ def poisson_prob_over(lam, line):
         prob_under += (math.pow(lam, k) * math.exp(-lam)) / math.factorial(k)
     return 1.0 - prob_under 
 
+# ==========================================
+# 🌤️ MODUŁ POGODY & SPLITÓW
+# ==========================================
 def pobierz_pogode_covers():
     print("🌤️ Pobieram dane pogodowe z Covers.com (Wiatr i Stadiony)...")
     weather_data = {}
@@ -282,6 +284,7 @@ def rozlicz_wczorajsze_typy_mlb():
             
         wynik = rzeczywiste_staty[znaleziony_zaw].get(rynek, 0); zaklad = str(typ.get('zaklad', typ.get('typ', '')))
         
+        # Specjalna reguła dla F5 Team Totals 1.5
         if "F5: Drużyna" in rynek:
             team_name = zaklad.replace(" OVER", "").replace(" UNDER", "").strip()
             f5_runs = rzeczywiste_staty[mecz_key].get('away_f5') if team_name.lower() in mecz_key.split('@')[0] else rzeczywiste_staty[mecz_key].get('home_f5', 0)
@@ -444,7 +447,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.4 (Rozdzielone API)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v7.5 (Fix Hand Prop)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -647,18 +650,18 @@ def uruchom_mlb_pro():
                     przetworzeni_zawodnicy.add(f"{p_name}_{mkt['key']}")
                     
                     player_id = None; is_today_home = False; opp_team_id = None; opp_name = ""; bat_side = 'R'; b_order = 0
-                    h_clean = dane_oficjalne['home_pitcher'].lower().replace(".", "").strip()
-                    a_clean = dane_oficjalne['away_pitcher'].lower().replace(".", "").strip()
+                    h_clean = dane_oficjalne.get('home_pitcher', '').lower().replace(".", "").strip()
+                    a_clean = dane_oficjalne.get('away_pitcher', '').lower().replace(".", "").strip()
                     p_clean = p_name.lower().replace(".", "").strip()
                     
                     if rola == 'pitcher':
                         if p_clean in h_clean or h_clean in p_clean: 
-                            player_id = dane_oficjalne['home_pitcher_id']
+                            player_id = dane_oficjalne.get('home_pitcher_id')
                             is_today_home = True
                             opp_team_id = dane_oficjalne['away_team_id']
                             opp_name = ev['away_team']
                         elif p_clean in a_clean or a_clean in p_clean: 
-                            player_id = dane_oficjalne['away_pitcher_id']
+                            player_id = dane_oficjalne.get('away_pitcher_id')
                             is_today_home = False
                             opp_team_id = dane_oficjalne['home_team_id']
                             opp_name = ev['home_team']
@@ -669,14 +672,12 @@ def uruchom_mlb_pro():
                             is_today_home = True
                             opp_team_id = dane_oficjalne['away_team_id']
                             opp_name = ev['away_team']
-                            b_order = dane_oficjalne.get('lineups_home', {}).get(player_id, 0)
                         elif p_clean in a_roster:
                             player_id = a_roster[p_clean]['id']
                             bat_side = a_roster[p_clean].get('batSide', {}).get('code', 'R')
                             is_today_home = False
                             opp_team_id = dane_oficjalne['home_team_id']
                             opp_name = ev['home_team']
-                            b_order = dane_oficjalne.get('lineups_away', {}).get(player_id, 0)
                     
                     if not player_id: continue
                     hist_data = pobierz_historie_gracza(player_id, rola, mlb_stat_key)
@@ -697,6 +698,9 @@ def uruchom_mlb_pro():
                     korekta = split_bonus
                     uwagi = f"🔥 WMA: {round(baza_proj,2)}."
                     m_color = "rank-yellow"; m_rank = "Neutral"
+                    
+                    # FIX: Używamy poprawnie zdefiniowanych rąk
+                    p_hand = away_p_hand if is_today_home else home_p_hand
                     
                     if rola == 'pitcher':
                         opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
@@ -734,7 +738,6 @@ def uruchom_mlb_pro():
                             korekta *= w_data['mod']
                             uwagi += f" 🌦️ Pogoda: {w_data['msg']}."
                         
-                        p_hand = dane_oficjalne['away_pitcher_hand'] if is_today_home else dane_oficjalne['home_pitcher_hand']
                         if p_hand and bat_side:
                             if bat_side == 'S': 
                                 korekta *= 1.04; uwagi += " ⚔️ Switch Hitter (+4%)."
@@ -742,10 +745,6 @@ def uruchom_mlb_pro():
                                 korekta *= 1.08; uwagi += f" ⚔️ Platoon Adv ({bat_side} vs {p_hand}) (+8%)."
                             else: 
                                 korekta *= 0.95; uwagi += f" ⚔️ Hard Split ({bat_side} vs {p_hand}) (-5%)."
-                            
-                        if b_order > 0:
-                            if b_order <= 3: korekta *= 1.05
-                            elif b_order >= 8: korekta *= 0.90
                     
                     projekcja_finalna = baza_proj * korekta
                     prob_over = poisson_prob_over(projekcja_finalna, linia)
