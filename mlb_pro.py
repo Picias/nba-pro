@@ -450,7 +450,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.5 (Fixed Missing Under Odds & Correct Thresholds)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v9.6 (Hardcoded 0.5 Lines Fix)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -658,13 +658,18 @@ def uruchom_mlb_pro():
                     if not p_name: continue
                     
                     if p_name not in aggregated_props[m_key]:
-                        aggregated_props[m_key][p_name] = {}
+                        aggregated_props[m_key][p_name] = {'Over': [], 'Under': [], 'point': []}
                         
                     mlb_stat_key = rynek_map[m_key][2]
-                    if 'point' in oc:
-                        point_val = float(oc['point'])
+                    
+                    # 🎯 TWARDE WYMUSZENIE LINII (Zabezpiecza przed głupotami od buka)
+                    if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
+                        point_val = 0.5 
+                    elif mlb_stat_key == 'totalBases':
+                        point_val = float(oc['point']) if 'point' in oc else 1.5
                     else:
-                        point_val = 1.5 if mlb_stat_key == 'totalBases' else 0.5
+                        if 'point' not in oc: continue
+                        point_val = float(oc['point'])
                         
                     if point_val not in aggregated_props[m_key][p_name]:
                         aggregated_props[m_key][p_name][point_val] = {'Over': [], 'Under': []}
@@ -692,7 +697,7 @@ def uruchom_mlb_pro():
                 
                 odds_data = points_dict[best_point]
                 
-                # 🎯 FIX: Zabezpieczenie przed brakiem UNDER dla Home Runów i RBIs!
+                # 🎯 FIX: ZEZWALAMY NA BRAK UNDERÓW! (Ważne dla Home Runów i RBIs)
                 if not odds_data['Over']: continue 
                 
                 avg_over = round(sum(odds_data['Over']) / len(odds_data['Over']), 2)
