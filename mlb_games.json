@@ -89,10 +89,10 @@
         "rynek": "Mecz: Suma Runs",
         "zaklad": "UNDER",
         "linia": 7.0,
-        "kurs": 1.95,
+        "kurs": 1.96,
         "projekcja": 5.72,
         "szansa": 78.2,
-        "ev": 0.524,
+        "ev": 0.532,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 8.0 mph | 🏟️ Park: 1.01x<br>⚾ <b>Milwaukee Brewers</b> vs RHP: OPS 0.793 | SP ERA: 3.31 | 🔋 BP Wypoczęty (-3%)<br>⚾ <b>Toronto Blue Jays</b> vs RHP: OPS 0.689 | SP ERA: 2.08 | 🔋 BP Wypoczęty (-3%)"
     },
     {
@@ -166,18 +166,6 @@
         "szansa": 52.0,
         "ev": 0.222,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: W twarz (-7% Runs) | 8.0 mph | 🏟️ Park: 1.05x<br>⚾ <b>Atlanta Braves</b> vs RHP: OPS 0.8 | SP ERA: 4.12 | BP Gotowy<br>⚾ <b>Miami Marlins</b> vs RHP: OPS 0.797 | SP ERA: 3.68 | BP Gotowy"
-    },
-    {
-        "mecz": "New York Mets @ Los Angeles Dodgers",
-        "data": "2026-04-14",
-        "rynek": "Mecz: Suma Runs",
-        "zaklad": "UNDER",
-        "linia": 7.5,
-        "kurs": 1.87,
-        "projekcja": 6.66,
-        "szansa": 64.9,
-        "ev": 0.214,
-        "uwagi": "🌦️ ⚙️ RĘCZNIE: Wywiewa (+8% Runs) | 10.0 mph | 🏟️ Park: 1.03x<br>⚾ <b>Los Angeles Dodgers</b> vs RHP: OPS 0.86 | SP ERA: 2.5 | BP Gotowy<br>⚾ <b>New York Mets</b> vs RHP: OPS 0.628 | SP ERA: 2.7 | BP Gotowy"
     },
     {
         "mecz": "Colorado Rockies @ Houston Astros",
@@ -471,11 +459,11 @@
         "mecz": "Tampa Bay Rays @ Chicago White Sox",
         "data": "2026-04-14",
         "rynek": "Mecz: Suma Runs",
-        "zaklad": "OVER",
-        "linia": 7.5,
-        "kurs": 1.85,
+        "zaklad": "UNDER",
+        "linia": 8.0,
+        "kurs": 1.93,
         "projekcja": 8.25,
-        "szansa": 58.1,
+        "szansa": 55.8,
         "ev": 0.076,
         "uwagi": "🌦️ ⚙️ RĘCZNIE: Neutralnie (15.0 mph) | 🏟️ Park: 1.03x<br>⚾ <b>Chicago White Sox</b> vs LHP: OPS 0.65 | SP ERA: 4.12 | 🔋 BP Wypoczęty (-3%)<br>⚾ <b>Tampa Bay Rays</b> vs LHP: OPS 0.663 | SP ERA: 4.15 | 🔋 BP Wypoczęty (-3%)"
     },
