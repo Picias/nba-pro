@@ -31,8 +31,21 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    # "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
-    # "New York Yankees": {"dir": "IN", "mph": 16.0},
+    "Cincinnati Reds": {"dir": "NEUTRAL", "mph": 13.0},
+    "Pittsburgh Pirates": {"dir": "OUT", "mph": 13.0},
+    "New York Yankees": {"dir": "OUT", "mph": 10.0},
+    "Minnesota Twins": {"dir": "NEUTRAL", "mph": 7.0},
+    "Athletics": {"dir": "OUT", "mph": 6},
+    "Baltimore Orioles": {"dir": "OUT", "mph": 13.0},
+    "Philadelphia Phillies": {"dir": "OUT", "mph": 11.5},
+    "Atlanta Braves": {"dir": "IN", "mph": 8.0},
+    "St. Louis Cardinals": {"dir": "OUT", "mph": 14.0},
+    "Los Angeles Dodgers": {"dir": "OUT", "mph": 10.0},
+    "Detroit Tigers": {"dir": "OUT", "mph": 13.0},
+    "Milwaukee Brewers": {"dir": "IN", "mph": 8.0},
+    "Chicago White Sox": {"dir": "NEUTRAL", "mph": 15.0},
+    "Houston Astros": {"dir": "OUT", "mph": 15.0},
+    "San Diego Padres": {"dir": "NEUTRAL", "mph": 11.0}
 }
 
 MLB_JSON_FILE = 'mlb.json'
