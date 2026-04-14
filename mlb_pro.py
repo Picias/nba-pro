@@ -242,7 +242,6 @@ def rozlicz_wczorajsze_typy_mlb():
                     away_fg = m['teams']['away'].get('score', 0); home_fg = m['teams']['home'].get('score', 0)
                     m_key = f"{away_t} @ {home_t}".lower()
                     
-                    # 🎯 FIX: Poprawiony zapis do pamięci F5 dla Audytora!
                     rzeczywiste_staty[m_key] = {
                         'Mecz: Suma Runs': away_fg + home_fg,
                         'Mecz: Zwycięzca (ML)': home_t if home_fg > away_fg else away_t,
@@ -271,11 +270,8 @@ def rozlicz_wczorajsze_typy_mlb():
         
         if "F5: Drużyna" in rynek:
             team_name = zaklad.replace(" OVER", "").replace(" UNDER", "").strip()
-            
-            # 🎯 FIX: Bezpieczne pobranie zmiennej do rozliczenia F5
             f5_val = rzeczywiste_staty[mecz_key].get('away_f5', 0) if team_name.lower() in mecz_key.split('@')[0] else rzeczywiste_staty[mecz_key].get('home_f5', 0)
             f5_runs = float(f5_val) if f5_val is not None else 0.0
-            
             czy_weszlo = (f5_runs > 1.5) if "OVER" in zaklad else (f5_runs < 1.5)
             wynik = f5_runs
         elif "Zwycięzca" in rynek or "ML" in rynek:
@@ -466,7 +462,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.1 (Auditor F5 Crash Fix)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.3 (Empirical Reality Blend)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -860,7 +856,23 @@ def uruchom_mlb_pro():
                         elif b_order >= 8: korekta *= 0.90
                 
                 projekcja_finalna = baza_proj * korekta
-                prob_over = poisson_prob_over(projekcja_finalna, linia)
+                
+                # OBLICZENIA POISSONA
+                prob_over_poisson = poisson_prob_over(projekcja_finalna, linia)
+                
+                # 🎯 FIX v10.3: MIESZANKA EMPIRYCZNA (GROUNDING W RZECZYWISTOŚCI)
+                empirical_over = sum(1 for x in vals if x > linia) / len(vals) if len(vals) > 0 else 0.0
+                
+                if rola == 'pitcher':
+                    prob_over = (prob_over_poisson * 0.7) + (empirical_over * 0.3)
+                else:
+                    if mlb_stat_key == 'totalBases':
+                        prob_over = (prob_over_poisson * 0.3) + (empirical_over * 0.7) # Największa losowość, ogromna waga na historię
+                    elif mlb_stat_key in ['runs', 'rbi', 'homeRuns']:
+                        prob_over = (prob_over_poisson * 0.4) + (empirical_over * 0.6)
+                    else: # hits
+                        prob_over = (prob_over_poisson * 0.5) + (empirical_over * 0.5)
+
                 prob_under = 1.0 - prob_over
                 
                 ev_o = (prob_over * kurs_over) - 1.0 if kurs_over > 0 else -100
@@ -883,6 +895,7 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
+                # 🎯 TWARDE PROGI: 55% ZWYKŁY ZAKŁAD / 20% HOME RUN
                 min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
