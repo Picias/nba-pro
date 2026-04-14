@@ -31,16 +31,8 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
-    "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
-    "New York Yankees": {"dir": "OUT", "mph": 16.0},
-    "Minnesota Twins": {"dir": "IN", "mph": 9.0},
-    "Athletics": {"dir": "NEUTRAL", "mph": 4.5},
-    "Baltimore Orioles": {"dir": "OUT", "mph": 14.0},
-    "Philadelphia Phillies": {"dir": "OUT", "mph": 14.0},
-    "Atlanta Braves": {"dir": "IN", "mph": 8.0},
-    "St. Louis Cardinals": {"dir": "OUT", "mph": 15.0},
-    "Los Angeles Dodgers": {"dir": "OUT", "mph": 13.0}
+    # "Seattle Mariners": {"dir": "OUT", "mph": 8.0},
+    # "New York Yankees": {"dir": "IN", "mph": 16.0},
 }
 
 MLB_JSON_FILE = 'mlb.json'
@@ -250,11 +242,12 @@ def rozlicz_wczorajsze_typy_mlb():
                     away_fg = m['teams']['away'].get('score', 0); home_fg = m['teams']['home'].get('score', 0)
                     m_key = f"{away_t} @ {home_t}".lower()
                     
+                    # 🎯 FIX: Poprawiony zapis do pamięci F5 dla Audytora!
                     rzeczywiste_staty[m_key] = {
                         'Mecz: Suma Runs': away_fg + home_fg,
                         'Mecz: Zwycięzca (ML)': home_t if home_fg > away_fg else away_t,
-                        'F5: Drużyna powyżej 1.5 Runs': away_f5 if "OVER" in away_t else home_f5,
-                        'F5: Drużyna poniżej 1.5 Runs': away_f5 if "UNDER" in away_t else home_f5
+                        'away_f5': away_f5,
+                        'home_f5': home_f5
                     }
                 except Exception as box_err: pass
         if ukonczone_mecze == 0: return
@@ -278,7 +271,11 @@ def rozlicz_wczorajsze_typy_mlb():
         
         if "F5: Drużyna" in rynek:
             team_name = zaklad.replace(" OVER", "").replace(" UNDER", "").strip()
-            f5_runs = rzeczywiste_staty[mecz_key].get('away_f5') if team_name.lower() in mecz_key.split('@')[0] else rzeczywiste_staty[mecz_key].get('home_f5', 0)
+            
+            # 🎯 FIX: Bezpieczne pobranie zmiennej do rozliczenia F5
+            f5_val = rzeczywiste_staty[mecz_key].get('away_f5', 0) if team_name.lower() in mecz_key.split('@')[0] else rzeczywiste_staty[mecz_key].get('home_f5', 0)
+            f5_runs = float(f5_val) if f5_val is not None else 0.0
+            
             czy_weszlo = (f5_runs > 1.5) if "OVER" in zaklad else (f5_runs < 1.5)
             wynik = f5_runs
         elif "Zwycięzca" in rynek or "ML" in rynek:
@@ -469,7 +466,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.0 (The Ultimate Grail Edition)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.1 (Auditor F5 Crash Fix)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -911,7 +908,6 @@ def uruchom_mlb_pro():
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
                 is_stable_bet = (m_color == "rank-green") or (is_elite_form and m_color != "rank-red")
                 
-                # 🎯 FIX v10.0: GRAAL WYMAGA ABSOLUTNIE MINIMUM 15% EV!
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
