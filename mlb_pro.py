@@ -475,7 +475,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.6 (The Empirical Grail)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.5 (The Golden Middle)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -686,29 +686,21 @@ def uruchom_mlb_pro():
                         aggregated_props[m_key][p_name] = {} 
                         
                     mlb_stat_key = rynek_map[m_key][2]
-                    
-                    # 🎯 TWARDA KONTROLA LINII
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
-                        target_line = 0.5 
+                        point_val = 0.5 
                     elif mlb_stat_key == 'totalBases':
-                        target_line = 1.5
+                        point_val = float(oc['point']) if 'point' in oc else 1.5
                     else:
-                        target_line = float(oc['point']) if 'point' in oc else None
+                        if 'point' not in oc: continue
+                        point_val = float(oc['point'])
                         
-                    point_val = float(oc['point']) if 'point' in oc else None
-                    
-                    if point_val is not None and target_line is not None and point_val != target_line and mlb_stat_key != 'strikeOuts':
-                        continue
-                        
-                    resolved_line = target_line if target_line is not None else point_val
-                    
-                    if resolved_line not in aggregated_props[m_key][p_name]:
-                        aggregated_props[m_key][p_name][resolved_line] = {'Over': [], 'Under': []}
+                    if point_val not in aggregated_props[m_key][p_name]:
+                        aggregated_props[m_key][p_name][point_val] = {'Over': [], 'Under': []}
                         
                     if oc['name'] == 'Over':
-                        aggregated_props[m_key][p_name][resolved_line]['Over'].append(oc['price'])
+                        aggregated_props[m_key][p_name][point_val]['Over'].append(oc['price'])
                     elif oc['name'] == 'Under':
-                        aggregated_props[m_key][p_name][resolved_line]['Under'].append(oc['price'])
+                        aggregated_props[m_key][p_name][point_val]['Under'].append(oc['price'])
 
         for m_key, players_data in aggregated_props.items():
             nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[m_key]
@@ -716,7 +708,16 @@ def uruchom_mlb_pro():
             for p_name, points_dict in players_data.items():
                 if not points_dict: continue
                 
-                best_point = max(points_dict.keys(), key=lambda k: len(points_dict[k]['Over']) + len(points_dict[k]['Under']))
+                best_point = None
+                max_count = -1
+                for pt, odds_d in points_dict.items():
+                    count = len(odds_d['Over']) + len(odds_d['Under'])
+                    if count > max_count:
+                        max_count = count
+                        best_point = pt
+                
+                if best_point is None: continue
+                
                 odds_data = points_dict[best_point]
                 
                 if not odds_data['Over']: continue 
@@ -869,19 +870,7 @@ def uruchom_mlb_pro():
                 
                 projekcja_finalna = baza_proj * korekta
                 
-                prob_over_poisson = poisson_prob_over(projekcja_finalna, linia)
-                empirical_over = sum(1 for x in vals if x > linia) / len(vals) if len(vals) > 0 else 0.0
-                
-                if rola == 'pitcher':
-                    prob_over = (prob_over_poisson * 0.7) + (empirical_over * 0.3)
-                else:
-                    if mlb_stat_key == 'totalBases':
-                        prob_over = (prob_over_poisson * 0.3) + (empirical_over * 0.7)
-                    elif mlb_stat_key in ['runs', 'rbi', 'homeRuns']:
-                        prob_over = (prob_over_poisson * 0.4) + (empirical_over * 0.6)
-                    else:
-                        prob_over = (prob_over_poisson * 0.5) + (empirical_over * 0.5)
-
+                prob_over = poisson_prob_over(projekcja_finalna, linia)
                 prob_under = 1.0 - prob_over
                 
                 ev_o = (prob_over * kurs_over) - 1.0 if kurs_over > 0 else -100
@@ -904,11 +893,10 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
-                # 🎯 TWARDE PROGI BEZPIECZEŃSTWA: (55% i minimum 5% EV)
                 min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
-                if ev_val < 0.05: continue # 🎯 Zmiana na twarde minimum 5% EV!
+                if ev_val < 0.05: continue 
                 
                 if typ == "OVER":
                     pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
@@ -924,15 +912,19 @@ def uruchom_mlb_pro():
                     is_value_bet = ev_val >= 0.15 
                     is_safe_bet = true_prob >= 0.30 and pokrycie_l10 >= 20 
                 else:
-                    is_value_bet = ev_val >= 0.05 # Dopasowane do nowego progu EV
+                    is_value_bet = ev_val >= 0.05 
                     is_safe_bet = true_prob >= 0.70 and pokrycie_l5 >= 60
                     
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
-                
-                # 🎯 FIX VARGASA: Elitarna forma całkowicie nadpisuje czerwonego miotacza!
                 is_stable_bet = (m_color == "rank-green") or is_elite_form
                 
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
+                
+                # Zabezpieczenie przed multiodznakami dla Graala w interfejsie JSON
+                if is_graal_bet:
+                    is_value_bet = False
+                    is_safe_bet = False
+                    is_stable_bet = False
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
