@@ -1092,15 +1092,20 @@
                 let evVal = item.ev;
                 
                 let rowClass = "", badges = [];
+                let isGraal = false;
+                
                 if (isGames) {
                     rowClass = evVal >= 0.10 ? "super-pick" : "super-stable";
                     badges.push(`<span title="Typ Meczowy" style="font-size:1.1rem">🏟️</span>`);
                     if (evVal >= 0.10) badges.push(`<span title="Value Bet (EV > 10%)" style="font-size:1.1rem">💰</span>`);
                 } else {
-                    let isGraal = item.is_graal === true;
+                    isGraal = item.is_graal === true;
                     rowClass = isGraal ? "super-pick" : (item.is_value ? "super-pick" : (item.is_safe ? "super-safe" : (item.is_stable ? "super-stable" : "")));
-                    if(isGraal) badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
-                    else {
+                    
+                    // Niezależnie od backendu, upewnijmy się, że dla Graala wyświetla się TYLKO złoty puchar w interfejsie:
+                    if(isGraal) {
+                        badges.push(`<span title="Święty Graal! (Value + Pewniak + Stabilny)" style="font-size:1.1rem">🏆</span>`); 
+                    } else {
                         if(item.is_value) badges.push(`<span title="Value Bet (EV > 40%)" style="font-size:1.1rem">💰</span>`); 
                         if(item.is_safe) badges.push(`<span title="Pewniak (>75% Szans)" style="font-size:1.1rem">🎯</span>`); 
                         if(item.is_stable) badges.push(`<span title="Stabilny (Zielony Matchup)" style="font-size:1.1rem">🛡️</span>`);
@@ -1121,9 +1126,11 @@
                 tr.dataset.odds = item.kurs; 
                 tr.dataset.prob = true_prob;
                 
+                // Twarde zapisywanie danych dla filtrów przeglądarkowych:
                 tr.dataset.isValue = item.is_value === true ? "true" : "false";
                 tr.dataset.isSafe = item.is_safe === true ? "true" : "false";
                 tr.dataset.isStable = item.is_stable === true ? "true" : "false";
+                tr.dataset.isGraal = isGraal ? "true" : "false"; // KLUCZOWA POPRAWKA
                 
                 let cleanUwagi = item.uwagi || "-";
                 if (!isGames && cleanUwagi !== "-") cleanUwagi = cleanUwagi.replace(/ \| 🔗 ZŁOTA PARA SGP:.*/, "");
@@ -1370,7 +1377,9 @@
                         if (stat === 'value' && r.dataset.isValue !== "true") matchStatus = false; 
                         if (stat === 'safe' && r.dataset.isSafe !== "true") matchStatus = false; 
                         if (stat === 'stable' && r.dataset.isStable !== "true") matchStatus = false; 
-                        if (stat === 'graal' && !(r.dataset.isValue === "true" && r.dataset.isSafe === "true" && r.dataset.isStable === "true")) matchStatus = false;
+                        
+                        // 🎯 KLUCZOWA POPRAWKA: Filtr teraz czyta bezpośrednio flagę "isGraal" z pamięci przeglądarki!
+                        if (stat === 'graal' && r.dataset.isGraal !== "true") matchStatus = false;
                     }
 
                     if (currentSport === 'mlb' && currentSubTab === 'props' && role !== 'all') {
