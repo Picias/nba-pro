@@ -42,14 +42,14 @@ CACHE_PLAYER_STATS = {}
 CACHE_TEAM_GAMES = {}
 CACHE_GAME_STATS = {}
 CACHE_INJURIES = {}
+CACHE_RAW_GAME_STATS = {} # 🚀 NOWOŚĆ: Główny magazyn zaciągniętych statystyk meczowych
 NBA_TEAMS = {}
 
-# Średnie Ligowe do wyliczania siły stref:
 L_AVG_3PM = 12.8
 L_AVG_REB = 43.5
 
 # ==========================================
-# FUNKCJE POMOCNICZE
+# FUNKCJE POMOCNICZE I OPTYMALIZACJA API
 # ==========================================
 def get_stat_val(z, stat_key):
     if stat_key == 'PTS': return z.get('points', 0) or 0
@@ -58,6 +58,27 @@ def get_stat_val(z, stat_key):
     if stat_key == '3PM': return z.get('tpm', 0) or 0
     if stat_key == 'PRA': return (z.get('points', 0) or 0) + (z.get('totReb', 0) or 0) + (z.get('assists', 0) or 0)
     return 0
+
+# 🚀 NOWOŚĆ: JEDNA FUNKCJA BY RZĄDZIĆ WSZYSTKIMI MECZAMI (Chroni API przed wyczerpaniem limitów)
+def pobierz_surowe_staty_meczu(game_id):
+    g_str = str(game_id)
+    if g_str in CACHE_RAW_GAME_STATS: return CACHE_RAW_GAME_STATS[g_str]
+    
+    time.sleep(0.15) # Bezpieczny timing (ok. 6 zapytań/sek)
+    try:
+        url = f"https://v2.nba.api-sports.io/players/statistics?game={g_str}"
+        res = requests.get(url, headers=HEADERS_SPORTS).json()
+        
+        if 'errors' in res and res['errors']:
+            print(f"⚠️ API Limit/Błąd (Gra {g_str}): {res['errors']}")
+            return []
+            
+        dane = res.get('response', [])
+        if dane: # Zapisujemy do RAMu tylko, jeśli dane są prawidłowe (zabezpieczenie przed zatruciem cache'a!)
+            CACHE_RAW_GAME_STATS[g_str] = dane
+        return dane
+    except Exception as e:
+        return []
 
 def inicjalizuj_druzyny():
     print("📡 Synchronizuję oficjalne ID drużyn z bazą API-Sports...")
@@ -124,6 +145,7 @@ def rozlicz_wczorajsze_typy():
         
     print(f"🕵️ Uruchamiam Audytora: Rozliczam typy z wczoraj ({data_typow})...")
     try:
+        time.sleep(0.15)
         res_games = requests.get(f"https://v2.nba.api-sports.io/games?date={data_typow}", headers=HEADERS_SPORTS).json()
         mecze = res_games.get('response', [])
     except: return
@@ -131,18 +153,15 @@ def rozlicz_wczorajsze_typy():
     rzeczywiste_staty = {}
     for m in mecze:
         if m['status']['long'] == 'Finished':
-            time.sleep(0.02)
-            try:
-                res_stats = requests.get(f"https://v2.nba.api-sports.io/players/statistics?game={m['id']}", headers=HEADERS_SPORTS).json()
-                for z in res_stats.get('response', []):
-                    p_info = z.get('player', {})
-                    full_n = f"{str(p_info.get('firstname', '')).strip()} {str(p_info.get('lastname', '')).strip()}".lower().replace(".", "").replace("'", "").strip()
-                    rzeczywiste_staty[full_n] = {
-                        'PTS': get_stat_val(z, 'PTS'), 'REB': get_stat_val(z, 'REB'),
-                        'AST': get_stat_val(z, 'AST'), '3PM': get_stat_val(z, '3PM'),
-                        'PRA': get_stat_val(z, 'PRA'), 'MIN': parse_min(z.get('min', '0'))
-                    }
-            except: continue
+            dane = pobierz_surowe_staty_meczu(m['id'])
+            for z in dane:
+                p_info = z.get('player', {})
+                full_n = f"{str(p_info.get('firstname', '')).strip()} {str(p_info.get('lastname', '')).strip()}".lower().replace(".", "").replace("'", "").strip()
+                rzeczywiste_staty[full_n] = {
+                    'PTS': get_stat_val(z, 'PTS'), 'REB': get_stat_val(z, 'REB'),
+                    'AST': get_stat_val(z, 'AST'), '3PM': get_stat_val(z, '3PM'),
+                    'PRA': get_stat_val(z, 'PRA'), 'MIN': parse_min(z.get('min', '0'))
+                }
             
     wygrane = przegrane = zwroty = 0
     profit = 0.0
@@ -210,7 +229,7 @@ def rozlicz_wczorajsze_typy():
 # ==========================================
 def pobierz_kalendarz_druzyny(team_id):
     if team_id in CACHE_TEAM_GAMES: return CACHE_TEAM_GAMES[team_id]
-    time.sleep(0.02)
+    time.sleep(0.15)
     try:
         res = requests.get(f"https://v2.nba.api-sports.io/games?team={team_id}&season={SEZON_NBA}", headers=HEADERS_SPORTS).json()
         kalendarz = {}
@@ -237,12 +256,10 @@ def pobierz_dzisiejsze_kontuzje():
 
         for sekcja in zespoly_sekcje:
             tytul_sekcji = sekcja.find(class_='TableBase-title')
-            if not tytul_sekcji: 
-                continue 
+            if not tytul_sekcji: continue 
                 
             team_tag = tytul_sekcji.find('span', class_='TeamName')
-            if not team_tag: 
-                continue
+            if not team_tag: continue
                 
             team_name_raw = team_tag.text.strip()
             team_id = None
@@ -276,16 +293,21 @@ def pobierz_id_i_pozycje(nazwa_gracza, team_name):
     team_id = NBA_TEAMS.get(team_name)
     if not team_id: return None, None
     if team_id not in CACHE_ROSTERS:
-        time.sleep(0.02)
+        time.sleep(0.15)
         url = f"https://v2.nba.api-sports.io/players?team={team_id}&season={SEZON_NBA}"
         try:
             res = requests.get(url, headers=HEADERS_SPORTS).json()
+            if 'errors' in res and res['errors']:
+                print(f"⚠️ API Błąd Roster: {res['errors']}")
             zawodnicy = res.get('response', [])
+            
             if not zawodnicy:
-                time.sleep(0.02)
+                time.sleep(0.15)
                 res_fb = requests.get(f"https://v2.nba.api-sports.io/players?team={team_id}&season={SEZON_NBA - 1}", headers=HEADERS_SPORTS).json()
                 zawodnicy = res_fb.get('response', [])
-            CACHE_ROSTERS[team_id] = zawodnicy
+                
+            if zawodnicy: # Zapisujemy tylko jeśli cokolwiek zwróciło
+                CACHE_ROSTERS[team_id] = zawodnicy
         except: return None, None
         
     czysta_nazwa = nazwa_gracza.lower().replace(".", "").replace("'", "").strip()
@@ -303,33 +325,30 @@ def pobierz_id_i_pozycje(nazwa_gracza, team_name):
 
 def pobierz_staty_meczu_global(game_id):
     if game_id in CACHE_GAME_STATS: return CACHE_GAME_STATS[game_id]
-    time.sleep(0.02)
-    try:
-        url = f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&game={game_id}"
-        res = requests.get(url, headers=HEADERS_SPORTS).json()
-        dane = res.get('response', [])
-        teams = {}
-        for z in dane:
-            t_id = z['team']['id']
-            if t_id not in teams: teams[t_id] = {'FGA':0, 'FTA':0, 'TOV':0, 'MIN':0.0, 'PLAYERS': set()}
-            minuty = parse_min(z.get('min', '0'))
-            teams[t_id]['FGA'] += z.get('fga', 0) or 0
-            teams[t_id]['FTA'] += z.get('fta', 0) or 0
-            teams[t_id]['TOV'] += z.get('turnovers', 0) or 0
-            teams[t_id]['MIN'] += minuty
-            if minuty > 0:
-                p_info = z.get('player', {})
-                full_n = f"{str(p_info.get('firstname', '')).strip()} {str(p_info.get('lastname', '')).strip()}".lower().replace(".", "").replace("'", "").strip()
-                teams[t_id]['PLAYERS'].add(full_n)
-        CACHE_GAME_STATS[game_id] = teams
-        return teams
-    except: return None
+    
+    dane = pobierz_surowe_staty_meczu(game_id)
+    if not dane: return None
+    
+    teams = {}
+    for z in dane:
+        t_id = z['team']['id']
+        if t_id not in teams: teams[t_id] = {'FGA':0, 'FTA':0, 'TOV':0, 'MIN':0.0, 'PLAYERS': set()}
+        minuty = parse_min(z.get('min', '0'))
+        teams[t_id]['FGA'] += z.get('fga', 0) or 0
+        teams[t_id]['FTA'] += z.get('fta', 0) or 0
+        teams[t_id]['TOV'] += z.get('turnovers', 0) or 0
+        teams[t_id]['MIN'] += minuty
+        if minuty > 0:
+            p_info = z.get('player', {})
+            full_n = f"{str(p_info.get('firstname', '')).strip()} {str(p_info.get('lastname', '')).strip()}".lower().replace(".", "").replace("'", "").strip()
+            teams[t_id]['PLAYERS'].add(full_n)
+            
+    CACHE_GAME_STATS[game_id] = teams
+    return teams
 
-# 🚀 NOWOŚĆ: Pobiera DvP oraz dokładne statystyki zespołu przeciwnika!
 def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow=7):
     cache_key = f"{opp_team_id}_{pozycja}_{stat_key}_{is_leader}"
     if cache_key in CACHE_DVP: return CACHE_DVP[cache_key]
-    time.sleep(0.02)
     
     bazy = {
         'G': {'PTS': 16.0, 'REB': 4.0, 'AST': 5.0, '3PM': 1.5, 'PRA': 25.0},
@@ -339,6 +358,7 @@ def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow
     poz_baza = bazy.get(pozycja, bazy['F'])
     domyslne_dvp = poz_baza.get(stat_key, 10.0)
     
+    time.sleep(0.15)
     try:
         res_games = requests.get(f"https://v2.nba.api-sports.io/games?team={opp_team_id}&season={SEZON_NBA}", headers=HEADERS_SPORTS).json()
         mecze_zakonczone = sorted([m for m in res_games.get('response', []) if m['status']['long'] == 'Finished'], key=lambda x: x['date']['start'])
@@ -351,30 +371,29 @@ def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow
         if przeanalizowane >= limit_meczow: break
         game_id = mecz['id']
         opp_id = mecz['teams']['visitors']['id'] if mecz['teams']['home']['id'] == opp_team_id else mecz['teams']['home']['id']
-        time.sleep(0.02)
-        try:
-            res_stats = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&game={game_id}", headers=HEADERS_SPORTS).json()
-            gracze_na_pozycji = []
-            game_3pm = 0; game_reb = 0
-            
-            for z in res_stats.get('response', []):
-                # Zliczamy sumaryczne trójki i zbiórki przeciwników (czyli to, na co pozwala analizowana obrona)
-                if z['team']['id'] == opp_id:
-                    game_3pm += get_stat_val(z, '3PM')
-                    game_reb += get_stat_val(z, 'REB')
+        
+        dane = pobierz_surowe_staty_meczu(game_id)
+        if not dane: continue
+        
+        gracze_na_pozycji = []
+        game_3pm = 0; game_reb = 0
+        
+        for z in dane:
+            if z['team']['id'] == opp_id:
+                game_3pm += get_stat_val(z, '3PM')
+                game_reb += get_stat_val(z, 'REB')
+                
+                pos = z.get('pos'); minuty = parse_min(z.get('min'))
+                if pos and pozycja in pos and minuty > 5.0:
+                    val = get_stat_val(z, stat_key)
+                    gracze_na_pozycji.append({'val': val or 0, 'min': minuty})
                     
-                    pos = z.get('pos'); minuty = parse_min(z.get('min'))
-                    if pos and pozycja in pos and minuty > 5.0:
-                        val = get_stat_val(z, stat_key)
-                        gracze_na_pozycji.append({'val': val or 0, 'min': minuty})
-                        
-            if gracze_na_pozycji:
-                gracze_na_pozycji.sort(key=lambda x: x['min'], reverse=True)
-                suma_stat += gracze_na_pozycji[0]['val'] if is_leader else (gracze_na_pozycji[1]['val'] if len(gracze_na_pozycji) > 1 else gracze_na_pozycji[0]['val'])
-                total_3pm += game_3pm
-                total_reb += game_reb
-                przeanalizowane += 1
-        except: continue
+        if gracze_na_pozycji:
+            gracze_na_pozycji.sort(key=lambda x: x['min'], reverse=True)
+            suma_stat += gracze_na_pozycji[0]['val'] if is_leader else (gracze_na_pozycji[1]['val'] if len(gracze_na_pozycji) > 1 else gracze_na_pozycji[0]['val'])
+            total_3pm += game_3pm
+            total_reb += game_reb
+            przeanalizowane += 1
             
     wynik_dvp = round(suma_stat / przeanalizowane, 1) if przeanalizowane > 0 else domyslne_dvp
     avg_3pm = total_3pm / przeanalizowane if przeanalizowane > 0 else L_AVG_3PM
@@ -386,14 +405,19 @@ def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow
 def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_team_id, linia, data_dzis, team_spread, game_total, is_home_game):
     cache_key = f"stats_{player_id}"
     
-    if cache_key in CACHE_PLAYER_STATS: response_data = CACHE_PLAYER_STATS[cache_key]
+    if cache_key in CACHE_PLAYER_STATS: 
+        response_data = CACHE_PLAYER_STATS[cache_key]
     else:
-        time.sleep(0.02)
+        time.sleep(0.15)
         try:
-            res = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&id={player_id}", headers=HEADERS_SPORTS).json()
-            response_data = res.get('response') or []
-            CACHE_PLAYER_STATS[cache_key] = response_data
-        except Exception as e: return None, f"Błąd API: {e}"
+            res_json = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&id={player_id}", headers=HEADERS_SPORTS).json()
+            if 'errors' in res_json and res_json['errors']:
+                return None, f"⚠️ API Limit: {res_json['errors']}"
+                
+            response_data = res_json.get('response', [])
+            if response_data:
+                CACHE_PLAYER_STATS[cache_key] = response_data
+        except Exception as e: return None, f"Błąd połącz.: {e}"
             
     if not response_data: return None, "Brak historii"
     
@@ -440,7 +464,6 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     avg_min_l5 = sum(true_l5_mins) / len(true_l5_mins) if true_l5_mins else 30.0
     is_leader = True if season_avg_min >= 26.0 else False
     
-    # 🔥 PLAYOFF MINUTES BUMP (Dla Starterów)
     if is_leader:
         avg_min_l5 = min(42.0, avg_min_l5 * 1.08)
 
@@ -521,7 +544,6 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     avg_usg = round(sum(usg_list) / len(usg_list), 1) if usg_list else 20.0
     avg_pace = round(sum(pace_list) / len(pace_list), 1) if pace_list else 100.0
     
-    # 🎯 ROZPAKOWANIE ZAAWANSOWANEJ OBRONY
     dvp, opp_3pm_allowed, opp_reb_allowed = pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader)
     
     standardy_ligowe = {
@@ -536,7 +558,6 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     roznica_w_procentach = (dvp - baza_dvp) / baza_dvp if baza_dvp > 0 else 0
     korekta_dvp = max(0.94, min(1.06, 1.0 + (roznica_w_procentach * 0.10)))
     
-    # 🧱 ZAAWANSOWANE STREFY RZUTÓW (Playoff Update)
     korekta_strefy = 1.0
     strefa_txt = ""
     
@@ -610,6 +631,7 @@ def generuj_pelny_raport_druzynowy_nba():
         cache_meczow = {}
 
     try:
+        time.sleep(0.15)
         res = requests.get(f"https://v2.nba.api-sports.io/games?season={SEZON_NBA}", headers=HEADERS_SPORTS).json()
         wszystkie_mecze = [m for m in res.get('response', []) if m['status']['long'] == 'Finished']
     except Exception as e:
@@ -622,34 +644,31 @@ def generuj_pelny_raport_druzynowy_nba():
         print(f"🔄 Pobieram szczegóły dla {len(brakujace_id)} nowych meczów (Smart Cache)...")
         for i, g_id in enumerate(brakujace_id):
             if i > 0 and i % 50 == 0: print(f"  -> Pobrano {i} z {len(brakujace_id)}...")
-            time.sleep(0.05) 
-            try:
-                s_res = requests.get(f"https://v2.nba.api-sports.io/players/statistics?season={SEZON_NBA}&game={g_id}", headers=HEADERS_SPORTS).json()
-                dane = s_res.get('response', [])
-                teams_stats = {}
-                
-                for z in dane:
-                    t_id = str(z['team']['id'])
-                    if t_id not in teams_stats:
-                        teams_stats[t_id] = {'pts': 0, 'reb': 0, 'ast': 0, '3pm': 0, '3pa': 0, 'fta': 0, 'fouls': 0, 'fga': 0, 'tov': 0, 'min': 0.0}
+            
+            dane = pobierz_surowe_staty_meczu(g_id)
+            if not dane: continue
+            
+            teams_stats = {}
+            for z in dane:
+                t_id = str(z['team']['id'])
+                if t_id not in teams_stats:
+                    teams_stats[t_id] = {'pts': 0, 'reb': 0, 'ast': 0, '3pm': 0, '3pa': 0, 'fta': 0, 'fouls': 0, 'fga': 0, 'tov': 0, 'min': 0.0}
 
-                    minuty = parse_min(z.get('min', '0'))
-                    if minuty > 0:
-                        teams_stats[t_id]['min'] += minuty
-                        teams_stats[t_id]['pts'] += z.get('points', 0) or 0
-                        teams_stats[t_id]['reb'] += z.get('totReb', 0) or 0
-                        teams_stats[t_id]['ast'] += z.get('assists', 0) or 0
-                        teams_stats[t_id]['3pm'] += z.get('tpm', 0) or 0
-                        teams_stats[t_id]['3pa'] += z.get('tpa', 0) or 0
-                        teams_stats[t_id]['fta'] += z.get('fta', 0) or 0
-                        teams_stats[t_id]['fga'] += z.get('fga', 0) or 0
-                        teams_stats[t_id]['tov'] += z.get('turnovers', 0) or 0
-                        teams_stats[t_id]['fouls'] += (z.get('pfouls', 0) or z.get('fouls', 0) or 0)
+                minuty = parse_min(z.get('min', '0'))
+                if minuty > 0:
+                    teams_stats[t_id]['min'] += minuty
+                    teams_stats[t_id]['pts'] += z.get('points', 0) or 0
+                    teams_stats[t_id]['reb'] += z.get('totReb', 0) or 0
+                    teams_stats[t_id]['ast'] += z.get('assists', 0) or 0
+                    teams_stats[t_id]['3pm'] += z.get('tpm', 0) or 0
+                    teams_stats[t_id]['3pa'] += z.get('tpa', 0) or 0
+                    teams_stats[t_id]['fta'] += z.get('fta', 0) or 0
+                    teams_stats[t_id]['fga'] += z.get('fga', 0) or 0
+                    teams_stats[t_id]['tov'] += z.get('turnovers', 0) or 0
+                    teams_stats[t_id]['fouls'] += (z.get('pfouls', 0) or z.get('fouls', 0) or 0)
 
-                if len(teams_stats) == 2:
-                    cache_meczow[g_id] = teams_stats
-
-            except: pass
+            if len(teams_stats) == 2:
+                cache_meczow[g_id] = teams_stats
 
         with open(plik_cache, 'w', encoding='utf-8') as f:
             json.dump(cache_meczow, f)
@@ -830,8 +849,9 @@ def uruchom_system_pro():
                         opp_id = NBA_TEAMS.get(opp_team)
                         
                         if p_id and opp_id and team_id:
-                            s, msg = przeanalizuj_gracza_ml(p_id, p_name, pos, s_key, team_id, opp_id, linia, data_dzis, team_spread, game_total, is_home)
-                            if s:
+                            s_data = przeanalizuj_gracza_ml(p_id, p_name, pos, s_key, team_id, opp_id, linia, data_dzis, team_spread, game_total, is_home)
+                            if s_data and s_data[0] is not None:
+                                s = s_data[0]
                                 print(f"✅ [Proj: {s['projekcja']} | DvP: {s['dvp']}]")
                                 proj = s['projekcja']
                                 typ = "OVER" if proj > linia else "UNDER"
@@ -890,7 +910,9 @@ def uruchom_system_pro():
                                     "is_stable": is_stable_bet,
                                     "is_graal": is_graal_bet
                                 })
-                            else: print(f"❌ ({msg})")
+                            else: 
+                                msg = s_data[1] if s_data else "Błąd nieznany"
+                                print(f"❌ ({msg})")
                         else: print(f"❌ (Nie znaleziono w Rosterze)")
 
     with open(SMART_MONEY_FILE, 'w') as f: json.dump(smart_money_db, f)
