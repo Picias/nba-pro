@@ -1,5 +1,504 @@
 [
     {
+        "data_meczow": "2026-04-14",
+        "wygrane": 19,
+        "przegrane": 28,
+        "zwroty": 0,
+        "hit_rate": "40.4%",
+        "profit_jednostki": -10.24,
+        "roi": "-21.8%",
+        "kategorie": {
+            "graal": {
+                "w": 0,
+                "t": 0
+            },
+            "value": {
+                "w": 19,
+                "t": 47
+            },
+            "safe": {
+                "w": 3,
+                "t": 5
+            },
+            "stable": {
+                "w": 1,
+                "t": 1
+            }
+        },
+        "detale": [
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 2,
+                "kurs": 2.18,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 5,
+                "kurs": 2.28,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Andrew Wiggins",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 4,
+                "kurs": 2.52,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Kel'el Ware",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 6.5,
+                "wynik_realny": 12,
+                "kurs": 2.06,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Kel'el Ware",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 12.5,
+                "wynik_realny": 35,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 5,
+                "kurs": 2.18,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Grant Williams",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 2.52,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 13.5,
+                "wynik_realny": 19,
+                "kurs": 1.76,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Moussa Diabate",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 10.5,
+                "wynik_realny": 14,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Tyler Herro",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 21.5,
+                "wynik_realny": 23,
+                "kurs": 2.0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 22.5,
+                "wynik_realny": 30,
+                "kurs": 1.82,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 19.5,
+                "wynik_realny": 27,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Davion Mitchell",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 4,
+                "kurs": 2.4,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Kel'el Ware",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 6.5,
+                "wynik_realny": 19,
+                "kurs": 1.97,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Andrew Wiggins",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 14.5,
+                "wynik_realny": 27,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 8.5,
+                "wynik_realny": 10,
+                "kurs": 2.16,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 5,
+                "kurs": 2.11,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 5,
+                "kurs": 2.28,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 29.5,
+                "wynik_realny": 33,
+                "kurs": 1.94,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Coby White",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 5,
+                "kurs": 1.76,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Andrew Wiggins",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 4.5,
+                "wynik_realny": 7,
+                "kurs": 1.98,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tyler Herro",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 30.5,
+                "wynik_realny": 32,
+                "kurs": 1.91,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Brandon Miller",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 23,
+                "kurs": 1.89,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Norman Powell",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 17.5,
+                "wynik_realny": 11,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Moussa Diabate",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 1,
+                "kurs": 2.34,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Davion Mitchell",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 2.5,
+                "wynik_realny": 4,
+                "kurs": 2.04,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Pelle Larsson",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 1.74,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Norman Powell",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 21.5,
+                "wynik_realny": 14,
+                "kurs": 1.82,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Moussa Diabate",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 23,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Pelle Larsson",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 3,
+                "kurs": 2.16,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Andrew Wiggins",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 21.5,
+                "wynik_realny": 37,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Pelle Larsson",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 10.5,
+                "wynik_realny": 6,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 5,
+                "kurs": 1.94,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Grant Williams",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 5,
+                "kurs": 1.83,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 23.5,
+                "wynik_realny": 39,
+                "kurs": 1.82,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Pelle Larsson",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 16.5,
+                "wynik_realny": 12,
+                "kurs": 1.89,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Bam Adebayo",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 10.5,
+                "wynik_realny": 3,
+                "kurs": 1.82,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Norman Powell",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 1.79,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Bam Adebayo",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 35.5,
+                "wynik_realny": 10,
+                "kurs": 1.91,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Miles Bridges",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 9,
+                "kurs": 1.91,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Davion Mitchell",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 6,
+                "kurs": 1.69,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Bam Adebayo",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 20.5,
+                "wynik_realny": 6,
+                "kurs": 1.85,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Moussa Diabate",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 7.5,
+                "wynik_realny": 8,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Grant Williams",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 2,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "LaMelo Ball",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 36.5,
+                "wynik_realny": 45,
+                "kurs": 1.85,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Davion Mitchell",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 16.5,
+                "wynik_realny": 38,
+                "kurs": 1.76,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Pelle Larsson",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 0.5,
+                "wynik_realny": 0,
+                "kurs": 1.74,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            }
+        ]
+    },
+    {
         "data_meczow": "2026-04-12",
         "wygrane": 44,
         "przegrane": 21,
