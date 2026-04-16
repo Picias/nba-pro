@@ -31,16 +31,21 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Cincinnati Reds": {"dir": "NEUTRAL", "mph": 11.5},
-    "Pittsburgh Pirates": {"dir": "OUT", "mph": 14.0},
+    "Cincinnati Reds": {"dir": "NEUTRAL", "mph": 13.0},
+    "Pittsburgh Pirates": {"dir": "OUT", "mph": 13.0},
     "New York Yankees": {"dir": "OUT", "mph": 10.0},
-    "Athletics": {"dir": "NEUTRAL", "mph": 17.0},
-    "Cleveland Guardians": {"dir": "NEUTRAL", "mph": 9.0},
-    "Detroit Tigers": {"dir": "OUT", "mph": 15.0},
-    "Milwaukee Brewers": {"dir": "OUT", "mph": 8.0},
-    "Chicago White Sox": {"dir": "OUT", "mph": 14.0},
-    "Houston Astros": {"dir": "OUT", "mph": 14.0},
-    "San Diego Padres": {"dir": "OUT", "mph": 9.0}
+    "Minnesota Twins": {"dir": "NEUTRAL", "mph": 7.0},
+    "Athletics": {"dir": "OUT", "mph": 6},
+    "Baltimore Orioles": {"dir": "OUT", "mph": 13.0},
+    "Philadelphia Phillies": {"dir": "OUT", "mph": 11.5},
+    "Atlanta Braves": {"dir": "IN", "mph": 8.0},
+    "St. Louis Cardinals": {"dir": "OUT", "mph": 14.0},
+    "Los Angeles Dodgers": {"dir": "OUT", "mph": 10.0},
+    "Detroit Tigers": {"dir": "OUT", "mph": 13.0},
+    "Milwaukee Brewers": {"dir": "IN", "mph": 8.0},
+    "Chicago White Sox": {"dir": "NEUTRAL", "mph": 15.0},
+    "Houston Astros": {"dir": "OUT", "mph": 15.0},
+    "San Diego Padres": {"dir": "NEUTRAL", "mph": 11.0}
 }
 
 MLB_JSON_FILE = 'mlb.json'
@@ -328,12 +333,17 @@ def pobierz_oficjalny_terminarz_mlb(data_str):
                 home_p = m['teams']['home'].get('probablePitcher', {})
                 away_p = m['teams']['away'].get('probablePitcher', {})
                 
+                # 🚀 FIX: Przwrócenie pobierania rotacji (Batting Orders) by poprawić modyfikatory szans!
+                lineups_home = {p['id']: i+1 for i, p in enumerate(m['teams']['home'].get('lineups', {}).get('homePlayers', []))}
+                lineups_away = {p['id']: i+1 for i, p in enumerate(m['teams']['away'].get('lineups', {}).get('awayPlayers', []))}
+                
                 klucz_meczu = f"{away_team} @ {home_team}".lower().replace("st. ", "st ")
                 baza_mlb[klucz_meczu] = {
                     'home_team': home_team, 'home_team_id': m['teams']['home']['team']['id'], 
                     'away_team': away_team, 'away_team_id': m['teams']['away']['team']['id'],
                     'home_pitcher': home_p.get('fullName', 'TBD'), 'home_pitcher_id': home_p.get('id', None),
-                    'away_pitcher': away_p.get('fullName', 'TBD'), 'away_pitcher_id': away_p.get('id', None)
+                    'away_pitcher': away_p.get('fullName', 'TBD'), 'away_pitcher_id': away_p.get('id', None),
+                    'lineups_home': lineups_home, 'lineups_away': lineups_away
                 }
     except: pass
     return baza_mlb
@@ -470,7 +480,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v10.5 (The Golden Middle)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.0 (The Precision Cap Update)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -681,21 +691,29 @@ def uruchom_mlb_pro():
                         aggregated_props[m_key][p_name] = {} 
                         
                     mlb_stat_key = rynek_map[m_key][2]
+                    
+                    # 🎯 TWARDA KONTROLA LINII
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
-                        point_val = 0.5 
+                        target_line = 0.5 
                     elif mlb_stat_key == 'totalBases':
-                        point_val = float(oc['point']) if 'point' in oc else 1.5
+                        target_line = 1.5
                     else:
-                        if 'point' not in oc: continue
-                        point_val = float(oc['point'])
+                        target_line = float(oc['point']) if 'point' in oc else None
                         
-                    if point_val not in aggregated_props[m_key][p_name]:
-                        aggregated_props[m_key][p_name][point_val] = {'Over': [], 'Under': []}
+                    point_val = float(oc['point']) if 'point' in oc else None
+                    
+                    if point_val is not None and target_line is not None and point_val != target_line and mlb_stat_key != 'strikeOuts':
+                        continue
+                        
+                    resolved_line = target_line if target_line is not None else point_val
+                    
+                    if resolved_line not in aggregated_props[m_key][p_name]:
+                        aggregated_props[m_key][p_name][resolved_line] = {'Over': [], 'Under': []}
                         
                     if oc['name'] == 'Over':
-                        aggregated_props[m_key][p_name][point_val]['Over'].append(oc['price'])
+                        aggregated_props[m_key][p_name][resolved_line]['Over'].append(oc['price'])
                     elif oc['name'] == 'Under':
-                        aggregated_props[m_key][p_name][point_val]['Under'].append(oc['price'])
+                        aggregated_props[m_key][p_name][resolved_line]['Under'].append(oc['price'])
 
         for m_key, players_data in aggregated_props.items():
             nazwa_rynku_pl, rola, mlb_stat_key = rynek_map[m_key]
@@ -703,16 +721,7 @@ def uruchom_mlb_pro():
             for p_name, points_dict in players_data.items():
                 if not points_dict: continue
                 
-                best_point = None
-                max_count = -1
-                for pt, odds_d in points_dict.items():
-                    count = len(odds_d['Over']) + len(odds_d['Under'])
-                    if count > max_count:
-                        max_count = count
-                        best_point = pt
-                
-                if best_point is None: continue
-                
+                best_point = max(points_dict.keys(), key=lambda k: len(points_dict[k]['Over']) + len(points_dict[k]['Under']))
                 odds_data = points_dict[best_point]
                 
                 if not odds_data['Over']: continue 
@@ -794,7 +803,7 @@ def uruchom_mlb_pro():
                 if rola == 'pitcher':
                     opp_k_rate = CACHE_TEAM_K_RATE.get(opp_team_id, LEAGUE_AVG_K_RATE)
                     k_rate_mod = opp_k_rate / LEAGUE_AVG_K_RATE
-                    korekta *= max(0.85, min(1.15, k_rate_mod))
+                    korekta *= k_rate_mod
                     if k_rate_mod >= 1.04: m_color = "rank-green"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
                     elif k_rate_mod <= 0.96: m_color = "rank-red"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
                     else: m_color = "rank-yellow"; m_rank = f"K-Rate rywala: {round(opp_k_rate*100,1)}%"
@@ -810,11 +819,11 @@ def uruchom_mlb_pro():
                     else: m_color = "rank-yellow"; m_rank = "Neutralny"
                     
                     opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
-                    era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
+                    era_korekta = opp_era / LEAGUE_AVG_ERA
                     
                     bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
                     
-                    korekta *= (max(0.85, min(1.15, baa_korekta)) * era_korekta * bullpen['korekta'])
+                    korekta *= (baa_korekta * era_korekta * bullpen['korekta'])
                     
                     uwagi += f" ⚾ SP: {opp_pitcher_name} (ERA: {round(p_stats['era'], 2)}, BAA: {str(p_stats['baa']).lstrip('0')})."
                     uwagi += f" 🛡️ BP ERA: {round(opp_era, 2)}."
@@ -863,8 +872,18 @@ def uruchom_mlb_pro():
                         if b_order <= 3: korekta *= 1.05
                         elif b_order >= 8: korekta *= 0.90
                 
+                # 🎯 FIX 1: Twardy Cap na modyfikatory! (Efekt "Kuli Śnieżnej")
+                # Zapobiega absurdalnemu pompowaniu szans z powodu wielu małych bonusów.
+                if rola == 'pitcher':
+                    korekta = max(0.85, min(1.15, korekta))
+                elif is_hr:
+                    korekta = max(0.60, min(1.50, korekta))
+                else:
+                    korekta = max(0.75, min(1.25, korekta))
+
                 projekcja_finalna = baza_proj * korekta
                 
+                # 🎯 FIX 2: Czysty Poisson. Obcięcie mnożników automatycznie uspokaja wyliczenia!
                 prob_over = poisson_prob_over(projekcja_finalna, linia)
                 prob_under = 1.0 - prob_over
                 
@@ -888,6 +907,7 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
+                # Progi minimalnej szansy (55% / 20%)
                 min_prob = 0.20 if is_hr else 0.55
                 
                 if true_prob < min_prob: continue
@@ -915,11 +935,8 @@ def uruchom_mlb_pro():
                 
                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
                 
-                # Zabezpieczenie przed multiodznakami dla Graala w interfejsie JSON
-                if is_graal_bet:
-                    is_value_bet = False
-                    is_safe_bet = False
-                    is_stable_bet = False
+                # 🎯 FIX 3: USUNIĘTO resetowanie cech is_value_bet/is_safe_bet przy graalu
+                # (Teraz Graal poprawnie wyświetli się w frontendzie i aplikacja JSONa się nie popsuje)
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
