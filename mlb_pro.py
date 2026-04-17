@@ -206,9 +206,9 @@ def generuj_pelny_raport_druzynowy_mlb():
         raport_finalny = sorted(raport_finalny, key=lambda x: x['Zespol'])
         with open(plik_raportu, 'w', encoding='utf-8') as f: json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
         wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych MLB")
-        
+
+# 🎯 FIX: AUDYTOR TYLKO DLA PROPSÓW
 def rozlicz_wczorajsze_typy_mlb():
-    # 🎯 FIX: Audytor analizuje WYŁĄCZNIE propbety na zawodników
     try:
         with open(MLB_JSON_FILE, 'r', encoding='utf-8') as f: stare_typy = json.load(f)
     except: return
@@ -446,7 +446,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.1 (The Syndicate Logic)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.2 (The Anti-Under Balance)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -585,7 +585,6 @@ def uruchom_mlb_pro():
             
             ev_o = (prob_over * t_over) - 1; ev_u = (prob_under * t_under) - 1
             
-            print(f"    🎲 Mecz Totals {t_line} | OVER: {round(prob_over*100,1)}% (EV: {round(ev_o*100,1)}%) | UNDER: {round(prob_under*100,1)}% (EV: {round(ev_u*100,1)}%)")
             if ev_o > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(prob_over * 100, 1), "ev": round(ev_o, 3), "uwagi": g_insights})
             elif ev_u > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round(prob_under * 100, 1), "ev": round(ev_u, 3), "uwagi": g_insights})
 
@@ -594,7 +593,6 @@ def uruchom_mlb_pro():
             a_kurs = round(sum(h2h_away_odds) / len(h2h_away_odds), 2)
             ev_h = (home_win_prob_fg * h_kurs) - 1; ev_a = ((1-home_win_prob_fg) * a_kurs) - 1
             
-            print(f"    ⚔️ Mecz ML Home: {round(home_win_prob_fg*100,1)}% (EV: {round(ev_h*100,1)}%) | ML Away: {round((1-home_win_prob_fg)*100,1)}% (EV: {round(ev_a*100,1)}%)")
             if ev_h > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
             elif ev_a > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
 
@@ -606,20 +604,16 @@ def uruchom_mlb_pro():
 
         if prob_away_f5_over_1_5 > 0.60:
             fair_odds_a = 1 / prob_away_f5_over_1_5
-            print(f"    🎯 F5 Team Totals OVER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
         elif prob_away_f5_under_1_5 > 0.60:
             fair_odds_a_u = 1 / prob_away_f5_under_1_5
-            print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['away_team']} | Szansa: {round(prob_away_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_a_u,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_a_u, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
             
         if prob_home_f5_over_1_5 > 0.60:
             fair_odds_h = 1 / prob_home_f5_over_1_5
-            print(f"    🎯 F5 Team Totals OVER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_over_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
         elif prob_home_f5_under_1_5 > 0.60:
             fair_odds_h_u = 1 / prob_home_f5_under_1_5
-            print(f"    🎯 F5 Team Totals UNDER 1.5: {ev['home_team']} | Szansa: {round(prob_home_f5_under_1_5*100,1)}% | FAIR KURS: {round(fair_odds_h_u,2)}")
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
 
         print(f"    🏃 Odpytuję API o zawodników (TOP US Books)...")
@@ -658,6 +652,7 @@ def uruchom_mlb_pro():
                         
                     mlb_stat_key = rynek_map[m_key][2]
                     
+                    # TWARDA KONTROLA LINII
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
                         target_line = 0.5 
                     elif mlb_stat_key == 'totalBases':
@@ -743,7 +738,6 @@ def uruchom_mlb_pro():
                 
                 vals = [h['val'] for h in hist_data[-30:]]
                 
-                # 🎯 FIX 1: OBCINANIE ANOMALII (Outlier Capping) 
                 if is_hr:
                     baza_proj = sum(vals) / len(vals)
                     if baza_proj < 0.08: baza_proj = 0.08
@@ -846,7 +840,6 @@ def uruchom_mlb_pro():
                         if b_order <= 3: korekta *= 1.05
                         elif b_order >= 8: korekta *= 0.90
                 
-                # Capping multiplier to avoid absurd Poisson skew
                 if rola == 'pitcher':
                     korekta = max(0.85, min(1.15, korekta))
                 elif is_hr:
@@ -878,8 +871,12 @@ def uruchom_mlb_pro():
                         true_prob = prob_under
                         kurs_final = kurs_under
                         ev_val = ev_u
-                        
-                # POBIERANIE STATYSTYK DO REALITY CHECKA
+                
+                min_prob = 0.20 if is_hr else 0.55
+                
+                if true_prob < min_prob: continue
+                if ev_val < 0.05: continue 
+                
                 if typ == "OVER":
                     pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
                     pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
@@ -891,20 +888,6 @@ def uruchom_mlb_pro():
                     
                 m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
                 
-                # 🎯 FIX 2: REALITY CHECK (Weryfikacja szans)
-                # Jeżeli Poisson wylicza np. 75%, ale gracz trafił to w L10 tylko 3 razy (30%), 
-                # to bot uważa 75% za anomalię i nakłada kaganiec na probability.
-                if not is_hr:
-                    max_allowed_prob = (pokrycie_l10 / 100.0) + 0.25 # Zezwalamy na max 25% odchyłu od historii!
-                    if true_prob > max_allowed_prob:
-                        true_prob = max_allowed_prob
-                        ev_val = (true_prob * kurs_final) - 1.0 # Przeliczamy EV dla bezpieczniejszej szansy
-                
-                min_prob = 0.20 if is_hr else 0.55
-                
-                if true_prob < min_prob: continue
-                if ev_val < 0.05: continue 
-                
                 if is_hr:
                     is_value_bet = ev_val >= 0.15 
                     is_safe_bet = true_prob >= 0.30 and pokrycie_l10 >= 20 
@@ -915,7 +898,14 @@ def uruchom_mlb_pro():
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
                 is_stable_bet = (m_color == "rank-green") or is_elite_form
                 
-                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
+                # 🎯 FIX 2: BALANS GRAALI (Overy mają łatwiej, Undery muszą być absurdalnie opłacalne)
+                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
+                if typ == "OVER" and ev_val >= 0.15:
+                    pass
+                elif typ == "UNDER" and ev_val >= 0.20:
+                    pass
+                else:
+                    is_graal_bet = False
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
@@ -934,7 +924,7 @@ def uruchom_mlb_pro():
     # Sortowanie i Zapis
     wyniki_props = sorted(wyniki_props, key=lambda x: x['ev'], reverse=True)
     with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki_props, f, ensure_ascii=False, indent=4)
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v11.1)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v11.2)")
     print(f"✅ Zapisano {len(wyniki_props)} typów na zawodników.")
 
 if __name__ == "__main__":
