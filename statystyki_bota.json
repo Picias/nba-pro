@@ -1,5 +1,404 @@
 [
     {
+        "data_meczow": "2026-04-15",
+        "wygrane": 18,
+        "przegrane": 19,
+        "zwroty": 0,
+        "hit_rate": "48.6%",
+        "profit_jednostki": -2.27,
+        "roi": "-6.1%",
+        "kategorie": {
+            "graal": {
+                "w": 0,
+                "t": 0
+            },
+            "value": {
+                "w": 18,
+                "t": 37
+            },
+            "safe": {
+                "w": 1,
+                "t": 2
+            },
+            "stable": {
+                "w": 1,
+                "t": 2
+            }
+        },
+        "detale": [
+            {
+                "zawodnik": "Quentin Grimes",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 10.5,
+                "wynik_realny": 4,
+                "kurs": 2.02,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 10.5,
+                "wynik_realny": 5,
+                "kurs": 2.0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Franz Wagner",
+                "rynek": "Asysty (AST)",
+                "typ": "UNDER",
+                "linia": 3.5,
+                "wynik_realny": 3,
+                "kurs": 2.22,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Quentin Grimes",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 15.5,
+                "wynik_realny": 10,
+                "kurs": 1.93,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Adem Bona",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 3,
+                "kurs": 2.0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Anthony Black",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 3,
+                "kurs": 2.15,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Paul George",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 21.5,
+                "wynik_realny": 16,
+                "kurs": 1.91,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Anthony Black",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 15.5,
+                "wynik_realny": 22,
+                "kurs": 1.78,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Anthony Black",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 10.5,
+                "wynik_realny": 13,
+                "kurs": 1.93,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Quentin Grimes",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 2,
+                "kurs": 2.48,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Paul George",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 31.5,
+                "wynik_realny": 26,
+                "kurs": 1.93,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Anthony Black",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 2.36,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 4.5,
+                "wynik_realny": 4,
+                "kurs": 1.63,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Kelly Oubre Jr",
+                "rynek": "Zbiórki (REB)",
+                "typ": "UNDER",
+                "linia": 5.5,
+                "wynik_realny": 3,
+                "kurs": 2.28,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Wendell Carter Jr",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 19.5,
+                "wynik_realny": 17,
+                "kurs": 1.81,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Dominick Barlow",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 2,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 37.5,
+                "wynik_realny": 27,
+                "kurs": 1.96,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Quentin Grimes",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 4,
+                "kurs": 1.68,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Paolo Banchero",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 22.5,
+                "wynik_realny": 18,
+                "kurs": 1.77,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Franz Wagner",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "wynik_realny": 0,
+                "kurs": 2.14,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Franz Wagner",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 18.5,
+                "wynik_realny": 12,
+                "kurs": 1.89,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 3,
+                "kurs": 1.62,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Anthony Black",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 2.5,
+                "wynik_realny": 6,
+                "kurs": 1.55,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 4,
+                "kurs": 1.52,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tyrese Maxey",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 6,
+                "kurs": 1.69,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Kelly Oubre Jr",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 21.5,
+                "wynik_realny": 23,
+                "kurs": 1.97,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Dominick Barlow",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 4,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "OVER",
+                "linia": 27.5,
+                "wynik_realny": 40,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 24.5,
+                "wynik_realny": 14,
+                "kurs": 1.98,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tyrese Maxey",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 29.5,
+                "wynik_realny": 31,
+                "kurs": 1.88,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 3,
+                "kurs": 1.74,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Kelly Oubre Jr",
+                "rynek": "Punkty (PTS)",
+                "typ": "UNDER",
+                "linia": 13.5,
+                "wynik_realny": 19,
+                "kurs": 1.8,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tyrese Maxey",
+                "rynek": "Pkt+Zb+As (PRA)",
+                "typ": "UNDER",
+                "linia": 39.5,
+                "wynik_realny": 39,
+                "kurs": 1.85,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Asysty (AST)",
+                "typ": "OVER",
+                "linia": 5.5,
+                "wynik_realny": 4,
+                "kurs": 1.82,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jalen Suggs",
+                "rynek": "Rzuty za 3 (3PM)",
+                "typ": "OVER",
+                "linia": 1.5,
+                "wynik_realny": 1,
+                "kurs": 1.48,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tyrese Maxey",
+                "rynek": "Zbiórki (REB)",
+                "typ": "OVER",
+                "linia": 3.5,
+                "wynik_realny": 2,
+                "kurs": 1.74,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Desmond Bane",
+                "rynek": "Punkty (PTS)",
+                "typ": "OVER",
+                "linia": 19.5,
+                "wynik_realny": 34,
+                "kurs": 1.88,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            }
+        ]
+    },
+    {
         "data_meczow": "2026-04-14",
         "wygrane": 19,
         "przegrane": 28,
