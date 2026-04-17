@@ -1,5 +1,2732 @@
 [
     {
+        "data_meczow": "2026-04-17",
+        "wygrane": 33,
+        "przegrane": 22,
+        "zwroty": 361,
+        "hit_rate": "60.0%",
+        "profit_jednostki": 4.11,
+        "roi": "7.5%",
+        "detale": [
+            {
+                "zawodnik": "Jeremiah Jackson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nico Hoerner",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.81,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Trevor Story",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "CJ Abrams",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jordan Walker",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Riley Greene",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Brennan",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Leody Taveras",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dillon Dingler",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brandon Lowe",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "CJ Abrams",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Garrett Mitchell",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Miguel Vargas",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Busch",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.61,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alec Bohm",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dillon Dingler",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ke'Bryan Hayes",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mike Trout",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jarren Duran",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Oneil Cruz",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Willson Contreras",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jo Adell",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Gunnar Henderson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mike Trout",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Riley Greene",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brice Turang",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dansby Swanson",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.15,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Carlos Cortes",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Adam Frazier",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Willson Contreras",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Willy Adames",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mark Vientos",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.43,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.35,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Yordan Alvarez",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dansby Swanson",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.74,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Sal Stewart",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Slater",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Yordan Alvarez",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Busch",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.65,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Luis Robert Jr.",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.7,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jake Cronenworth",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcus Semien",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.5,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Rece Hinds",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bryan Reynolds",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jorge Polanco",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.55,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Max Muncy",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brandon Lowe",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nathan Lukes",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Casey Schmitt",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alex Bregman",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.82,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Brice Turang",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcus Semien",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.6,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Jacob Wilson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Shohei Ohtani",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Freddy Fermin",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Vinnie Pasquantino",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carlos Correa",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Gunnar Henderson",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Christian Walker",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Drew Gilbert",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Salvador Perez",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brett Baty",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alec Burleson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jonathan Aranda",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tyler Soderstrom",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jordan Walker",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Christian Walker",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ozzie Albies",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nolan Arenado",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nathan Lukes",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jorge Polanco",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.71,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Andrew Benintendi",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Seiya Suzuki",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.13,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Will Brennan",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Manny Machado",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Trent Grisham",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jose Altuve",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Busch",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Moisés Ballesteros",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.3,
+                "wynik_realny": 5,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jo Adell",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.94,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ryan Jeffers",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ryan Kreidler",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Brennan",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcell Ozuna",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Josh Naylor",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Otto Kemp",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dansby Swanson",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.24,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alec Bohm",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dillon Dingler",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Francisco Lindor",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.92,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Seiya Suzuki",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.32,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Marcus Semien",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.61,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.54,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Austin Riley",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alex Freeland",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jung Hoo Lee",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tim Tawa",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Patrick Bailey",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mark Vientos",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.58,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Oneil Cruz",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Busch",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.94,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Kyle Leahy",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jarren Duran",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mike Trout",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Elly De La Cruz",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Corey Seager",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Edgar Quero",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Slater",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ryan McMahon",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt McLain",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cedric Mullins",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Edgar Quero",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Francisco Lindor",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Nico Hoerner",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 1.93,
+                "wynik_realny": 6,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Jake Fraley",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Geraldo Perdomo",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Corbin Carroll",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Daulton Varsho",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Francisco Lindor",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.75,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Bo Naylor",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Slater",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Brennan",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Luis Robert Jr.",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.65,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Luke Raley",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alec Bohm",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kazuma Okamoto",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brett Baty",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.61,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Drew Gilbert",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jazz Chisholm Jr.",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ben Williamson",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ryan McMahon",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Smith",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jacob Wilson",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.15,
+                "wynik_realny": 4,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alex Freeland",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carson Kelly",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.35,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Evan Carter",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.5,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ozzie Albies",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Elly De La Cruz",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Luis Campusano",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Miguel Vargas",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jose Fernandez",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "CJ Abrams",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Kurtz",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Yorke",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Giancarlo Stanton",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tanner Murray",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cody Bellinger",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kazuma Okamoto",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Wells",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ezequiel Tovar",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jorge Polanco",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.54,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Eric Lauer",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Sal Frelick",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Sal Stewart",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Chapman",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Max Muncy",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Andrew Benintendi",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Shea Langeliers",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alec Burleson",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Freddie Freeman",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Andy Pages",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Reese McGuire",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jordan Walker",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Francisco Alvarez",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.67,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Nolan Schanuel",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alex Freeland",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jeremiah Jackson",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Salvador Perez",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jonathan India",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bobby Witt Jr.",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "TJ Rumfield",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Yorke",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brett Baty",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.6,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ke'Bryan Hayes",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Daniel Schneemann",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kyle Karros",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Andrew Benintendi",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Hunter Feduccia",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Chandler Simpson",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Smith",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tyler Freeman",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Patrick Bailey",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "J.T. Realmuto",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Salvador Perez",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brandon Lockridge",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Vladimir Guerrero Jr.",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jeff McNeil",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Roman Anthony",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Yorke",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mark Vientos",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.55,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Luis Robert Jr.",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.47,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Kyle Tucker",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Wells",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Geraldo Perdomo",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tim Tawa",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jorge Polanco",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.61,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Justin Crawford",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Wilyer Abreu",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Javier Sanoja",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Otto Kemp",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Sal Frelick",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Riley",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "TJ Friedl",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Masyn Winn",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bo Bichette",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.61,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Hunter Feduccia",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Davis Martin",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "William Contreras",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Taylor Ward",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cam Schlittler",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Pete Crow-Armstrong",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.12,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Patrick Bailey",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ke'Bryan Hayes",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.38,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ryan McMahon",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Casey Mize",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.34,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Luis Robert Jr.",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.75,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Blaze Alexander",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Caleb Durbin",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jazz Chisholm Jr.",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Giancarlo Stanton",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Joey Ortiz",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Francisco Alvarez",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.46,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Jac Caglianone",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Lenyn Sosa",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Trea Turner",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tanner Murray",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Moisés Ballesteros",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.59,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Edgar Quero",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jo Adell",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Fernando Tatis Jr.",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Fernando Tatis Jr.",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Will Smith",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Allen",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jordan Walker",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "CJ Abrams",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "JJ Wetherholt",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bubba Chandler",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Riley Greene",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jake Fraley",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Pete Crow-Armstrong",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.5,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Marcell Ozuna",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ketel Marte",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Juan Brito",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cody Bellinger",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cole Young",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Rece Hinds",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Miguel Vargas",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Trent Grisham",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Miguel Andujar",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Isaac Paredes",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Max Muncy",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bo Bichette",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.63,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Austin Riley",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kyle Karros",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brenton Doyle",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kyle Manzardo",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nick Fortes",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Wells",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jake Fraley",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Andy Pages",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jonathan Aranda",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Leody Taveras",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Vierling",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Dominic Canzone",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Gunnar Henderson",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tyler Stephenson",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Wallner",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Lenyn Sosa",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Roman Anthony",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Byron Buxton",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brendan Donovan",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcus Semien",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.39,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Brandon Valenzuela",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kazuma Okamoto",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Adam Frazier",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Joc Pederson",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Aaron Judge",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt McLain",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "TJ Rumfield",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.85,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Shea Langeliers",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carson Kelly",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kyle Isbel",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Casey Schmitt",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ezequiel Tovar",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tim Tawa",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Edmundo Sosa",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcell Ozuna",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Taijuan Walker",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nathan Lukes",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brett Baty",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Victor Scott II",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Alec Burleson",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cal Raleigh",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Vinnie Pasquantino",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Andrew Benintendi",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Byron Buxton",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tanner Murray",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mark Vientos",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Cody Bellinger",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "J.T. Realmuto",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Willson Contreras",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Mike Yastrzemski",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Giancarlo Stanton",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cedric Mullins",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jac Caglianone",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Austin Slater",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "TJ Friedl",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Wyatt Langford",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bobby Witt Jr.",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jose Altuve",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Sal Frelick",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tyler Stephenson",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "J.P. Crawford",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Chandler Simpson",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Victor Caratini",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bo Bichette",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Yainer Diaz",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jazz Chisholm Jr.",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carter Jensen",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Josh Naylor",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Freddy Fermin",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cam Smith",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Kyle Manzardo",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Drew Gilbert",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jakob Marsee",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jeff McNeil",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Josh Smith",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Zach Neto",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jorbit Vivas",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Isaac Paredes",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "James McCann",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jose Altuve",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Xander Bogaerts",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jonathan Aranda",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Vladimir Guerrero Jr.",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Bryce Harper",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Joey Loperfido",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "David Hamilton",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Daulton Varsho",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Javier Sanoja",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Wilyer Abreu",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Keibert Ruiz",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Spencer Horwitz",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Matt Chapman",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcelo Mayer",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jake Cronenworth",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ernie Clement",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Yordan Alvarez",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Harris II",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Xavier Edwards",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Cal Raleigh",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "George Valera",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Willy Adames",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Trea Turner",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Josh Smith",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Jose Fernandez",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brady House",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Michael Massey",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Max Muncy",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Brandon Valenzuela",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ernie Clement",
+                "rynek": "Total Bases",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Rece Hinds",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Aaron Civale",
+                "rynek": "K's",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Carlos Correa",
+                "rynek": "Hits",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Hunter Feduccia",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Connor Norby",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Junior Caminero",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Henry Davis",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Marcelo Mayer",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Nolan Gorman",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Miguel Vargas",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Logan O'Hoppe",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Trevor Story",
+                "rynek": "Runs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Tyler Heineman",
+                "rynek": "RBIs",
+                "status": "ZWROT",
+                "kategoria": "Zwykły Typ"
+            }
+        ]
+    },
+    {
         "data_meczow": "2026-04-16",
         "wygrane": 152,
         "przegrane": 154,
