@@ -31,20 +31,21 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Philadelphia Phillies": {"dir": "NEUTRAL", "mph": 8},
-    "Pittsburgh Pirates": {"dir": "OUT", "mph": 4.5},
-    "Miami Marlins": {"dir": "IN", "mph": 11.5},
-    "Houston Astros": {"dir": "OUT", "mph": 15.0},
-    "Colorado Rockies": {"dir": "IN", "mph": 11.5},
-    "Oakland Athletics": {"dir": "NEUTRAL", "mph": 2},
-    "Seattle Mariners": {"dir": "NEUTRAL", "mph": 3.5},
-    "Cleveland Guardians": {"dir": "IN", "mph": 3.5},
-    "Washington Nationals": {"dir": "IN", "mph": 9.0},
+    "Chicago Cubs": {"dir": "OUT", "mph": 19.5},
+    "Philadelphia Phillies": {"dir": "NEUTRAL", "mph": 15.0},
+    "Pittsburgh Pirates": {"dir": "OUT", "mph": 16.0},
+    "Miami Marlins": {"dir": "IN", "mph": 10.5},
+    "Houston Astros": {"dir": "IN", "mph": 9.0},
+    "Colorado Rockies": {"dir": "OUT", "mph": 6.0},
+    "Oakland Athletics": {"dir": "OUT", "mph": 2.0},
+    "Seattle Mariners": {"dir": "OUT", "mph": 3.5},
+    "Cleveland Guardians": {"dir": "NEUTRAL", "mph": 15.0},
+    "Washington Nationals": {"dir": "OUT", "mph": 11.5},
     "New York Yankees": {"dir": "IN", "mph": 10.5},
-    "Boston Red Sox": {"dir": "IN", "mph": 4.5},
-    "Minnesota Twins": {"dir": "OUT", "mph": 15.0},
-    "Los Angeles Angels": {"dir": "OUT", "mph": 8.0},
-    "Arizona Diamondbacks": {"dir": "NEUTRAL", "mph": 5.5},
+    "Boston Red Sox": {"dir": "IN", "mph": 9.0},
+    "Minnesota Twins": {"dir": "OUT", "mph": 18.5},
+    "Los Angeles Angels": {"dir": "OUT", "mph": 9.0},
+    "Arizona Diamondbacks": {"dir": "NEUTRAL", "mph": 2.0},
 }
 
 MLB_JSON_FILE = 'mlb.json'
@@ -207,7 +208,6 @@ def generuj_pelny_raport_druzynowy_mlb():
         with open(plik_raportu, 'w', encoding='utf-8') as f: json.dump(raport_finalny, f, ensure_ascii=False, indent=4)
         wyslij_plik_na_githuba(plik_raportu, "Aktualizacja statystyk drużynowych MLB")
 
-# 🎯 FIX: AUDYTOR TYLKO DLA PROPSÓW
 def rozlicz_wczorajsze_typy_mlb():
     try:
         with open(MLB_JSON_FILE, 'r', encoding='utf-8') as f: stare_typy = json.load(f)
@@ -216,6 +216,10 @@ def rozlicz_wczorajsze_typy_mlb():
     if not stare_typy: return
     data_typow = stare_typy[0].get('data', '2000-01-01')
     if data_typow > DATA_DZIS: return
+    
+    # 🎯 FIX: Oczyszczamy stare typy z jakichkolwiek meczowych bugów!
+    stare_typy = [t for t in stare_typy if "Mecz:" not in t.get('rynek', '') and "F5:" not in t.get('rynek', '')]
+    if not stare_typy: return
         
     print(f"\n🕵️ Uruchamiam Głównego Audytora PROPSÓW: Rozliczam typy zawodników z daty {data_typow}...")
     url = f"https://statsapi.mlb.com/api/v1/schedule?sportId=1&date={data_typow}"
@@ -446,7 +450,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.2 (The Anti-Under Balance)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.3 (The Over-Biased Reality Engine)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -738,6 +742,7 @@ def uruchom_mlb_pro():
                 
                 vals = [h['val'] for h in hist_data[-30:]]
                 
+                # 🎯 FIX 1: OBCINANIE ANOMALII (Outlier Capping z większym zakresem)
                 if is_hr:
                     baza_proj = sum(vals) / len(vals)
                     if baza_proj < 0.08: baza_proj = 0.08
@@ -746,9 +751,9 @@ def uruchom_mlb_pro():
                     
                     capped_vals = []
                     for v in vals_15:
-                        if mlb_stat_key == 'hits': capped_vals.append(min(v, 2))
-                        elif mlb_stat_key == 'totalBases': capped_vals.append(min(v, 4))
-                        elif mlb_stat_key in ['runs', 'rbi']: capped_vals.append(min(v, 2))
+                        if mlb_stat_key == 'hits': capped_vals.append(min(v, 3))
+                        elif mlb_stat_key == 'totalBases': capped_vals.append(min(v, 6))
+                        elif mlb_stat_key in ['runs', 'rbi']: capped_vals.append(min(v, 3))
                         else: capped_vals.append(v)
                         
                     weights = [3 if i >= len(capped_vals)-5 else (2 if i >= len(capped_vals)-10 else 1) for i in range(len(capped_vals))]
@@ -787,7 +792,7 @@ def uruchom_mlb_pro():
                     else: m_color = "rank-yellow"; m_rank = "Neutralny"
                     
                     opp_era = CACHE_TEAM_ERA.get(opp_team_id, LEAGUE_AVG_ERA)
-                    era_korekta = max(0.90, min(1.10, opp_era / LEAGUE_AVG_ERA))
+                    era_korekta = opp_era / LEAGUE_AVG_ERA
                     
                     bullpen = oblicz_zmeczenie_bullpenu(opp_team_id, DATA_DZIS)
                     
@@ -840,6 +845,7 @@ def uruchom_mlb_pro():
                         if b_order <= 3: korekta *= 1.05
                         elif b_order >= 8: korekta *= 0.90
                 
+                # Zabezpieczenie modyfikatorów
                 if rola == 'pitcher':
                     korekta = max(0.85, min(1.15, korekta))
                 elif is_hr:
@@ -849,7 +855,21 @@ def uruchom_mlb_pro():
 
                 projekcja_finalna = baza_proj * korekta
                 
-                prob_over = poisson_prob_over(projekcja_finalna, linia)
+                prob_over_poisson = poisson_prob_over(projekcja_finalna, linia)
+                empirical_over = sum(1 for x in vals if x > linia) / len(vals) if len(vals) > 0 else 0.0
+                
+                # 🎯 2. MIESZANKA EMPIRYCZNA (Uratowanie OVERÓW)
+                if mlb_stat_key == 'hits':
+                    prob_over = (prob_over_poisson * 0.20) + (empirical_over * 0.80) 
+                elif mlb_stat_key == 'totalBases':
+                    prob_over = (prob_over_poisson * 0.40) + (empirical_over * 0.60)
+                elif mlb_stat_key in ['runs', 'rbi']:
+                    prob_over = (prob_over_poisson * 0.50) + (empirical_over * 0.50)
+                elif is_hr:
+                    prob_over = (prob_over_poisson * 0.75) + (empirical_over * 0.25)
+                else: # pitcher
+                    prob_over = (prob_over_poisson * 0.60) + (empirical_over * 0.40)
+
                 prob_under = 1.0 - prob_over
                 
                 ev_o = (prob_over * kurs_over) - 1.0 if kurs_over > 0 else -100
@@ -861,7 +881,8 @@ def uruchom_mlb_pro():
                     kurs_final = kurs_over
                     ev_val = ev_o
                 else:
-                    if ev_o >= ev_u:
+                    # 🎯 Anti-Under Bias: Faworyzujemy Overy. Under wygrywa tylko jeśli jest o 2% bardziej opłacalny.
+                    if ev_o >= ev_u - 0.02: 
                         typ = "OVER"
                         true_prob = prob_over
                         kurs_final = kurs_over
@@ -872,21 +893,22 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
+                # 🎯 TWARDE PROGI: Overy wchodzą łatwo (3-4% EV), Undery muszą być pewniakami (8% EV)
                 min_prob = 0.20 if is_hr else 0.55
+                min_ev = 0.04 if typ == "OVER" else 0.08
                 
                 if true_prob < min_prob: continue
-                if ev_val < 0.05: continue 
+                if ev_val < min_ev: continue 
                 
                 if typ == "OVER":
                     pokrycie_l5 = int((sum(1 for x in vals[-5:] if x > linia) / 5) * 100) if len(vals) >= 5 else 0
                     pokrycie_l10 = int((sum(1 for x in vals[-10:] if x > linia) / 10) * 100) if len(vals) >= 10 else 0
-                    pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100) if len(vals) > 0 else 0
+                    pokrycie_sezon = int((sum(1 for x in vals if x > linia) / len(vals)) * 100)
                 else:
                     pokrycie_l5 = int((sum(1 for x in vals[-5:] if x < linia) / 5) * 100) if len(vals) >= 5 else 0
                     pokrycie_l10 = int((sum(1 for x in vals[-10:] if x < linia) / 10) * 100) if len(vals) >= 10 else 0
-                    pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100) if len(vals) > 0 else 0
-                    
-                m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
+                    pokrycie_sezon = int((sum(1 for x in vals if x < linia) / len(vals)) * 100)
+                    m_color = "rank-green" if m_color == "rank-red" else ("rank-red" if m_color == "rank-green" else "rank-yellow")
                 
                 if is_hr:
                     is_value_bet = ev_val >= 0.15 
@@ -898,14 +920,7 @@ def uruchom_mlb_pro():
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
                 is_stable_bet = (m_color == "rank-green") or is_elite_form
                 
-                # 🎯 FIX 2: BALANS GRAALI (Overy mają łatwiej, Undery muszą być absurdalnie opłacalne)
-                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
-                if typ == "OVER" and ev_val >= 0.15:
-                    pass
-                elif typ == "UNDER" and ev_val >= 0.20:
-                    pass
-                else:
-                    is_graal_bet = False
+                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
@@ -924,7 +939,7 @@ def uruchom_mlb_pro():
     # Sortowanie i Zapis
     wyniki_props = sorted(wyniki_props, key=lambda x: x['ev'], reverse=True)
     with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki_props, f, ensure_ascii=False, indent=4)
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v11.2)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v11.3)")
     print(f"✅ Zapisano {len(wyniki_props)} typów na zawodników.")
 
 if __name__ == "__main__":
