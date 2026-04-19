@@ -31,21 +31,21 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Chicago Cubs": {"dir": "OUT", "mph": 19.5},
-    "Philadelphia Phillies": {"dir": "NEUTRAL", "mph": 15.0},
-    "Pittsburgh Pirates": {"dir": "OUT", "mph": 16.0},
-    "Miami Marlins": {"dir": "IN", "mph": 10.5},
-    "Houston Astros": {"dir": "IN", "mph": 9.0},
-    "Colorado Rockies": {"dir": "OUT", "mph": 6.0},
-    "Oakland Athletics": {"dir": "OUT", "mph": 2.0},
-    "Seattle Mariners": {"dir": "OUT", "mph": 3.5},
-    "Cleveland Guardians": {"dir": "NEUTRAL", "mph": 15.0},
-    "Washington Nationals": {"dir": "OUT", "mph": 11.5},
-    "New York Yankees": {"dir": "IN", "mph": 10.5},
-    "Boston Red Sox": {"dir": "IN", "mph": 9.0},
-    "Minnesota Twins": {"dir": "OUT", "mph": 18.5},
-    "Los Angeles Angels": {"dir": "OUT", "mph": 9.0},
-    "Arizona Diamondbacks": {"dir": "NEUTRAL", "mph": 2.0},
+    "Chicago Cubs": {"dir": "OUT", "mph": 17.0},
+    "Philadelphia Phillies": {"dir": "NEUTRAL", "mph": 9.0},
+    "Pittsburgh Pirates": {"dir": "OUT", "mph": 17.0},
+    "Miami Marlins": {"dir": "IN", "mph": 6.0},
+    "Houston Astros": {"dir": "IN", "mph": 15.0},
+    "Colorado Rockies": {"dir": "NEUTRAL", "mph": 4.5},
+    "Oakland Athletics": {"dir": "OUT", "mph": 6.0},
+    "Seattle Mariners": {"dir": "IN", "mph": 7.0},
+    "Cleveland Guardians": {"dir": "IN", "mph": 16.0},
+    "Washington Nationals": {"dir": "IN", "mph": 13.0},
+    "New York Yankees": {"dir": "OUT", "mph": 16.0},
+    "Boston Red Sox": {"dir": "NEUTRAL", "mph": 16.0},
+    "Minnesota Twins": {"dir": "OUT", "mph": 10.5},
+    "Los Angeles Angels": {"dir": "OUT", "mph": 8.0},
+    "Arizona Diamondbacks": {"dir": "OUT", "mph": 11.5},
 }
 
 MLB_JSON_FILE = 'mlb.json'
@@ -105,11 +105,20 @@ def poisson_prob_over(lam, line):
     prob_under = sum((math.pow(lam, k) * math.exp(-lam)) / math.factorial(k) for k in range(k_max + 1))
     return 1.0 - prob_under 
 
+# 🎯 NOWOŚĆ: Normal Distribution CDF dla Totalów i F5 (Znacznie dokładniejsze niż Poisson dla baseballu)
+def normal_cdf(x, mean, std_dev):
+    if std_dev == 0: return 1.0 if x >= mean else 0.0
+    z = (x - mean) / (std_dev * math.sqrt(2.0))
+    t = 1.0 / (1.0 + 0.3275911 * abs(z))
+    a1 =  0.254829592; a2 = -0.284496736; a3 =  1.421413741; a4 = -1.453152027; a5 =  1.061405429
+    erf = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * math.exp(-z * z)
+    return 0.5 * (1.0 + (1.0 if z > 0 else -1.0) * erf)
+
 # ==========================================
-# 🌤️ MODUŁ POGODY (TYLKO MANUAL)
+# 🌤️ MODUŁ POGODY (DYNAMICZNE SKALOWANIE)
 # ==========================================
 def pobierz_pogode():
-    print("🌤️ Wczytywanie RĘCZNYCH ustawień pogody...")
+    print("🌤️ Wczytywanie RĘCZNYCH ustawień pogody (Dynamiczne Skalowanie)...")
     weather_data = {}
     
     for manual_team, data in MANUAL_WEATHER.items():
@@ -118,15 +127,16 @@ def pobierz_pogode():
         w_mod = 1.0
         msg = f"⚙️ RĘCZNIE: Neutralnie ({mph} mph)"
         
+        # 🎯 FIX: Wiatr skaluje się z jego siłą (mph), a nie ma tylko sztywnych "schodków"
         if kierunek == 'OUT':
-            w_mod = 1.08 if mph >= 8 else 1.04
+            w_mod = 1.0 + (mph * 0.01) # Np. 15mph daje potężne +15% Runs!
             msg = f"⚙️ RĘCZNIE: Wywiewa (+{int((w_mod-1)*100)}% Runs) | {mph} mph"
         elif kierunek == 'IN':
-            w_mod = 0.92 if mph >= 8 else 0.96
+            w_mod = 1.0 - (mph * 0.008) # Np. 15mph daje -12% Runs!
             msg = f"⚙️ RĘCZNIE: W twarz ({int((w_mod-1)*100)}% Runs) | {mph} mph"
             
         weather_data[manual_team] = {'mod': w_mod, 'msg': msg, 'dir': kierunek, 'mph': mph}
-        print(f"  🟢 Zaaplikowano RĘCZNĄ pogodę dla: {manual_team} -> {msg}")
+        print(f"  🟢 Zaaplikowano pogode dla: {manual_team} -> {msg}")
 
     global CACHE_WEATHER
     CACHE_WEATHER = weather_data
@@ -217,7 +227,7 @@ def rozlicz_wczorajsze_typy_mlb():
     data_typow = stare_typy[0].get('data', '2000-01-01')
     if data_typow > DATA_DZIS: return
     
-    # 🎯 FIX: Oczyszczamy stare typy z jakichkolwiek meczowych bugów!
+    # 🎯 AUDYTOR CZYSTY - Zostają TYLKO propsy zawodników! Ignorujemy Mecz, Suma Runs, F5 itp.
     stare_typy = [t for t in stare_typy if "Mecz:" not in t.get('rynek', '') and "F5:" not in t.get('rynek', '')]
     if not stare_typy: return
         
@@ -450,7 +460,7 @@ def pobierz_statystyki_druzyn_mlb():
 # ==========================================
 def uruchom_mlb_pro():
     print("==================================================")
-    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v11.3 (The Over-Biased Reality Engine)")
+    print("🚀 QUANT AI BOTS: MLB PRO ULTIMATE v12.0 (The Game Lines Engine)")
     print("==================================================")
     
     if not os.path.exists(STATS_MLB_FILE):
@@ -500,7 +510,15 @@ def uruchom_mlb_pro():
         home_t_id = dane_oficjalne['home_team_id']
         away_t_id = dane_oficjalne['away_team_id']
         
-        w_data = next((v for k, v in CACHE_WEATHER.items() if k.lower() in ev['home_team'].lower() or ev['home_team'].lower() in k.lower()), {'mod': 1.0, 'msg': 'Neutralnie/Dach', 'dir': 'NEUTRAL', 'mph': 0.0})
+        # 🎯 FIX WIATRU DLA MECZY: Wyszukiwanie uwzględniające słowa kluczowe (np. "Guardians")
+        w_data = {'mod': 1.0, 'msg': 'Neutralnie/Dach', 'dir': 'NEUTRAL', 'mph': 0.0}
+        for w_team, w_info in CACHE_WEATHER.items():
+            w_t_lower = w_team.lower()
+            ev_t_lower = ev['home_team'].lower()
+            if w_t_lower in ev_t_lower or ev_t_lower in w_t_lower or w_t_lower.split()[-1] in ev_t_lower:
+                w_data = w_info
+                break
+
         p_factor = get_park_factor(ev['home_team'])
         
         away_ops_splits = pobierz_ops_splits(away_t_id)
@@ -515,12 +533,15 @@ def uruchom_mlb_pro():
         home_bp = oblicz_zmeczenie_bullpenu(home_t_id, DATA_DZIS)
         away_bp = oblicz_zmeczenie_bullpenu(away_t_id, DATA_DZIS)
 
-        away_pitcher_mod = max(0.6, min(1.5, home_p_stats['era'] / LEAGUE_AVG_ERA))
-        home_pitcher_mod = max(0.6, min(1.5, away_p_stats['era'] / LEAGUE_AVG_ERA))
+        # SP Modifier: Max 1.8x, Min 0.5x (Dajemy mocnym miotaczom jeszcze więcej szacunku)
+        away_pitcher_mod = max(0.5, min(1.8, home_p_stats['era'] / LEAGUE_AVG_ERA))
+        home_pitcher_mod = max(0.5, min(1.8, away_p_stats['era'] / LEAGUE_AVG_ERA))
 
         away_ops_vs_sp = away_ops_splits['vs_LHP'] if home_p_hand == 'L' else away_ops_splits['vs_RHP']
         away_ops_vs_bp = (away_ops_splits['vs_LHP'] + away_ops_splits['vs_RHP']) / 2.0
         away_true_ops_full = (away_ops_vs_sp * 0.65) + (away_ops_vs_bp * 0.35)
+        
+        # 🎯 FIX MATEMATYKI DLA MECZY: Wiatr skaluje się dynamicznie do sumy runsów!
         away_base_runs_fg = (away_true_ops_full / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS
         away_proj_runs_fg = away_base_runs_fg * away_pitcher_mod * home_bp['korekta'] * p_factor * w_data['mod']
         
@@ -531,8 +552,14 @@ def uruchom_mlb_pro():
         home_proj_runs_fg = home_base_runs_fg * home_pitcher_mod * away_bp['korekta'] * p_factor * w_data['mod'] * 1.04 
         
         total_proj_runs_fg = round(away_proj_runs_fg + home_proj_runs_fg, 2)
-        try: home_win_prob_fg = (home_proj_runs_fg**1.83) / (home_proj_runs_fg**1.83 + away_proj_runs_fg**1.83)
-        except: home_win_prob_fg = 0.5
+        
+        # 🎯 FIX MONEYLINE: Pythagorean Expectation + Regresja do średniej
+        try: 
+            raw_home_win_prob = (home_proj_runs_fg**1.83) / (home_proj_runs_fg**1.83 + away_proj_runs_fg**1.83)
+            # Ściągamy skrajne wartości lekko w dół, żeby bot nie wymyślał 80% szans w wyrównanej lidze
+            home_win_prob_fg = (raw_home_win_prob * 0.85) + (0.5 * 0.15)
+        except: 
+            home_win_prob_fg = 0.5
 
         away_base_runs_f5 = (away_ops_vs_sp / LEAGUE_AVG_OPS) * LEAGUE_AVG_RUNS_F5
         away_proj_runs_f5 = away_base_runs_f5 * away_pitcher_mod * p_factor * w_data['mod']
@@ -584,39 +611,47 @@ def uruchom_mlb_pro():
             t_over = round(sum(tot_over_odds) / len(tot_over_odds), 2)
             t_under = round(sum(tot_under_odds) / len(tot_under_odds), 2)
             
-            prob_over = poisson_prob_over(total_proj_runs_fg, t_line)
-            prob_under = 1.0 - prob_over
+            # 🎯 FIX TOTALS: Normal Distribution (Standard Deviation = 3.1) zamiast Poissona!
+            prob_under = normal_cdf(t_line, total_proj_runs_fg, 3.1)
+            prob_over = 1.0 - prob_under
             
             ev_o = (prob_over * t_over) - 1; ev_u = (prob_under * t_under) - 1
             
-            if ev_o > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(prob_over * 100, 1), "ev": round(ev_o, 3), "uwagi": g_insights})
-            elif ev_u > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round(prob_under * 100, 1), "ev": round(ev_u, 3), "uwagi": g_insights})
+            print(f"    🎲 Mecz Totals {t_line} | OVER: {round(prob_over*100,1)}% (EV: {round(ev_o*100,1)}%) | UNDER: {round(prob_under*100,1)}% (EV: {round(ev_u*100,1)}%)")
+            
+            # Wymagane min +4% EV dla linii całego meczu
+            if ev_o > 0.04: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "OVER", "linia": t_line, "kurs": t_over, "projekcja": total_proj_runs_fg, "szansa": round(prob_over * 100, 1), "ev": round(ev_o, 3), "uwagi": g_insights})
+            elif ev_u > 0.04: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Suma Runs", "zaklad": "UNDER", "linia": t_line, "kurs": t_under, "projekcja": total_proj_runs_fg, "szansa": round(prob_under * 100, 1), "ev": round(ev_u, 3), "uwagi": g_insights})
 
         if h2h_home_odds and h2h_away_odds:
             h_kurs = round(sum(h2h_home_odds) / len(h2h_home_odds), 2)
             a_kurs = round(sum(h2h_away_odds) / len(h2h_away_odds), 2)
             ev_h = (home_win_prob_fg * h_kurs) - 1; ev_a = ((1-home_win_prob_fg) * a_kurs) - 1
             
-            if ev_h > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
-            elif ev_a > 0.02: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
+            print(f"    ⚔️ Mecz ML Home: {round(home_win_prob_fg*100,1)}% (EV: {round(ev_h*100,1)}%) | ML Away: {round((1-home_win_prob_fg)*100,1)}% (EV: {round(ev_a*100,1)}%)")
+            
+            # Wymagane min +3% EV oraz ponad 40% szans dla ML (żeby nie grać totalnych dogów)
+            if ev_h > 0.03 and home_win_prob_fg > 0.40: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['home_team'], "linia": "-", "kurs": h_kurs, "projekcja": f"{round(home_proj_runs_fg,1)} - {round(away_proj_runs_fg,1)}", "szansa": round(home_win_prob_fg * 100, 1), "ev": round(ev_h, 3), "uwagi": g_insights})
+            elif ev_a > 0.03 and (1-home_win_prob_fg) > 0.40: wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "Mecz: Zwycięzca (ML)", "zaklad": ev['away_team'], "linia": "-", "kurs": a_kurs, "projekcja": f"{round(away_proj_runs_fg,1)} - {round(home_proj_runs_fg,1)}", "szansa": round((1-home_win_prob_fg) * 100, 1), "ev": round(ev_a, 3), "uwagi": g_insights})
 
-        prob_away_f5_under_1_5 = (math.pow(away_proj_runs_f5, 0) * math.exp(-away_proj_runs_f5)) / math.factorial(0) + (math.pow(away_proj_runs_f5, 1) * math.exp(-away_proj_runs_f5)) / math.factorial(1)
+        # 🎯 FIX F5: Normal Distribution (Standard Deviation = 1.55)
+        prob_away_f5_under_1_5 = normal_cdf(1.5, away_proj_runs_f5, 1.55)
         prob_away_f5_over_1_5 = 1.0 - prob_away_f5_under_1_5
         
-        prob_home_f5_under_1_5 = (math.pow(home_proj_runs_f5, 0) * math.exp(-home_proj_runs_f5)) / math.factorial(0) + (math.pow(home_proj_runs_f5, 1) * math.exp(-home_proj_runs_f5)) / math.factorial(1)
+        prob_home_f5_under_1_5 = normal_cdf(1.5, home_proj_runs_f5, 1.55)
         prob_home_f5_over_1_5 = 1.0 - prob_home_f5_under_1_5
 
-        if prob_away_f5_over_1_5 > 0.60:
+        if prob_away_f5_over_1_5 > 0.58:
             fair_odds_a = 1 / prob_away_f5_over_1_5
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_a, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
-        elif prob_away_f5_under_1_5 > 0.60:
+        elif prob_away_f5_under_1_5 > 0.58:
             fair_odds_a_u = 1 / prob_away_f5_under_1_5
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['away_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_a_u, 2), "projekcja": round(away_proj_runs_f5, 2), "szansa": round(prob_away_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_a_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
             
-        if prob_home_f5_over_1_5 > 0.60:
+        if prob_home_f5_over_1_5 > 0.58:
             fair_odds_h = 1 / prob_home_f5_over_1_5
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} OVER", "linia": 1.5, "kurs": round(fair_odds_h, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_over_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h + 0.05, 2)} na OVER 1.5 Runs do 5. inningu!</b>"})
-        elif prob_home_f5_under_1_5 > 0.60:
+        elif prob_home_f5_under_1_5 > 0.58:
             fair_odds_h_u = 1 / prob_home_f5_under_1_5
             wyniki_games.append({"mecz": m_str, "data": DATA_DZIS, "rynek": "F5: Drużyna powyżej 1.5 Runs", "zaklad": f"{ev['home_team']} UNDER", "linia": 1.5, "kurs": round(fair_odds_h_u, 2), "projekcja": round(home_proj_runs_f5, 2), "szansa": round(prob_home_f5_under_1_5 * 100, 1), "ev": 0.1, "uwagi": g_insights + f"<br><br>🎯 <b>Szukaj u bukmachera kursu > {round(fair_odds_h_u + 0.05, 2)} na UNDER 1.5 Runs do 5. inningu!</b>"})
 
@@ -656,7 +691,6 @@ def uruchom_mlb_pro():
                         
                     mlb_stat_key = rynek_map[m_key][2]
                     
-                    # TWARDA KONTROLA LINII
                     if mlb_stat_key in ['homeRuns', 'runs', 'rbi', 'hits']:
                         target_line = 0.5 
                     elif mlb_stat_key == 'totalBases':
@@ -742,7 +776,6 @@ def uruchom_mlb_pro():
                 
                 vals = [h['val'] for h in hist_data[-30:]]
                 
-                # 🎯 FIX 1: OBCINANIE ANOMALII (Outlier Capping z większym zakresem)
                 if is_hr:
                     baza_proj = sum(vals) / len(vals)
                     if baza_proj < 0.08: baza_proj = 0.08
@@ -751,9 +784,9 @@ def uruchom_mlb_pro():
                     
                     capped_vals = []
                     for v in vals_15:
-                        if mlb_stat_key == 'hits': capped_vals.append(min(v, 3))
-                        elif mlb_stat_key == 'totalBases': capped_vals.append(min(v, 6))
-                        elif mlb_stat_key in ['runs', 'rbi']: capped_vals.append(min(v, 3))
+                        if mlb_stat_key == 'hits': capped_vals.append(min(v, 2))
+                        elif mlb_stat_key == 'totalBases': capped_vals.append(min(v, 4))
+                        elif mlb_stat_key in ['runs', 'rbi']: capped_vals.append(min(v, 2))
                         else: capped_vals.append(v)
                         
                     weights = [3 if i >= len(capped_vals)-5 else (2 if i >= len(capped_vals)-10 else 1) for i in range(len(capped_vals))]
@@ -845,7 +878,6 @@ def uruchom_mlb_pro():
                         if b_order <= 3: korekta *= 1.05
                         elif b_order >= 8: korekta *= 0.90
                 
-                # Zabezpieczenie modyfikatorów
                 if rola == 'pitcher':
                     korekta = max(0.85, min(1.15, korekta))
                 elif is_hr:
@@ -858,7 +890,6 @@ def uruchom_mlb_pro():
                 prob_over_poisson = poisson_prob_over(projekcja_finalna, linia)
                 empirical_over = sum(1 for x in vals if x > linia) / len(vals) if len(vals) > 0 else 0.0
                 
-                # 🎯 2. MIESZANKA EMPIRYCZNA (Uratowanie OVERÓW)
                 if mlb_stat_key == 'hits':
                     prob_over = (prob_over_poisson * 0.20) + (empirical_over * 0.80) 
                 elif mlb_stat_key == 'totalBases':
@@ -881,7 +912,6 @@ def uruchom_mlb_pro():
                     kurs_final = kurs_over
                     ev_val = ev_o
                 else:
-                    # 🎯 Anti-Under Bias: Faworyzujemy Overy. Under wygrywa tylko jeśli jest o 2% bardziej opłacalny.
                     if ev_o >= ev_u - 0.02: 
                         typ = "OVER"
                         true_prob = prob_over
@@ -893,7 +923,6 @@ def uruchom_mlb_pro():
                         kurs_final = kurs_under
                         ev_val = ev_u
                 
-                # 🎯 TWARDE PROGI: Overy wchodzą łatwo (3-4% EV), Undery muszą być pewniakami (8% EV)
                 min_prob = 0.20 if is_hr else 0.55
                 min_ev = 0.04 if typ == "OVER" else 0.08
                 
@@ -920,7 +949,9 @@ def uruchom_mlb_pro():
                 is_elite_form = (pokrycie_l10 >= 80 and pokrycie_l5 >= 80)
                 is_stable_bet = (m_color == "rank-green") or is_elite_form
                 
-                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet and (ev_val >= 0.15)
+                is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
+                if typ == "UNDER" and ev_val < 0.20:
+                    is_graal_bet = False
                 
                 znacznik = "🏆 GRAAL" if is_graal_bet else ("🎯 PEWNIAK" if is_safe_bet else ("💰 VALUE" if is_value_bet else "✅ DODANO"))
                 print(f"      {znacznik:<11}: {p_name:<20} | {nazwa_rynku_pl:<14} | EV: +{round(ev_val*100,1)}% | Szansa: {round(true_prob*100,1)}%")
@@ -939,7 +970,7 @@ def uruchom_mlb_pro():
     # Sortowanie i Zapis
     wyniki_props = sorted(wyniki_props, key=lambda x: x['ev'], reverse=True)
     with open(MLB_JSON_FILE, 'w', encoding='utf-8') as f: json.dump(wyniki_props, f, ensure_ascii=False, indent=4)
-    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v11.3)")
+    wyslij_plik_na_githuba(MLB_JSON_FILE, "MLB Data: Update Props (v12.0)")
     print(f"✅ Zapisano {len(wyniki_props)} typów na zawodników.")
 
 if __name__ == "__main__":
