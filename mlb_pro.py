@@ -31,21 +31,16 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Chicago Cubs": {"dir": "OUT", "mph": 17.0},
-    "Philadelphia Phillies": {"dir": "NEUTRAL", "mph": 9.0},
-    "Pittsburgh Pirates": {"dir": "OUT", "mph": 17.0},
-    "Miami Marlins": {"dir": "IN", "mph": 6.0},
-    "Houston Astros": {"dir": "IN", "mph": 15.0},
-    "Colorado Rockies": {"dir": "NEUTRAL", "mph": 4.5},
-    "Oakland Athletics": {"dir": "OUT", "mph": 6.0},
-    "Seattle Mariners": {"dir": "IN", "mph": 7.0},
-    "Cleveland Guardians": {"dir": "IN", "mph": 16.0},
-    "Washington Nationals": {"dir": "IN", "mph": 13.0},
-    "New York Yankees": {"dir": "OUT", "mph": 16.0},
-    "Boston Red Sox": {"dir": "NEUTRAL", "mph": 16.0},
-    "Minnesota Twins": {"dir": "OUT", "mph": 10.5},
-    "Los Angeles Angels": {"dir": "OUT", "mph": 8.0},
-    "Arizona Diamondbacks": {"dir": "OUT", "mph": 11.5},
+    "Tampa Bay Rays": {"dir": "IN", "mph": 17.2},
+    "Washington Nationals": {"dir": "IN", "mph": 11.4},
+    "Kansas City Royals": {"dir": "OUT", "mph": 13.9},
+    "Boston Red Sox": {"dir": "IN", "mph": 8.1},
+    "Cleveland Guardians": {"dir": "OUT", "mph": 3.4},
+    "Miami Marlins": {"dir": "IN", "mph": 17.2},
+    "Chicago Cubs": {"dir": "NEUTRAL", "mph": 11.4},
+    "Colorado Rockies": {"dir": "NEUTRAL", "mph": 5.8},
+    "Los Angeles Angels": {"dir": "OUT", "mph": 8.1},
+    "Seattle Mariners": {"dir": "OUT", "mph": 4.7}
 }
 
 MLB_JSON_FILE = 'mlb.json'
