@@ -31,16 +31,34 @@ DATA_DZIS = datetime.now().strftime('%Y-%m-%d')
 # 🌪️ RĘCZNA KOREKTA POGODY (TYLKO MANUAL)
 # ==========================================
 MANUAL_WEATHER = {
-    "Tampa Bay Rays": {"dir": "IN", "mph": 17.2},
-    "Washington Nationals": {"dir": "IN", "mph": 11.4},
-    "Kansas City Royals": {"dir": "OUT", "mph": 13.9},
-    "Boston Red Sox": {"dir": "OUT", "mph": 8.1},
-    "Cleveland Guardians": {"dir": "IN", "mph": 3.4},
-    "Miami Marlins": {"dir": "NEUTRAL", "mph": 17.2},
-    "Chicago Cubs": {"dir": "NEUTRAL", "mph": 11.4},
-    "Colorado Rockies": {"dir": "NEUTRAL", "mph": 5.8},
-    "Los Angeles Angels": {"dir": "OUT", "mph": 8.1},
-    "Seattle Mariners": {"dir": "OUT", "mph": 4.7}
+    "Cleveland Guardians": {"dir": "OUT", "mph": 11.4},
+    
+    # 🏟️ TROPICANA FIELD: Stała kopuła. Wiatr ZAWSZE 0. Ustawiłem na sztywno.
+    "Tampa Bay Rays": {"dir": "NEUTRAL", "mph": 0.0}, 
+    
+    # 🌤️ DACH ROZSUWANY (Sprawdź Twittera! Jeśli zamknięty, zmień na NEUTRAL 0.0)
+    "Miami Marlins": {"dir": "NEUTRAL", "mph": 20.8}, 
+    
+    "Detroit Tigers": {"dir": "NEUTRAL", "mph": 12.5},
+    "Boston Red Sox": {"dir": "OUT", "mph": 9.2},
+    "Washington Nationals": {"dir": "OUT", "mph": 9.2},
+    "New York Mets": {"dir": "OUT", "mph": 11.4},
+    "Chicago Cubs": {"dir": "OUT", "mph": 10.3},
+    "Kansas City Royals": {"dir": "OUT", "mph": 17.2},
+    
+    # 🌤️ DACH ROZSUWANY (Sprawdź Twittera! Jeśli zamknięty, zmień na NEUTRAL 0.0)
+    "Texas Rangers": {"dir": "NEUTRAL", "mph": 10.3}, 
+    
+    "Colorado Rockies": {"dir": "OUT", "mph": 9.2},
+    "Los Angeles Angels": {"dir": "OUT", "mph": 9.2},
+    
+    # 🌤️ DACH ROZSUWANY (W Arizonie latem prawie zawsze zamykają przez upał)
+    "Arizona Diamondbacks": {"dir": "OUT", "mph": 11.4}, 
+    
+    # 🌤️ DACH ROZSUWANY (Otwarty po bokach, ale dach chroni przed deszczem. Sprawdź status!)
+    "Seattle Mariners": {"dir": "OUT", "mph": 6.9}, 
+    
+    "San Francisco Giants": {"dir": "OUT", "mph": 11.4}
 }
 
 MLB_JSON_FILE = 'mlb.json'
