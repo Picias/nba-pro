@@ -42,7 +42,7 @@ CACHE_PLAYER_STATS = {}
 CACHE_TEAM_GAMES = {}
 CACHE_GAME_STATS = {}
 CACHE_INJURIES = {}
-CACHE_RAW_GAME_STATS = {} # 🚀 NOWOŚĆ: Główny magazyn zaciągniętych statystyk meczowych
+CACHE_RAW_GAME_STATS = {} # Główny magazyn zaciągniętych statystyk meczowych
 NBA_TEAMS = {}
 
 L_AVG_3PM = 12.8
@@ -59,12 +59,11 @@ def get_stat_val(z, stat_key):
     if stat_key == 'PRA': return (z.get('points', 0) or 0) + (z.get('totReb', 0) or 0) + (z.get('assists', 0) or 0)
     return 0
 
-# 🚀 NOWOŚĆ: JEDNA FUNKCJA BY RZĄDZIĆ WSZYSTKIMI MECZAMI (Chroni API przed wyczerpaniem limitów)
 def pobierz_surowe_staty_meczu(game_id):
     g_str = str(game_id)
     if g_str in CACHE_RAW_GAME_STATS: return CACHE_RAW_GAME_STATS[g_str]
     
-    time.sleep(0.15) # Bezpieczny timing (ok. 6 zapytań/sek)
+    time.sleep(0.15) 
     try:
         url = f"https://v2.nba.api-sports.io/players/statistics?game={g_str}"
         res = requests.get(url, headers=HEADERS_SPORTS).json()
@@ -74,7 +73,7 @@ def pobierz_surowe_staty_meczu(game_id):
             return []
             
         dane = res.get('response', [])
-        if dane: # Zapisujemy do RAMu tylko, jeśli dane są prawidłowe (zabezpieczenie przed zatruciem cache'a!)
+        if dane: 
             CACHE_RAW_GAME_STATS[g_str] = dane
         return dane
     except Exception as e:
@@ -306,7 +305,7 @@ def pobierz_id_i_pozycje(nazwa_gracza, team_name):
                 res_fb = requests.get(f"https://v2.nba.api-sports.io/players?team={team_id}&season={SEZON_NBA - 1}", headers=HEADERS_SPORTS).json()
                 zawodnicy = res_fb.get('response', [])
                 
-            if zawodnicy: # Zapisujemy tylko jeśli cokolwiek zwróciło
+            if zawodnicy: 
                 CACHE_ROSTERS[team_id] = zawodnicy
         except: return None, None
         
@@ -402,6 +401,7 @@ def pobierz_dvp_i_obrone(opp_team_id, pozycja, stat_key, is_leader, limit_meczow
     CACHE_DVP[cache_key] = (wynik_dvp, avg_3pm, avg_reb)
     return CACHE_DVP[cache_key]
 
+# 🚀 PLAYOFF SYNDICATE ENGINE
 def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_team_id, linia, data_dzis, team_spread, game_total, is_home_game):
     cache_key = f"stats_{player_id}"
     
@@ -462,10 +462,14 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     l5_mins_raw = [parse_min(m.get('min')) for m in mecze_sezon[-5:]]
     true_l5_mins = [m if abs(m - season_avg_min) <= 8 else season_avg_min for m in l5_mins_raw]
     avg_min_l5 = sum(true_l5_mins) / len(true_l5_mins) if true_l5_mins else 30.0
-    is_leader = True if season_avg_min >= 26.0 else False
+    
+    # 🚀 PLAYOFF FIX 1: Nowa definicja Lidera i drastyczne zmiany w rotacji
+    is_leader = True if season_avg_min >= 29.0 else False
     
     if is_leader:
-        avg_min_l5 = min(42.0, avg_min_l5 * 1.08)
+        avg_min_l5 = min(44.0, max(avg_min_l5, season_avg_min) * 1.12)
+    else:
+        avg_min_l5 = avg_min_l5 * 0.80
 
     dzis_date = datetime.strptime(data_dzis, '%Y-%m-%d')
     prev_dates = []
@@ -485,12 +489,18 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
             
     blowout_multi = 1.0
     is_blowout = False
-    if is_leader and abs(team_spread) >= 13.0:
-        blowout_multi = 0.85 
+    if is_leader and abs(team_spread) >= 15.0:
+        blowout_multi = 0.88 
         is_blowout = True
 
     model = Ridge(alpha=1.0).fit(X[-15:], y[-15:])
-    proj_baza = model.predict([[avg_min_l5]])[0]
+    proj_baza = max(0.0, model.predict([[avg_min_l5]])[0])
+
+    # 🚀 PLAYOFF FIX 2: Waga Serii (H2H z ostatnich dni)
+    h2h_avg = round(sum(h2h_stats) / len(h2h_stats), 1) if h2h_stats else 0
+    if len(h2h_stats) >= 2:
+        recent_h2h_avg = sum(h2h_stats[-3:]) / len(h2h_stats[-3:])
+        proj_baza = (proj_baza * 0.65) + (recent_h2h_avg * 0.35)
 
     korekta_kontuzji = 1.0
     on_off_text = ""
@@ -556,25 +566,28 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     baza_dvp = baza_pozycji.get(stat_key, 10.0)
     
     roznica_w_procentach = (dvp - baza_dvp) / baza_dvp if baza_dvp > 0 else 0
-    korekta_dvp = max(0.94, min(1.06, 1.0 + (roznica_w_procentach * 0.10)))
+    korekta_dvp = max(0.88, min(1.12, 1.0 + (roznica_w_procentach * 0.15))) 
     
     korekta_strefy = 1.0
     strefa_txt = ""
     
     if stat_key == '3PM' or (stat_key == 'PTS' and pozycja == 'G'):
-        korekta_strefy = max(0.92, min(1.08, opp_3pm_allowed / L_AVG_3PM))
+        korekta_strefy = max(0.90, min(1.10, opp_3pm_allowed / L_AVG_3PM))
         strefa_txt = f" | 🎯 Obrona 3PT: Tracą {round(opp_3pm_allowed, 1)} trójek"
     elif stat_key == 'REB' or (stat_key == 'PTS' and pozycja in ['C', 'F']):
-        korekta_strefy = max(0.92, min(1.08, opp_reb_allowed / L_AVG_REB))
+        korekta_strefy = max(0.90, min(1.10, opp_reb_allowed / L_AVG_REB))
         strefa_txt = f" | 🧱 Pomalowane: Tracą {round(opp_reb_allowed, 1)} zbiórek"
     
-    projekcja_finalna = max(0.0, proj_baza * korekta_dvp * korekta_strefy * korekta_kontuzji * fatigue_multi * blowout_multi)
+    # 🚀 PLAYOFF FIX 3: Playoff Tax
+    playoff_tax = 0.94 if stat_key in ['PTS', 'PRA', '3PM'] else 0.97
+    
+    projekcja_finalna = max(0.0, proj_baza * korekta_dvp * korekta_strefy * korekta_kontuzji * fatigue_multi * blowout_multi * playoff_tax)
     
     y_train = y[-15:]
     std_dev = math.sqrt(sum((x - (sum(y_train) / len(y_train))) ** 2 for x in y_train) / (len(y_train) - 1)) if len(y_train) > 1 else 2.0
-    if std_dev < 1.0: std_dev = 1.5
     
-    h2h_avg = round(sum(h2h_stats) / len(h2h_stats), 1) if h2h_stats else 0
+    if std_dev < 1.5: std_dev = 2.0 
+    
     h2h_history_list = ", ".join(map(str, reversed(h2h_stats))) if h2h_stats else "Brak"
     
     implied_total = 0.0
@@ -585,7 +598,8 @@ def przeanalizuj_gracza_ml(player_id, nazwa, pozycja, stat_key, team_id, opp_tea
     split_avg = round(sum(split_stats)/len(split_stats), 1) if split_stats else 0.0
     
     uwagi_txt = f"USG: {avg_usg}% | Tempo: {avg_pace}{strefa_txt}"
-    if is_leader: uwagi_txt += " | 🔥 Playoff Mins"
+    if is_leader: uwagi_txt += " | 🔥 Playoff Starter (Heavy Mins)"
+    else: uwagi_txt += " | 📉 Zmiennik (Obcięte minuty w PO)"
     if is_b2b: uwagi_txt += " | 😴 ZMĘCZENIE (B2B)"
     if is_blowout: uwagi_txt += f" | 🚨 BLOWOUT RISK"
     if absencje_wplywajace:
@@ -616,7 +630,6 @@ def generuj_pelny_raport_druzynowy_nba():
     plik_raportu = 'nba_teams.json'
     plik_cache = 'nba_season_cache.json'
     
-    # 🛑 BEZPIECZNIK: Wykonaj tylko raz dziennie
     if os.path.exists(plik_raportu):
         mod_time = datetime.fromtimestamp(os.path.getmtime(plik_raportu))
         if mod_time.strftime('%Y-%m-%d') == datetime.now().strftime('%Y-%m-%d'):
@@ -673,7 +686,6 @@ def generuj_pelny_raport_druzynowy_nba():
         with open(plik_cache, 'w', encoding='utf-8') as f:
             json.dump(cache_meczow, f)
 
-    # 🧮 AGREGACJA WYNIKÓW
     druzyny_sumy = {str(tid): {'games':0, 'pts':0, 'reb':0, 'ast':0, '3pm':0, '3pa':0, 'fta':0, 'pace':0,
                                'opp_pts':0, 'opp_reb':0, 'opp_ast':0, 'opp_3pm':0, 'opp_3pa':0, 'opp_fta':0, 'opp_fouls':0}
                     for tid in NBA_TEAMS.values()}
@@ -739,7 +751,7 @@ def uruchom_system_pro():
     inicjalizuj_druzyny()
     rozlicz_wczorajsze_typy()
     pobierz_dzisiejsze_kontuzje() 
-    generuj_pelny_raport_druzynowy_nba() # 🚀 GENERATOR STATYSTYK DRUŻYNOWYCH
+    generuj_pelny_raport_druzynowy_nba() 
     
     try:
         with open(SMART_MONEY_FILE, 'r') as f: 
@@ -876,8 +888,9 @@ def uruchom_system_pro():
                                 
                                 ostateczne_uwagi = s['uwagi_txt'] + sm_text
                                 
-                                is_value_bet = ev_val >= 0.04
-                                is_safe_bet = true_prob >= 0.75 and pokrycie_l5 >= 80
+                                # 🚀 PLAYOFF FIX 4: Zmodyfikowane, urealnione progi
+                                is_value_bet = ev_val >= 0.05
+                                is_safe_bet = true_prob >= 0.65 and pokrycie_l5 >= 60
                                 
                                 is_stable_bet = False
                                 if s['history']:
@@ -885,10 +898,10 @@ def uruchom_system_pro():
                                     if mean > 0:
                                         cv = s['std_dev'] / mean
                                         if typ == "OVER":
-                                            if cv < 0.30 and mean >= (linia * 0.75) and m_color == 'rank-green':
+                                            if mean >= (linia * 0.85) and m_color == 'rank-green' and s['h2h_history'] != "Brak":
                                                 is_stable_bet = True
                                         else:
-                                            if cv < 0.30 and mean <= (linia * 1.25) and m_color == 'rank-green':
+                                            if mean <= (linia * 1.15) and m_color == 'rank-green':
                                                 is_stable_bet = True
                                 
                                 is_graal_bet = is_value_bet and is_safe_bet and is_stable_bet
@@ -938,7 +951,7 @@ def uruchom_system_pro():
 
 if __name__ == "__main__":
     print("==================================================")
-    print("🚀 START: QUANT AI BOTS (NBA PRO v14.1 PLAYOFF EDITION + TEAM STATS)")
+    print("🚀 START: QUANT AI BOTS (NBA PRO v14.2 PLAYOFF SYNDICATE EDITION)")
     print("==================================================")
     
     start = time.time()
@@ -949,13 +962,13 @@ if __name__ == "__main__":
         with open('nba.json', 'w', encoding='utf-8') as f: json.dump(final_data, f, ensure_ascii=False, indent=4)
         print("\n💾 SUKCES: Zapisano plik 'nba.json' na Twoim dysku!")
         
-        wyslij_plik_na_githuba('nba.json', "Update NBA (v14.1 Playoff Edition)")
+        wyslij_plik_na_githuba('nba.json', "Update NBA (v14.2 Playoff Edition)")
         print("🌐 Wysłano aktualizację JSON na stronę GitHuba!")
         
         top = [t for t in final_data if t['ev'] > 0.05 and t['true_prob'] > 0.55][:5]
         
         if top:
-            msg = "🚨 <b>RAPORT QUANT AI: NBA (PRO ULTIMATE)</b> 🚨\n\n"
+            msg = "🚨 <b>RAPORT QUANT AI: NBA (PLAYOFF SYNDICATE)</b> 🚨\n\n"
             for t in top: 
                 msg += f"🏀 {t['zawodnik']} - {t['rynek']}\n"
                 msg += f"👉 <b>{t['typ']} {t['linia']}</b> @ {t['kurs']} (EV: +{round(t['ev'] * 100, 1)}%)\n"
