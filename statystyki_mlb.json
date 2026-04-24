@@ -1,5 +1,1946 @@
 [
     {
+        "data_meczow": "2026-04-23",
+        "wygrane": 97,
+        "przegrane": 96,
+        "zwroty": 0,
+        "hit_rate": "50.3%",
+        "profit_jednostki": -1.28,
+        "roi": "-0.7%",
+        "detale": [
+            {
+                "zawodnik": "Lourdes Gurriel Jr.",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 10.0,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Ben Rice",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.0,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Andy Pages",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 10.0,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 9.0,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 4.75,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Michael Harris II",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.25,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Max Muncy",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.5,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Mickey Moniak",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 4.8,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.75,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.98,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Freddie Freeman",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 8.5,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.1,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Nolan Arenado",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 8.5,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Michael Busch",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 7.5,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Nico Hoerner",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 3.05,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Nico Hoerner",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 8.0,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Aaron Judge",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 3.65,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.4,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.69,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jordan Beck",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.57,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.65,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ben Rice",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.23,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 4.0,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.5,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Dansby Swanson",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.1,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kerry Carpenter",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.25,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jose Fernandez",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.63,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.67,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jake Cronenworth",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.53,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Nick Castellanos",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.67,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.92,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Dansby Swanson",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.4,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.13,
+                "wynik_realny": 4,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.42,
+                "wynik_realny": 5,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Seiya Suzuki",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.2,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.46,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "RBIs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.31,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Andrew Benintendi",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 6.75,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.28,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Giancarlo Stanton",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.1,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 4.4,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Manny Machado",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.83,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.46,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ildemaro Vargas",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.31,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Brandon Lowe",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.1,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.1,
+                "wynik_realny": 4,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.03,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jake Cronenworth",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.6,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Edgar Quero",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.44,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Heliot Ramos",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.73,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.29,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Ben Rice",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.9,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Tyler Freeman",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.67,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.29,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Dominic Smith",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.91,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Fernando Tatis Jr.",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.21,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Xander Bogaerts",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.9,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Trent Grisham",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.27,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Ryan O'Hearn",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.6,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Ezequiel Tovar",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.43,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "TJ Rumfield",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.67,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Cody Bellinger",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.22,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Miguel Andujar",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.49,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Nick Castellanos",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.67,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Caleb Durbin",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.09,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ozzie Albies",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.12,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Bryce Harper",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.81,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Cam Schlittler",
+                "rynek": "K's",
+                "typ": "OVER",
+                "linia": 6.5,
+                "kurs": 2.13,
+                "wynik_realny": 5,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "CJ Abrams",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.6,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.43,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.24,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Chase Meidroth",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.31,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Gavin Sheets",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.83,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jake McCarthy",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 1.94,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Tristan Peters",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.31,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Trea Turner",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.88,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Ezequiel Tovar",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.65,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Ryan Feltner",
+                "rynek": "K's",
+                "typ": "OVER",
+                "linia": 3.5,
+                "kurs": 1.76,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Aaron Judge",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 1.99,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.9,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Gavin Sheets",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.54,
+                "wynik_realny": 3,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Edouard Julien",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.85,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Rafael Devers",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.73,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.94,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Aaron Judge",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.72,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Tyler Freeman",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.62,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Fernando Tatis Jr.",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.99,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Alec Bohm",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.52,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alec Bohm",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Bryson Stott",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Joc Pederson",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.34,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Michael Harris II",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.15,
+                "wynik_realny": 4,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Evan Carter",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Danny Jansen",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.47,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kyle Karros",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.37,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Juan Soto",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Jose Fernandez",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Keibert Ruiz",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.45,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Seiya Suzuki",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.04,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Brandon Lockridge",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.36,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Freddy Fermin",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.47,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Freddy Fermin",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.61,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Bryson Stott",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.35,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kyle Schwarber",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.04,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Manny Machado",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.94,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Byron Buxton",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 2.08,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Ezequiel Tovar",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.65,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 2.01,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ketel Marte",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 4.5,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "William Contreras",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.54,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Josh Smith",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 2.09,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Wilyer Abreu",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.53,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Gleyber Torres",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.5,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Josh Smith",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.46,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jake Burger",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.6,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jake Burger",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.61,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Matt Chapman",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.69,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Victor Caratini",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Luis Robert Jr.",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.34,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Spencer Horwitz",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.79,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jordan Beck",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.57,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Jazz Chisholm Jr.",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.33,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Brett Baty",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.39,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ian Happ",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.55,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Brandon Nimmo",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.77,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Spencer Torkelson",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.5,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Miguel Andujar",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.75,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.85,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jorbit Vivas",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.36,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kyle Karros",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.54,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Mark Vientos",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Justin Crawford",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Brenton Doyle",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.34,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.38,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kody Clemens",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.1,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Ceddanne Rafaela",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.54,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Austin Wells",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.46,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alex Bregman",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.69,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Danny Jansen",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.83,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Marcus Semien",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ben Rice",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.49,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Marcelo Mayer",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.28,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Brandon Marsh",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 2,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Jackson Merrill",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.98,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Corey Seager",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.69,
+                "wynik_realny": 5,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Gavin Sheets",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.73,
+                "wynik_realny": 4,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Royce Lewis",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.45,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Willson Contreras",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.54,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Austin Wells",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.31,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kyle Schwarber",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 3.55,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🎯 Pewniak"
+            },
+            {
+                "zawodnik": "Oneil Cruz",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.58,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Joey Ortiz",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.21,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Ketel Marte",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.73,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Juan Soto",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.77,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Kevin McGonigle",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.35,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Joc Pederson",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.5,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Sal Frelick",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.71,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Seiya Suzuki",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.43,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Daylen Lile",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 2,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Henry Davis",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.75,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Colt Keith",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.52,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Jake Cronenworth",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.44,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Carson Benge",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.22,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Alex Freeland",
+                "rynek": "Hits",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.88,
+                "wynik_realny": 1,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Jackson Merrill",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 5.25,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "MJ Melendez",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.48,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Trea Turner",
+                "rynek": "Total Bases",
+                "typ": "UNDER",
+                "linia": 1.5,
+                "kurs": 1.7,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Davis Martin",
+                "rynek": "K's",
+                "typ": "OVER",
+                "linia": 3.5,
+                "kurs": 1.84,
+                "wynik_realny": 7,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Danny Jansen",
+                "rynek": "RBIs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.32,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Drake Baldwin",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.31,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Alex Freeland",
+                "rynek": "Runs",
+                "typ": "UNDER",
+                "linia": 0.5,
+                "kurs": 1.39,
+                "wynik_realny": 0,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Mike Yastrzemski",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.66,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Colson Montgomery",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.57,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Freddie Freeman",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.41,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Shohei Ohtani",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.81,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Pete Crow-Armstrong",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.68,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Matt Olson",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.44,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Shohei Ohtani",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 3.8,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "James Wood",
+                "rynek": "Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.82,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Francisco Alvarez",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.71,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Mickey Moniak",
+                "rynek": "Total Bases",
+                "typ": "OVER",
+                "linia": 1.5,
+                "kurs": 1.84,
+                "wynik_realny": 10,
+                "status": "✅ WYGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Cody Bellinger",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.42,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Giancarlo Stanton",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.6,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Josh Jung",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.49,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🏆 Graal"
+            },
+            {
+                "zawodnik": "Matt Wallner",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.85,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "💰 Value"
+            },
+            {
+                "zawodnik": "Byron Buxton",
+                "rynek": "Home Runs",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 3.9,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Aaron Judge",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.46,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Carson Kelly",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.53,
+                "wynik_realny": 3,
+                "status": "✅ WYGRANA",
+                "kategoria": "🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Jacob Young",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.47,
+                "wynik_realny": 0,
+                "status": "❌ PRZEGRANA",
+                "kategoria": "🎯 Pewniak | 🛡️ Stabilny"
+            },
+            {
+                "zawodnik": "Joey Ortiz",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.82,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "Zwykły Typ"
+            },
+            {
+                "zawodnik": "Munetaka Murakami",
+                "rynek": "Hits",
+                "typ": "OVER",
+                "linia": 0.5,
+                "kurs": 1.59,
+                "wynik_realny": 1,
+                "status": "✅ WYGRANA",
+                "kategoria": "Zwykły Typ"
+            }
+        ]
+    },
+    {
         "data_meczow": "2026-04-22",
         "wygrane": 136,
         "przegrane": 105,
